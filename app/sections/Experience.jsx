@@ -1,23 +1,24 @@
 export default function Experience(){
   return (
-    <div>
-      <h2 className="text-4xl font-bold mb-4">Professional Experience</h2>
+    <div className="max-w-5xl mx-auto">
+      <h2 className="text-4xl font-bold mb-6">Professional Experience</h2>
 
       <div className="space-y-4">
-        <div className="bg-white/5 p-4 rounded">
+        <div className="card">
           <h4 className="font-semibold">CFD Engineer — Example Co</h4>
-          <p className="text-sm opacity-90">2023 — Present</p>
-          <ul className="list-disc ml-5 mt-2">
-            <li>Ran simulations in OpenFOAM and Fluent for aerodynamics projects.</li>
-            <li>Built pre- and post-processing pipelines in Python.</li>
+          <div className="muted text-sm">2023 — Present</div>
+          <ul className="mt-2 list-disc ml-5 muted">
+            <li>Designed simulation workflows in OpenFOAM and Fluent.</li>
+            <li>Built Python pipelines for batch post-processing and plotting.</li>
           </ul>
         </div>
 
-        <div className="bg-white/5 p-4 rounded">
-          <h4 className="font-semibold">Web Developer — Personal Projects</h4>
-          <p className="text-sm opacity-90">2021 — Present</p>
-          <ul className="list-disc ml-5 mt-2">
-            <li>Built portfolio sites, visualization dashboards using Next.js + React.</li>
+        <div className="card">
+          <h4 className="font-semibold">Web & Visualization — Personal Projects</h4>
+          <div className="muted text-sm">2021 — Present</div>
+          <ul className="mt-2 list-disc ml-5 muted">
+            <li>Built portfolio sites and dashboards with Next.js.</li>
+            <li>Linked data visualizations to CFD outputs (ParaView exports).</li>
           </ul>
         </div>
       </div>

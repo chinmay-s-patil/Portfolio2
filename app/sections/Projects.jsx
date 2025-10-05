@@ -1,19 +1,34 @@
+import ProjectCard from '../components/ProjectCard'
+
 export default function Projects(){
+  const projects = [
+    {
+      title: 'Drone Propeller Simulation',
+      subtitle: 'OpenFOAM · AMI · Mesh refinement',
+      description: 'Reverse engineered a propeller, ran multiple simulations to optimize tip geometry and capture vortex shedding characteristics.',
+      href: '#'
+    },
+    {
+      title: 'Solar Vortex Engine Sim',
+      subtitle: 'OpenFOAM · Radiation',
+      description: 'Set up a multi-region solver with radiation and buoyancy to simulate solar vortex behaviors.',
+      href: '#'
+    },
+    {
+      title: 'Portfolio Website',
+      subtitle: 'Next.js · Tailwind',
+      description: 'This site — built to showcase projects, timeline, and media. Mobile-first and fast.',
+      href: '#'
+    }
+  ]
+
   return (
-    <div>
-      <h2 className="text-4xl font-bold mb-4">Projects</h2>
-
-      <div className="grid md:grid-cols-2 gap-4">
-        <article className="bg-white/5 p-4 rounded">
-          <h4 className="font-semibold">Drone Propeller Simulation</h4>
-          <p className="text-sm opacity-90">OpenFOAM — Mesh, AMI, turbulence modeling</p>
-          <p className="mt-2">Summary of what you did & results. Add screenshots or video links below.</p>
-        </article>
-
-        <article className="bg-white/5 p-4 rounded">
-          <h4 className="font-semibold">Portfolio Website</h4>
-          <p className="text-sm opacity-90">Next.js + Tailwind</p>
-        </article>
+    <div className="max-w-6xl mx-auto">
+      <h2 className="text-4xl font-bold mb-6">Selected Projects</h2>
+      <div className="project-grid">
+        {projects.map((p,i) => (
+          <ProjectCard key={i} {...p} />
+        ))}
       </div>
     </div>
   )

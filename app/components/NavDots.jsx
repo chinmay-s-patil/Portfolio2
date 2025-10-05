@@ -1,4 +1,3 @@
-// app/components/NavDots.jsx
 'use client'
 import { useEffect, useState } from 'react'
 
@@ -16,13 +15,12 @@ export default function NavDots({ sections }) {
           if (entry.isIntersecting) {
             const idx = sectionEls.indexOf(entry.target)
             if (idx >= 0) setActive(idx)
-            // update URL anchor (without adding to history stack)
             const id = entry.target.id
             if (id) history.replaceState(null, '', `#${id}`)
           }
         })
       },
-      { root: container, threshold: 0.5 }
+      { root: container, threshold: 0.55 }
     )
 
     sectionEls.forEach(el => observer.observe(el))
@@ -43,6 +41,7 @@ export default function NavDots({ sections }) {
         <button
           key={s.id}
           aria-label={`Go to ${s.label}`}
+          title={s.label}
           className={`nav-dot ${i === active ? 'active' : ''}`}
           onClick={() => goTo(i)}
         />
