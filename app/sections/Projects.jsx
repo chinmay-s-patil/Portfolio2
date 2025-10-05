@@ -4,31 +4,29 @@ export default function Projects(){
   const projects = [
     {
       title: 'Drone Propeller Simulation',
-      subtitle: 'OpenFOAM · AMI · Mesh refinement',
-      description: 'Reverse engineered a propeller, ran multiple simulations to optimize tip geometry and capture vortex shedding characteristics.',
+      subtitle: 'OpenFOAM · Mesh / AMI',
+      description: 'Reverse engineered an S500 propeller and iterated tip geometry — used AMI for rotation and examined vortex shedding.',
       href: '#'
     },
     {
-      title: 'Solar Vortex Engine Sim',
-      subtitle: 'OpenFOAM · Radiation',
-      description: 'Set up a multi-region solver with radiation and buoyancy to simulate solar vortex behaviors.',
+      title: 'Solar Vortex Engine',
+      subtitle: 'Multi-region · Radiation',
+      description: 'Built fvDOM radiation-driven natural convection model and tuned mesh regions to capture vortex behavior.',
       href: '#'
     },
     {
-      title: 'Portfolio Website',
+      title: 'Interactive Portfolio',
       subtitle: 'Next.js · Tailwind',
-      description: 'This site — built to showcase projects, timeline, and media. Mobile-first and fast.',
+      description: 'This portfolio: focused on legibility, performance, and fullpage UX.',
       href: '#'
     }
   ]
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <h2 className="text-4xl font-bold mb-6">Selected Projects</h2>
+    <div>
+      <h2 className="text-3xl font-semibold mb-6">Selected projects</h2>
       <div className="project-grid">
-        {projects.map((p,i) => (
-          <ProjectCard key={i} {...p} />
-        ))}
+        {projects.map((p,i) => <ProjectCard key={i} {...p} />)}
       </div>
     </div>
   )
