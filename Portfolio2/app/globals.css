@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* full-page snap & layout */
+:root {
+  --nav-dot-size: 12px;
+}
+
+/* Make the main container scrollable and snap by section */
+#sections {
+  height: 100vh;
+  width: 100%;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* each section fills viewport and snaps */
+.section {
+  height: 100vh;
+  width: 100%;
+  scroll-snap-align: start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* subtle section backgrounds */
+.section--alt {
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.02));
+}
+
+/* hide native scrollbar (nice-to-have) */
+#sections::-webkit-scrollbar { width: 8px; }
+#sections::-webkit-scrollbar-thumb { background: rgba(100,100,100,0.25); border-radius: 4px; }
+
+/* nav dots */
+.nav-dots {
+  position: fixed;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 60;
+}
+.nav-dot {
+  width: var(--nav-dot-size);
+  height: var(--nav-dot-size);
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.45);
+  display: inline-block;
+  cursor: pointer;
+  border: 2px solid rgba(0,0,0,0.12);
+  transition: transform .18s, background .18s;
+}
+.nav-dot.active {
+  transform: scale(1.25);
+  background: white;
+  box-shadow: 0 6px 20px rgba(2,6,23,0.35);
+}
+
+/* small header */
+.site-header {
+  position: fixed;
+  left: 18px;
+  top: 18px;
+  z-index: 60;
+  padding: .4rem .7rem;
+  border-radius: 10px;
+  backdrop-filter: blur(6px);
+}
