@@ -4,7 +4,6 @@ import SectionWrapper from './components/SectionWrapper'
 
 import Landing from './sections/Landing'
 import Intro from './sections/Intro'
-import Skills from './sections/Skills'
 import Education from './sections/Education'
 import Experience from './sections/Experience'
 import Projects from './sections/Projects'
@@ -14,7 +13,6 @@ import Footer from './components/Footer'
 const sectionsMeta = [
   { id: 'home', label: 'Home' },
   { id: 'intro', label: 'About' },
-  { id: 'skills', label: 'Skills' },
   { id: 'education', label: 'Education' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
@@ -24,7 +22,6 @@ const sectionsMeta = [
 const sectionComponents = {
   home: Landing,
   intro: Intro,
-  skills: Skills,
   education: Education,
   experience: Experience,
   projects: Projects,
