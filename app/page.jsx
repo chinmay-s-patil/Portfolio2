@@ -1,31 +1,32 @@
+// app/page.jsx
 import NavDots from './components/NavDots'
 import Header from './components/Header'
 import SectionWrapper from './components/SectionWrapper'
 
 import Landing from './sections/Landing'
-import Intro from './sections/Intro'
-import Education from './sections/Education'
-import Experience from './sections/Experience'
+import About from './sections/Intro'      // About === Intro
+import Skills from './sections/Skills'   // new small section
+import Experience from './sections/Experience' // special behavior
 import Projects from './sections/Projects'
-import Events from './sections/Events'
+import Contact from './sections/Contact' // new contact section
 import Footer from './components/Footer'
 
 const sectionsMeta = [
   { id: 'home', label: 'Home' },
-  { id: 'intro', label: 'About' },
-  { id: 'education', label: 'Education' },
+  { id: 'about', label: 'About' },
+  { id: 'skills', label: 'Skills' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
-  { id: 'events', label: 'Events' }
+  { id: 'contact', label: 'Contact' }
 ]
 
 const sectionComponents = {
   home: Landing,
-  intro: Intro,
-  education: Education,
+  about: About,
+  skills: Skills,
   experience: Experience,
   projects: Projects,
-  events: Events
+  contact: Contact
 }
 
 export default function Home() {
