@@ -550,6 +550,7 @@ body {
 
 /* Footer */
 .site-footer {
+  width: 100%;
   padding: 3rem 2rem;
   text-align: center;
   color: var(--muted);
