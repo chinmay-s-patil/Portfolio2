@@ -196,7 +196,7 @@ export default function Events() {
         </div>
       </div>
 
-      <div style={{
+      {/* <div style={{
         marginTop: '3rem',
         padding: '2rem',
         borderRadius: '16px',
@@ -220,7 +220,7 @@ export default function Events() {
           </svg>
           <span>Get in Touch</span>
         </a>
-      </div>
+      </div> */}
     </div>
   )
 }

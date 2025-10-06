@@ -84,18 +84,6 @@ export default function Intro() {
           </p>
         </div>
       </div>
-
-      <div className="mt-12 p-8 rounded-2xl" style={{
-        background: 'linear-gradient(135deg, rgba(20, 255, 200, 0.05), rgba(20, 255, 200, 0.02))',
-        border: '1px solid rgba(20, 255, 200, 0.15)'
-      }}>
-        <h3 className="font-semibold text-2xl mb-4">My Mission</h3>
-        <p className="muted text-lg leading-relaxed">
-          To democratize access to complex simulation data by building intuitive, 
-          high-performance visualization tools that empower non-experts to make 
-          data-driven decisions with confidence.
-        </p>
-      </div>
     </div>
   )
 }

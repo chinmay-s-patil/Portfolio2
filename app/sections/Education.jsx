@@ -100,7 +100,7 @@ export default function Education() {
             </p>
           </div>
 
-          <div className="card">
+          {/* <div className="card">
             <div style={{
               width: '48px',
               height: '48px',
@@ -146,12 +146,12 @@ export default function Education() {
               Exposure to state-of-the-art wind engineering labs, experimental testing, 
               and validation of computational models against real-world data.
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
 
       {/* Skills highlight */}
-      <div style={{
+      {/* <div style={{
         marginTop: '3rem',
         padding: '2rem',
         borderRadius: '16px',
@@ -194,7 +194,7 @@ export default function Education() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }
