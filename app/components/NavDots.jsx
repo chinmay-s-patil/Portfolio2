@@ -143,7 +143,6 @@ export default function NavDots({ sections }) {
           <div 
             className="dot-label"
             style={{
-              fontSize: '0.85rem',
               fontWeight: i === active ? '600' : '400'
             }}
           >
