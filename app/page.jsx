@@ -33,7 +33,8 @@ export default function Home() {
     <>
       <Header />
       <NavDots sections={sectionsMeta} />
-      <main id="sections" aria-label="Full page sections">
+      
+      <main id="sections" aria-label="Portfolio sections">
         {sectionsMeta.map((s, idx) => {
           const Comp = sectionComponents[s.id]
           return (
@@ -42,8 +43,21 @@ export default function Home() {
             </SectionWrapper>
           )
         })}
+        
+        {/* Footer as last section */}
+        <section 
+          id="contact" 
+          className="section" 
+          style={{ 
+            minHeight: 'auto', 
+            height: 'auto',
+            scrollSnapAlign: 'end',
+            padding: 0 
+          }}
+        >
+          <Footer />
+        </section>
       </main>
-      <Footer />
     </>
   )
 }
