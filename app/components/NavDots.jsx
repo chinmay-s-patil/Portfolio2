@@ -113,7 +113,7 @@ export default function NavDots({ sections }) {
         style={{
           position: 'fixed',
           left: '2rem',
-          top: '40%',
+          top: '50%',
           transform: 'translateY(-50%)',
           zIndex: 60,
           display: 'flex',
