@@ -107,49 +107,70 @@ export default function NavDots({ sections }) {
   }
 
   return (
-    <div className="right-nav" aria-label="Section navigation">
-      <div className="label">SECTIONS</div>
-      
-      {/* Progress bar */}
+    <>
+      {/* Progress bar on the left */}
       <div 
-        className="progress-track" 
-        role="progressbar" 
-        aria-valuemin="0" 
-        aria-valuemax="100" 
-        aria-valuenow={Math.round((active / (sections.length - 1)) * 100)}
+        style={{
+          position: 'fixed',
+          left: '2rem',
+          top: '40%',
+          transform: 'translateY(-50%)',
+          zIndex: 60,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '1rem',
+          animation: 'fadeInLeft 0.8s ease-out'
+        }}
         aria-label="Scroll progress"
       >
-        <div ref={progressRef} className="progress-fill" />
+        {/* <div className="label">Section</div> */}
+        <div className="section-label">SECTIONS</div>
+        
+        <div 
+          className="progress-track" 
+          role="progressbar" 
+          aria-valuemin="0" 
+          aria-valuemax="100" 
+          aria-valuenow={Math.round((active / (sections.length - 1)) * 100)}
+          aria-label="Scroll progress"
+        >
+          <div ref={progressRef} className="progress-fill" />
+        </div>
       </div>
 
-      <div style={{ height: '1rem' }} />
+      {/* Navigation dots on the right */}
+      <div className="right-nav" aria-label="Section navigation">
+        {/* <div className="label">SECTIONS</div> */}
+        
+        <div style={{ height: '1rem' }} />
 
-      {/* Navigation dots */}
-      {sections.map((s, i) => (
-        <div 
-          key={s.id} 
-          className="nav-row"
-        >
-          <button
-            aria-label={`Go to ${s.label} section`}
-            aria-current={i === active ? 'true' : 'false'}
-            title={s.label}
-            className={`nav-dot ${i === active ? 'active' : ''}`}
-            onClick={() => goTo(i)}
-            style={{
-              transform: i === active ? 'scale(1.4)' : isScrolling && i !== active ? 'scale(0.9)' : 'scale(1)'
-            }}
-          />
+        {sections.map((s, i) => (
           <div 
-            className="dot-label"
-            style={{
-              fontWeight: i === active ? '600' : '400'
-            }}
+            key={s.id} 
+            className="nav-row"
           >
-            {s.label}
+            <button
+              aria-label={`Go to ${s.label} section`}
+              aria-current={i === active ? 'true' : 'false'}
+              title={s.label}
+              className={`nav-dot ${i === active ? 'active' : ''}`}
+              onClick={() => goTo(i)}
+              style={{
+                transform: i === active ? 'scale(1.4)' : isScrolling && i !== active ? 'scale(0.9)' : 'scale(1)'
+              }}
+            />
+            <div 
+              className="dot-label"
+              style={{
+                fontWeight: i === active ? '600' : '400'
+              }}
+            >
+              {s.label}
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </>
   )
 }

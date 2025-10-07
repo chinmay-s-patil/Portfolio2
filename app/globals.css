@@ -420,7 +420,7 @@ body {
 .right-nav {
   position: fixed;
   right: 2rem;
-  top: 50%;
+  top: 35%;
   transform: translateY(-50%);
   z-index: 60;
   display: flex;
@@ -442,6 +442,15 @@ body {
 }
 
 .right-nav .label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+}
+
+.section-label {
   font-size: 0.75rem;
   color: var(--muted);
   writing-mode: vertical-rl;

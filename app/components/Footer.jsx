@@ -2,14 +2,14 @@
 
 export default function Footer() {
   return (
-    <footer className="site-footer" style={{ padding: '2.5rem 1rem' }}>
-      <div style={{ maxWidth: '100%', margin: '0 auto' }}>
+    <footer className="site-footer" style={{ padding: '1rem 1rem 0.5rem' }}>
+      <div style={{ maxWidth: '90%', margin: '0 auto' }}>
         {/* Main content grid - three equal columns, content centered in each */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
           gap: '3rem',
-          marginBottom: '2rem',
+          marginBottom: '0.5rem',
           alignItems: 'start',
           justifyItems: 'center'
         }}>
@@ -82,7 +82,7 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div style={{
-          paddingTop: '1.5rem',
+          paddingTop: '.5rem',
           borderTop: '1px solid var(--border)',
           display: 'flex',
           justifyContent: 'space-between',
