@@ -43,6 +43,41 @@ export default function Projects() {
       description: 'Comprehensive comparative study of RANS turbulence models (k-ε, k-ω SST, Spalart-Allmaras) for external aerodynamics with validation against experimental data.',
       href: '#',
       tags: ['Turbulence', 'Validation', 'Research']
+    },
+    {
+      title: 'Turbulence Model Comparison',
+      subtitle: 'OpenFOAM · Analysis',
+      description: 'Comprehensive comparative study of RANS turbulence models (k-ε, k-ω SST, Spalart-Allmaras) for external aerodynamics with validation against experimental data.',
+      href: '#',
+      tags: ['Turbulence', 'Validation', 'Research']
+    },
+    {
+      title: 'Turbulence Model Comparison',
+      subtitle: 'OpenFOAM · Analysis',
+      description: 'Comprehensive comparative study of RANS turbulence models (k-ε, k-ω SST, Spalart-Allmaras) for external aerodynamics with validation against experimental data.',
+      href: '#',
+      tags: ['Turbulence', 'Validation', 'Research']
+    },
+    {
+      title: 'Turbulence Model Comparison',
+      subtitle: 'OpenFOAM · Analysis',
+      description: 'Comprehensive comparative study of RANS turbulence models (k-ε, k-ω SST, Spalart-Allmaras) for external aerodynamics with validation against experimental data.',
+      href: '#',
+      tags: ['Turbulence', 'Validation', 'Research']
+    },
+    {
+      title: 'Turbulence Model Comparison',
+      subtitle: 'OpenFOAM · Analysis',
+      description: 'Comprehensive comparative study of RANS turbulence models (k-ε, k-ω SST, Spalart-Allmaras) for external aerodynamics with validation against experimental data.',
+      href: '#',
+      tags: ['Turbulence', 'Validation', 'Research']
+    },
+    {
+      title: 'Turbulence Model Comparison',
+      subtitle: 'OpenFOAM · Analysis',
+      description: 'Comprehensive comparative study of RANS turbulence models (k-ε, k-ω SST, Spalart-Allmaras) for external aerodynamics with validation against experimental data.',
+      href: '#',
+      tags: ['Turbulence', 'Validation', 'Research']
     }
   ]
 
