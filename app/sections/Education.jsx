@@ -18,9 +18,11 @@ export default function EducationSection() {
   ];
   
   const bachelorsImages = [
-    '/VIT/slideshow/image1.jpg',
-    '/VIT/slideshow/image2.jpg',
-    '/VIT/slideshow/image3.jpg'
+    '/VITC/slideshow/13469604894_02d812d4ca_b.jpg',
+    '/VITC/slideshow/5th-Floor-VOC-Auditorium-4.jpg',
+    '/VITC/slideshow/campus-banner.jpg',
+    '/VITC/slideshow/R.jpeg',
+    '/VITC/slideshow/vitchennai3.png',
   ];
   
   const currentImages = activeTab === 'masters' ? mastersImages : bachelorsImages;
@@ -290,18 +292,20 @@ export default function EducationSection() {
                 }}
               >
                 {/* Fallback for missing images */}
-                <div style={{
-                  width: '100%',
-                  height: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: 'linear-gradient(135deg, rgba(20, 255, 200, 0.1), rgba(140, 255, 200, 0.05))',
-                  color: 'rgba(255, 255, 255, 0.5)',
-                  fontSize: '1rem'
-                }}>
-                  {activeTab === 'masters' ? 'TUM Campus' : 'VIT Chennai Campus'}
-                </div>
+                {!img && (
+                  <div style={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'linear-gradient(135deg, rgba(20, 255, 200, 0.1), rgba(140, 255, 200, 0.05))',
+                    color: 'rgba(255, 255, 255, 0.5)',
+                    fontSize: '1rem'
+                  }}>
+                    {activeTab === 'masters' ? 'TUM Campus' : 'VIT Chennai Campus'}
+                  </div>
+                )}
               </div>
             ))}
           </div>
