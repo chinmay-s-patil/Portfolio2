@@ -80,6 +80,48 @@ export default function Projects() {
       description: 'Computational aeroacoustics analysis of flow-induced noise using Ffowcs Williams-Hawkings acoustic analogy for automotive side mirror design optimization.',
       href: '#',
       tags: ['Acoustics', 'Automotive', 'Noise']
+    },
+    {
+      title: 'Cavitation Studies',
+      subtitle: 'Multiphase · VOF',
+      description: 'Investigation of cavitation phenomena in marine propellers using Volume of Fluid method with vapor-liquid phase change modeling and erosion risk assessment.',
+      href: '#',
+      tags: ['Multiphase', 'Marine', 'Advanced']
+    },
+    {
+      title: 'HVAC System Design',
+      subtitle: 'Comfort · Energy',
+      description: 'Room air distribution analysis for HVAC systems focusing on thermal comfort indices, energy efficiency, and compliance with ventilation standards.',
+      href: '#',
+      tags: ['HVAC', 'Comfort', 'Building']
+    },
+    {
+      title: 'Aeroacoustics Study',
+      subtitle: 'Noise · FW-H',
+      description: 'Computational aeroacoustics analysis of flow-induced noise using Ffowcs Williams-Hawkings acoustic analogy for automotive side mirror design optimization.',
+      href: '#',
+      tags: ['Acoustics', 'Automotive', 'Noise']
+    },
+    {
+      title: 'Cavitation Studies',
+      subtitle: 'Multiphase · VOF',
+      description: 'Investigation of cavitation phenomena in marine propellers using Volume of Fluid method with vapor-liquid phase change modeling and erosion risk assessment.',
+      href: '#',
+      tags: ['Multiphase', 'Marine', 'Advanced']
+    },
+    {
+      title: 'HVAC System Design',
+      subtitle: 'Comfort · Energy',
+      description: 'Room air distribution analysis for HVAC systems focusing on thermal comfort indices, energy efficiency, and compliance with ventilation standards.',
+      href: '#',
+      tags: ['HVAC', 'Comfort', 'Building']
+    },
+    {
+      title: 'Aeroacoustics Study',
+      subtitle: 'Noise · FW-H',
+      description: 'Computational aeroacoustics analysis of flow-induced noise using Ffowcs Williams-Hawkings acoustic analogy for automotive side mirror design optimization.',
+      href: '#',
+      tags: ['Acoustics', 'Automotive', 'Noise']
     }
   ]
 
@@ -159,14 +201,14 @@ export default function Projects() {
       </div>
 
       {/* Scrollable Projects Container */}
+      {/* Scrollable Projects Container */}
       <div 
         ref={scrollContainerRef}
+        className="projects-scroll-container"
         style={{
           flex: 1,
           overflowY: 'auto',
           overflowX: 'hidden',
-          scrollSnapType: 'y mandatory',
-          scrollBehavior: 'smooth',
           scrollbarWidth: 'none',
           msOverflowStyle: 'none'
         }}

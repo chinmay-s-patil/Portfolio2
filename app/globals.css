@@ -298,6 +298,21 @@ body {
   background: rgba(255, 255, 255, 0.3);
 }
 
+/* Projects section scroll snap - add this anywhere in globals.css */
+.projects-scroll-container {
+  scroll-snap-type: y mandatory;
+  scroll-padding: 0;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+.projects-scroll-page {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-height: 100%;
+  flex-shrink: 0;
+}
+
 .projects-page {
   min-width: 100%;
   flex-shrink: 0;
