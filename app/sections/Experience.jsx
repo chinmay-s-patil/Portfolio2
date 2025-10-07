@@ -289,9 +289,55 @@ export default function Experience() {
           top: 50%;
           transform: translateY(-50%);
           height: 3px;
+          background: transparent;
+          z-index: 0;
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 0 calc(50% / 5);
+        }
+        .progress-bg::before {
+          content: '';
+          flex: 1;
+          height: 3px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 999px;
+        }
+        .progress-bg::after {
+          content: '';
+          flex: 1;
+          height: 3px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 999px;
+        }
+        .tabs-wrapper::before,
+        .tabs-wrapper::after,
+        .year-button::before,
+        .year-button::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          height: 3px;
           background: rgba(255, 255, 255, 0.1);
           border-radius: 999px;
           z-index: 0;
+        }
+        .tabs-wrapper::before {
+          left: 0;
+          width: calc((100% - (1rem * 4)) / 5 / 2);
+        }
+        .tabs-wrapper::after {
+          right: 0;
+          width: calc((100% - (1rem * 4)) / 5 / 2);
+        }
+        .year-button::after {
+          left: 100%;
+          width: 1rem;
+          margin-left: 0;
+        }
+        .year-button:last-child::after {
+          display: none;
         }
         .progress-fill {
           position: absolute;
@@ -303,6 +349,7 @@ export default function Experience() {
           z-index: 1;
           transition: width 0.3s ease;
           box-shadow: 0 0 12px hsl(var(--accent) / 0.5);
+          pointer-events: none;
         }
 
         .year-tabs {
