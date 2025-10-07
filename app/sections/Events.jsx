@@ -1,204 +1,398 @@
+'use client'
+import { useState, useEffect } from 'react'
+
 export default function Events() {
-  const SCALE = 0.75; // change this value as needed
+  const SCALE = 0.75
+  const [selectedEvent, setSelectedEvent] = useState(null)
+
+  const events = [
+    {
+      id: 1,
+      title: 'Advanced CFD Workshop',
+      location: 'CSIR SERC, Chennai',
+      date: 'Summer 2022',
+      year: '2022',
+      type: 'Workshop',
+      images: [
+        '/events/cfd-workshop-1.jpg',
+        '/events/cfd-workshop-2.jpg',
+        '/events/cfd-workshop-3.jpg'
+      ],
+      description: 'Intensive hands-on sessions covering advanced meshing strategies, turbulence modeling best practices, and comprehensive validation methodologies for industrial CFD applications.',
+      tags: ['Meshing', 'Turbulence', 'Validation'],
+      rotation: -2,
+      color: '#14ffc8'
+    },
+    {
+      id: 2,
+      title: 'Student Aerospace Meet',
+      location: 'Munich, Germany',
+      date: 'March 2023',
+      year: '2023',
+      type: 'Poster Presentation',
+      images: [
+        '/events/aerospace-meet-1.jpg',
+        '/events/aerospace-meet-2.jpg',
+        '/events/aerospace-meet-3.jpg'
+      ],
+      description: 'Presented research poster on propeller flow-field visualizations using CFD, showcasing innovative approaches to vortex structure analysis and wake characterization.',
+      tags: ['Research', 'Aerodynamics', 'CFD'],
+      rotation: 3,
+      color: '#00d4aa'
+    },
+    {
+      id: 3,
+      title: 'OpenFOAM Conference',
+      location: 'Online',
+      date: 'September 2023',
+      year: '2023',
+      type: 'Conference',
+      images: [
+        '/events/openfoam-1.jpg',
+        '/events/openfoam-2.jpg',
+        '/events/openfoam-3.jpg'
+      ],
+      description: 'Attended technical sessions and networking events focused on latest developments in OpenFOAM, including new solver implementations and parallel computing strategies.',
+      tags: ['OpenFOAM', 'Community', 'HPC'],
+      rotation: -1,
+      color: '#00b890'
+    },
+    {
+      id: 4,
+      title: 'Web Dev Meetup',
+      location: 'Munich, Germany',
+      date: 'January 2024',
+      year: '2024',
+      type: 'Speaker',
+      images: [
+        '/events/webdev-meetup-1.jpg',
+        '/events/webdev-meetup-2.jpg',
+        '/events/webdev-meetup-3.jpg'
+      ],
+      description: 'Presented talk on "Bridging Engineering and Web: Building Interactive CFD Dashboards" covering techniques for integrating scientific computing with modern frameworks.',
+      tags: ['Speaking', 'Web Dev', 'Visualization'],
+      rotation: 2,
+      color: '#009c76'
+    }
+  ]
+
+  const [imageIndices, setImageIndices] = useState(
+    events.reduce((acc, event) => ({ ...acc, [event.id]: 0 }), {})
+  )
+
+  // Auto-advance slideshows
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setImageIndices(prev => {
+        const newIndices = { ...prev }
+        events.forEach(event => {
+          newIndices[event.id] = (prev[event.id] + 1) % event.images.length
+        })
+        return newIndices
+      })
+    }, 4000)
+
+    return () => clearInterval(interval)
+  }, [events])
 
   return (
-    <div className="max-w-5xl mx-auto">
-      <div style={{ transform: `scale(${SCALE})`, transformOrigin: 'center top' }}>
+    <div style={{ maxWidth: '1300px', margin: '0 auto', height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ transform: `scale(${SCALE})`, transformOrigin: 'center top', flexShrink: 0, marginBottom: '2rem' }}>
         <div className="kicker">Conferences & Workshops</div>
-        <h2 className="text-4xl md:text-5xl font-bold mb-6">Events & Presentations</h2>
-        <p className="muted text-lg mb-12" style={{ maxWidth: '60ch' }}>
-          Active participation in technical conferences, workshops, and knowledge-sharing events 
-          within the CFD and engineering community.
+        <h2 className="text-4xl md:text-5xl font-bold mb-4">Events & Presentations</h2>
+        <p className="muted text-lg" style={{ maxWidth: '60ch' }}>
+          A visual journey through technical conferences, workshops, and speaking engagements.
         </p>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="card">
+      {/* Polaroid Collage Grid - Scrollable */}
+      <div style={{
+        flex: 1,
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        paddingRight: '0.5rem'
+      }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: '2rem',
+          padding: '2rem 0',
+          alignItems: 'start'
+        }}>
+        {events.map((event, idx) => (
+          <div
+            key={event.id}
+            onClick={() => setSelectedEvent(selectedEvent?.id === event.id ? null : event)}
+            style={{
+              cursor: 'pointer',
+              transform: `rotate(${event.rotation}deg) scale(${selectedEvent?.id === event.id ? 1.05 : 1})`,
+              transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+              marginTop: idx % 2 === 0 ? '0' : '2rem'
+            }}
+            className="polaroid-card"
+          >
+            {/* Polaroid Frame */}
             <div style={{
-              width: '52px',
-              height: '52px',
-              borderRadius: '12px',
-              background: 'linear-gradient(135deg, hsl(var(--accent) / 0.2), hsl(var(--accent) / 0.05))',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: '1.25rem'
+              background: 'linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%)',
+              padding: '1rem',
+              paddingBottom: '4rem',
+              borderRadius: '8px',
+              boxShadow: selectedEvent?.id === event.id
+                ? `0 20px 60px ${event.color}40, 0 0 0 3px ${event.color}`
+                : '0 10px 30px rgba(0, 0, 0, 0.5), 0 1px 8px rgba(0, 0, 0, 0.3)',
+              position: 'relative',
+              overflow: 'hidden'
             }}>
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="3" y="6" width="18" height="13" rx="2" stroke="hsl(var(--accent))" strokeWidth="2"/>
-                <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6" stroke="hsl(var(--accent))" strokeWidth="2"/>
-                <path d="M3 10H21" stroke="hsl(var(--accent))" strokeWidth="2"/>
-              </svg>
-            </div>
-            
-            <h4 className="font-semibold text-xl mb-2">Advanced CFD Workshop</h4>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="muted text-sm">CSIR SERC</span>
-              <span className="muted" style={{ opacity: 0.5 }}>•</span>
-              <span className="muted text-sm">2022</span>
-            </div>
-            
-            <p className="muted mb-4" style={{ lineHeight: '1.7', fontSize: '0.95rem' }}>
-              Participated in intensive hands-on sessions covering advanced meshing strategies, 
-              turbulence modeling best practices, and comprehensive validation methodologies 
-              for industrial CFD applications.
-            </p>
+              {/* Year Badge - Top Left */}
+              <div style={{
+                position: 'absolute',
+                top: '1.5rem',
+                left: '1.5rem',
+                padding: '0.5rem 1rem',
+                background: 'rgba(0, 0, 0, 0.8)',
+                backdropFilter: 'blur(8px)',
+                borderRadius: '8px',
+                fontSize: '1.25rem',
+                fontWeight: '900',
+                color: event.color,
+                zIndex: 10,
+                border: `2px solid ${event.color}60`,
+                boxShadow: `0 4px 12px ${event.color}30`
+              }}>
+                {event.year}
+              </div>
 
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              {['Meshing', 'Turbulence', 'Validation'].map(tag => (
-                <span key={tag} style={{
-                  padding: '0.3rem 0.75rem',
-                  borderRadius: '6px',
-                  fontSize: '0.75rem',
-                  background: 'rgba(255, 255, 255, 0.04)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  color: 'var(--muted)'
+              {/* Photo Slideshow */}
+              <div style={{
+                width: '100%',
+                height: '280px',
+                background: `linear-gradient(135deg, ${event.color}20, ${event.color}05)`,
+                borderRadius: '4px',
+                overflow: 'hidden',
+                position: 'relative',
+                marginBottom: '1rem'
+              }}>
+                {event.images.map((img, imgIdx) => (
+                  <div
+                    key={imgIdx}
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      backgroundImage: `url(${img})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      opacity: imageIndices[event.id] === imgIdx ? 1 : 0,
+                      filter: selectedEvent?.id === event.id ? 'brightness(1)' : 'brightness(0.9)',
+                      transition: 'opacity 1s ease-in-out, filter 0.3s ease'
+                    }}
+                  />
+                ))}
+                
+                {/* Fallback */}
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '3rem',
+                  fontWeight: '900',
+                  color: event.color,
+                  opacity: 0.15
                 }}>
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
+                  {event.year}
+                </div>
 
-          <div className="card">
-            <div style={{
-              width: '52px',
-              height: '52px',
-              borderRadius: '12px',
-              background: 'linear-gradient(135deg, hsl(var(--accent) / 0.2), hsl(var(--accent) / 0.05))',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: '1.25rem'
-            }}>
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M9 11L12 14L22 4" stroke="hsl(var(--accent))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M21 12V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H16" stroke="hsl(var(--accent))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            
-            <h4 className="font-semibold text-xl mb-2">Student Aerospace Meet</h4>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="muted text-sm">Poster Presentation</span>
-              <span className="muted" style={{ opacity: 0.5 }}>•</span>
-              <span className="muted text-sm">2023</span>
-            </div>
-            
-            <p className="muted mb-4" style={{ lineHeight: '1.7', fontSize: '0.95rem' }}>
-              Presented research poster on propeller flow-field visualizations using CFD, 
-              showcasing innovative approaches to vortex structure analysis and wake 
-              characterization in rotorcraft applications.
-            </p>
-
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              {['Aerodynamics', 'Visualization', 'Research'].map(tag => (
-                <span key={tag} style={{
-                  padding: '0.3rem 0.75rem',
-                  borderRadius: '6px',
+                {/* Type Badge - Top Right */}
+                <div style={{
+                  position: 'absolute',
+                  top: '1rem',
+                  right: '1rem',
+                  padding: '0.4rem 0.9rem',
+                  background: 'rgba(0, 0, 0, 0.75)',
+                  backdropFilter: 'blur(8px)',
+                  borderRadius: '20px',
                   fontSize: '0.75rem',
-                  background: 'rgba(255, 255, 255, 0.04)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  color: 'var(--muted)'
+                  fontWeight: '700',
+                  color: event.color,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
                 }}>
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
+                  {event.type}
+                </div>
 
-          <div className="card">
-            <div style={{
-              width: '52px',
-              height: '52px',
-              borderRadius: '12px',
-              background: 'linear-gradient(135deg, hsl(var(--accent) / 0.2), hsl(var(--accent) / 0.05))',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: '1.25rem'
-            }}>
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="hsl(var(--accent))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <circle cx="9" cy="7" r="4" stroke="hsl(var(--accent))" strokeWidth="2"/>
-                <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="hsl(var(--accent))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89317 18.7122 8.75608 18.1676 9.45768C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="hsl(var(--accent))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            
-            <h4 className="font-semibold text-xl mb-2">OpenFOAM User Conference</h4>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="muted text-sm">Attendee</span>
-              <span className="muted" style={{ opacity: 0.5 }}>•</span>
-              <span className="muted text-sm">2023</span>
-            </div>
-            
-            <p className="muted mb-4" style={{ lineHeight: '1.7', fontSize: '0.95rem' }}>
-              Attended technical sessions and networking events focused on latest developments 
-              in OpenFOAM, including new solver implementations, parallel computing strategies, 
-              and community best practices.
-            </p>
-
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              {['OpenFOAM', 'Community', 'HPC'].map(tag => (
-                <span key={tag} style={{
-                  padding: '0.3rem 0.75rem',
-                  borderRadius: '6px',
-                  fontSize: '0.75rem',
-                  background: 'rgba(255, 255, 255, 0.04)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  color: 'var(--muted)'
+                {/* Slideshow Indicators */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: '1rem',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  display: 'flex',
+                  gap: '0.4rem',
+                  zIndex: 10
                 }}>
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
+                  {event.images.map((_, imgIdx) => (
+                    <div
+                      key={imgIdx}
+                      style={{
+                        width: imageIndices[event.id] === imgIdx ? '24px' : '8px',
+                        height: '8px',
+                        borderRadius: '4px',
+                        background: imageIndices[event.id] === imgIdx 
+                          ? event.color 
+                          : 'rgba(255, 255, 255, 0.4)',
+                        transition: 'all 0.3s ease',
+                        boxShadow: imageIndices[event.id] === imgIdx 
+                          ? `0 0 8px ${event.color}80` 
+                          : 'none'
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
 
-          <div className="card">
-            <div style={{
-              width: '52px',
-              height: '52px',
-              borderRadius: '12px',
-              background: 'linear-gradient(135deg, hsl(var(--accent) / 0.2), hsl(var(--accent) / 0.05))',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: '1.25rem'
-            }}>
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="2" y="7" width="20" height="14" rx="2" stroke="hsl(var(--accent))" strokeWidth="2"/>
-                <path d="M16 21V5C16 4.46957 15.7893 3.96086 15.4142 3.58579C15.0391 3.21071 14.5304 3 14 3H10C9.46957 3 8.96086 3.21071 8.58579 3.58579C8.21071 3.96086 8 4.46957 8 5V21" stroke="hsl(var(--accent))" strokeWidth="2"/>
-              </svg>
-            </div>
-            
-            <h4 className="font-semibold text-xl mb-2">Web Development Meetup</h4>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="muted text-sm">Speaker</span>
-              <span className="muted" style={{ opacity: 0.5 }}>•</span>
-              <span className="muted text-sm">2024</span>
-            </div>
-            
-            <p className="muted mb-4" style={{ lineHeight: '1.7', fontSize: '0.95rem' }}>
-              Presented talk on "Bridging Engineering and Web: Building Interactive CFD Dashboards" 
-              covering techniques for integrating scientific computing with modern web frameworks.
-            </p>
+              {/* Caption Area */}
+              <div style={{
+                fontFamily: "'Caveat', cursive",
+                fontSize: '1.2rem',
+                color: '#e0e0e0',
+                textAlign: 'center',
+                marginBottom: '0.5rem',
+                fontWeight: '600'
+              }}>
+                {event.title}
+              </div>
 
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              {['Web Dev', 'Visualization', 'Speaking'].map(tag => (
-                <span key={tag} style={{
-                  padding: '0.3rem 0.75rem',
-                  borderRadius: '6px',
-                  fontSize: '0.75rem',
-                  background: 'rgba(255, 255, 255, 0.04)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  color: 'var(--muted)'
+              <div style={{
+                fontSize: '0.85rem',
+                color: '#a0a0a0',
+                textAlign: 'center',
+                marginBottom: '0.75rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem'
+              }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="currentColor" strokeWidth="2"/>
+                  <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="2"/>
+                </svg>
+                {event.location}
+              </div>
+
+              <div style={{
+                fontSize: '0.8rem',
+                color: '#808080',
+                textAlign: 'center',
+                fontStyle: 'italic'
+              }}>
+                {event.date}
+              </div>
+
+              {/* Expanded Info */}
+              <div style={{
+                maxHeight: selectedEvent?.id === event.id ? '300px' : '0',
+                overflow: 'hidden',
+                transition: 'max-height 0.4s ease'
+              }}>
+                <div style={{
+                  marginTop: '1.5rem',
+                  paddingTop: '1.5rem',
+                  borderTop: '2px solid #333'
                 }}>
-                  {tag}
-                </span>
-              ))}
+                  <p style={{
+                    fontSize: '0.9rem',
+                    lineHeight: '1.7',
+                    color: '#c0c0c0',
+                    marginBottom: '1rem',
+                    textAlign: 'left'
+                  }}>
+                    {event.description}
+                  </p>
+
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '0.5rem',
+                    justifyContent: 'center'
+                  }}>
+                    {event.tags.map((tag, i) => (
+                      <span
+                        key={i}
+                        style={{
+                          padding: '0.4rem 0.9rem',
+                          borderRadius: '20px',
+                          fontSize: '0.75rem',
+                          fontWeight: '600',
+                          background: `${event.color}15`,
+                          color: event.color,
+                          border: `1.5px solid ${event.color}40`
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Tape Effect */}
+              <div style={{
+                position: 'absolute',
+                top: '-8px',
+                left: '50%',
+                transform: 'translateX(-50%) rotate(-2deg)',
+                width: '80px',
+                height: '20px',
+                background: 'rgba(255, 255, 255, 0.3)',
+                backdropFilter: 'blur(2px)',
+                border: '1px solid rgba(0, 0, 0, 0.05)',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+              }} />
             </div>
+
+            {/* Click hint */}
+            {selectedEvent?.id !== event.id && (
+              <div style={{
+                position: 'absolute',
+                bottom: '1rem',
+                right: '1rem',
+                fontSize: '0.75rem',
+                color: 'rgba(255, 255, 255, 0.5)',
+                background: 'rgba(0, 0, 0, 0.6)',
+                padding: '0.4rem 0.8rem',
+                borderRadius: '12px',
+                opacity: 0,
+                transition: 'opacity 0.3s ease'
+              }}
+              className="click-hint"
+              >
+                Click to expand
+              </div>
+            )}
           </div>
+        ))}
         </div>
       </div>
+
+      <style jsx>{`
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&display=swap');
+
+        .polaroid-card:hover {
+          transform: rotate(0deg) scale(1.02) translateY(-8px) !important;
+          z-index: 10;
+        }
+
+        .polaroid-card:hover .click-hint {
+          opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+          .polaroid-card {
+            transform: rotate(0deg) !important;
+          }
+        }
+      `}</style>
     </div>
   )
 }
