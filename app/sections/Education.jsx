@@ -8,11 +8,13 @@ export default function EducationSection() {
   
   // Slideshow data
   const mastersImages = [
-    '/TUM/slideshow/image1.jpg',
-    '/TUM/slideshow/image2.jpg',
-    '/TUM/slideshow/image3.jpg',
-    '/TUM/slideshow/image4.jpg',
-    '/TUM/slideshow/image5.jpg'
+  '/TUM/Slideshow/1533559592php3XzNsk.jpeg',
+  '/TUM/Slideshow/1533559592phpn8Vt65.jpeg',
+  '/TUM/Slideshow/1533559592phpsYF8Oy.jpeg',
+  '/TUM/Slideshow/1533559592phpxHu6nD.jpeg',
+  '/TUM/Slideshow/1533559593phpr35XFa.jpeg',
+  '/TUM/Slideshow/6244f144-e799-4122-9ea5-6cf251ab69c4_TUM internet picture1_8e811d4e_750x400.jpg',
+  '/TUM/Slideshow/Technical-University-of-Munich-–-TUM-campus-610x406.jpg',
   ];
   
   const bachelorsImages = [
@@ -23,7 +25,7 @@ export default function EducationSection() {
   
   const currentImages = activeTab === 'masters' ? mastersImages : bachelorsImages;
   
-  // Auto-advance slideshow
+  // Auto-advance slideshow every 4 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % currentImages.length);
@@ -137,14 +139,16 @@ export default function EducationSection() {
       {/* Content Area */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: '3rem',
-        alignItems: 'start'
+        gridTemplateColumns: '45fr 55fr',
+        gap: '2rem',
+        alignItems: 'stretch'
       }}>
         {/* Left Side - Text Content */}
         <div style={{ 
           animation: 'fadeIn 0.5s ease-in',
-          paddingRight: '2rem'
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center'
         }}>
           <div style={{
             fontSize: '0.85rem',
@@ -242,147 +246,65 @@ export default function EducationSection() {
           </div>
         </div>
 
-        {/* Right Side - Slideshow */}
+        {/* Right Side - Slideshow with Fade Effect */}
         <div style={{
           position: 'relative',
           width: '100%',
-          height: '500px',
-          borderRadius: '16px',
-          overflow: 'hidden',
-          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
-          border: '1px solid rgba(255, 255, 255, 0.1)'
+          height: '100%',
+          minHeight: '500px',
+          display: 'flex',
+          alignItems: 'center'
         }}>
-          {currentImages.map((img, idx) => (
-            <div
-              key={idx}
-              style={{
-                position: 'absolute',
-                inset: 0,
-                opacity: idx === currentImageIndex ? 1 : 0,
-                transition: 'opacity 0.8s ease-in-out',
-                background: `url(${img}) center/cover no-repeat`,
-                backgroundColor: 'rgba(255, 255, 255, 0.05)'
-              }}
-            >
-              {/* Fallback for missing images */}
-              <div style={{
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'linear-gradient(135deg, rgba(20, 255, 200, 0.1), rgba(140, 255, 200, 0.05))',
-                color: 'rgba(255, 255, 255, 0.5)',
-                fontSize: '1rem'
-              }}>
-                {activeTab === 'masters' ? 'TUM Campus' : 'VIT Chennai Campus'}
-              </div>
-            </div>
-          ))}
-
-          {/* Slideshow Indicators */}
+          {/* Gradient Fade Overlay - Left to Right */}
           <div style={{
             position: 'absolute',
-            bottom: '1.5rem',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            display: 'flex',
-            gap: '0.5rem',
-            zIndex: 10
+            left: 0,
+            top: 0,
+            bottom: 0,
+            width: '120px',
+            background: 'linear-gradient(to right, rgba(10, 14, 26, 1) 0%, rgba(10, 14, 26, 0.8) 40%, rgba(10, 14, 26, 0) 100%)',
+            zIndex: 2,
+            pointerEvents: 'none'
+          }} />
+
+          {/* Slideshow Container */}
+          <div style={{
+            position: 'relative',
+            width: '100%',
+            height: '100%',
+            borderRadius: '16px',
+            overflow: 'hidden',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
+            border: '1px solid rgba(255, 255, 255, 0.1)'
           }}>
-            {currentImages.map((_, idx) => (
-              <button
+            {currentImages.map((img, idx) => (
+              <div
                 key={idx}
-                onClick={() => setCurrentImageIndex(idx)}
                 style={{
-                  width: idx === currentImageIndex ? '40px' : '10px',
-                  height: '10px',
-                  borderRadius: '5px',
-                  background: idx === currentImageIndex 
-                    ? 'hsl(var(--accent))' 
-                    : 'rgba(255, 255, 255, 0.4)',
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  boxShadow: idx === currentImageIndex 
-                    ? '0 0 10px hsl(var(--accent) / 0.6)' 
-                    : 'none'
+                  position: 'absolute',
+                  inset: 0,
+                  opacity: idx === currentImageIndex ? 1 : 0,
+                  transition: 'opacity 1.2s ease-in-out',
+                  background: `url(${img}) center/cover no-repeat`,
+                  backgroundColor: 'rgba(255, 255, 255, 0.05)'
                 }}
-                aria-label={`Go to image ${idx + 1}`}
-              />
+              >
+                {/* Fallback for missing images */}
+                <div style={{
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'linear-gradient(135deg, rgba(20, 255, 200, 0.1), rgba(140, 255, 200, 0.05))',
+                  color: 'rgba(255, 255, 255, 0.5)',
+                  fontSize: '1rem'
+                }}>
+                  {activeTab === 'masters' ? 'TUM Campus' : 'VIT Chennai Campus'}
+                </div>
+              </div>
             ))}
           </div>
-
-          {/* Navigation Arrows */}
-          <button
-            onClick={() => setCurrentImageIndex((prev) => 
-              (prev - 1 + currentImages.length) % currentImages.length
-            )}
-            style={{
-              position: 'absolute',
-              left: '1rem',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              background: 'rgba(0, 0, 0, 0.6)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              color: 'white',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'all 0.2s ease',
-              zIndex: 10
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)';
-              e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(0, 0, 0, 0.6)';
-              e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
-            }}
-          >
-            ‹
-          </button>
-          
-          <button
-            onClick={() => setCurrentImageIndex((prev) => 
-              (prev + 1) % currentImages.length
-            )}
-            style={{
-              position: 'absolute',
-              right: '1rem',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              background: 'rgba(0, 0, 0, 0.6)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              color: 'white',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'all 0.2s ease',
-              zIndex: 10
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)';
-              e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(0, 0, 0, 0.6)';
-              e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
-            }}
-          >
-            ›
-          </button>
         </div>
       </div>
 
