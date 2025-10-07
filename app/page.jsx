@@ -5,8 +5,7 @@ import SectionWrapper from './components/SectionWrapper'
 import Landing from './sections/Landing'
 import Intro from './sections/Intro'
 import Education from './sections/Education'
-import EducationMasters from './sections/EducationMasters'
-import EducationBachelors from './sections/EducationBachelors'
+import Experience from './sections/Experience'
 import Projects from './sections/Projects'
 import Events from './sections/Events'
 import Footer from './components/Footer'
@@ -14,8 +13,7 @@ import Footer from './components/Footer'
 const sectionsMeta = [
   { id: 'home', label: 'Home' },
   { id: 'intro', label: 'About' },
-  { id: 'education-masters', label: 'Masters' },
-  { id: 'education-bachelors', label: 'Bachelors' },
+  { id: 'education', label: 'Education' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
   { id: 'events', label: 'Events' }
@@ -24,8 +22,7 @@ const sectionsMeta = [
 const sectionComponents = {
   home: Landing,
   intro: Intro,
-  'education-masters': EducationMasters,
-  'education-bachelors': EducationBachelors,
+  education: Education,
   experience: Experience,
   projects: Projects,
   events: Events

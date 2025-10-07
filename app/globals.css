@@ -341,6 +341,35 @@ body {
   }
 }
 
+/* Smooth transitions for tab switching */
+.education-content {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+/* Hover effect for skill tags - already handled inline but can be moved here */
+.skill-tag:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Responsive adjustments for education section */
+@media (max-width: 968px) {
+  .education-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .education-slideshow {
+    height: 400px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .education-slideshow {
+    height: 300px !important;
+  }
+}
+
 /* Portrait card */
 .portrait {
   position: relative;
