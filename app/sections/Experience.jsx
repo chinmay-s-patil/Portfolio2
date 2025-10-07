@@ -138,7 +138,6 @@ export default function Experience() {
     if (!container) return
 
     const handleScroll = () => {
-      // Each child is min-width:100% so item width equals container.clientWidth
       const scrollLeft = container.scrollLeft
       const itemWidth = container.clientWidth || 1
       const newIndex = Math.min(Math.round(scrollLeft / itemWidth), experiences.length - 1)
@@ -162,10 +161,6 @@ export default function Experience() {
     })
   }
 
-  const calculateProgress = () => {
-    return (activeIndex / (experiences.length - 1)) * 100
-  }
-
   return (
     <section className="experience-section" style={{ maxWidth: '1200px', margin: '0 auto', height: '100%', display: 'flex', flexDirection: 'column', padding: '0 2rem' }}>
       <div
@@ -184,21 +179,55 @@ export default function Experience() {
         </p>
       </div>
 
-      {/* Tabs + Progress */}
+      {/* Year Tabs - No Progress Bar */}
       <div className="tabs-wrapper" style={{ position: 'relative', marginBottom: '3rem', flexShrink: 0 }}>
-        <div className="progress-bg" />
-        <div className="progress-fill" style={{ width: `${calculateProgress()}%` }} />
-
-        <div className="year-tabs">
+        <div className="year-tabs" style={{
+          display: 'flex',
+          gap: '1rem',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
           {experiences.map((exp, idx) => (
             <button
               key={idx}
               onClick={() => scrollToIndex(idx)}
-              className={`year-button ${idx === activeIndex ? 'active' : ''}`}
+              className="year-button"
+              style={{
+                flex: 1,
+                minWidth: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '0.25rem',
+                padding: '1rem 1.5rem',
+                borderRadius: '12px',
+                border: idx === activeIndex ? '2px solid hsl(var(--accent))' : '2px solid rgba(255,255,255,0.1)',
+                background: idx === activeIndex 
+                  ? 'linear-gradient(135deg, hsl(var(--accent) / 0.25), hsl(var(--accent) / 0.1))' 
+                  : 'rgba(255,255,255,0.03)',
+                cursor: 'pointer',
+                transition: 'all 0.25s ease',
+                boxShadow: idx === activeIndex ? '0 4px 20px hsl(var(--accent) / 0.3)' : 'none'
+              }}
               aria-current={idx === activeIndex}
             >
-              <div className="year">{exp.year}</div>
-              <div className="type">{exp.type}</div>
+              <div style={{
+                fontSize: '1.5rem',
+                fontWeight: '700',
+                color: idx === activeIndex ? 'hsl(var(--accent))' : 'rgba(255,255,255,0.6)',
+                transition: 'color 0.3s'
+              }}>
+                {exp.year}
+              </div>
+              <div style={{
+                fontSize: '0.65rem',
+                color: 'rgba(255,255,255,0.5)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                textAlign: 'center'
+              }}>
+                {exp.type}
+              </div>
             </button>
           ))}
         </div>
@@ -207,38 +236,146 @@ export default function Experience() {
       {/* Main grid */}
       <div className="main-grid" style={{ display: 'grid', gridTemplateColumns: '45% 55%', gap: '2rem', flex: 1, overflow: 'hidden' }}>
         {/* Left: scrollable panels */}
-        <div ref={scrollContainerRef} className="exp-scroll">
+        <div ref={scrollContainerRef} className="exp-scroll" style={{
+          overflowX: 'auto',
+          overflowY: 'hidden',
+          scrollSnapType: 'x mandatory',
+          display: 'flex',
+          gap: 0,
+          msOverflowStyle: 'none',
+          scrollbarWidth: 'none'
+        }}>
           {experiences.map((exp, idx) => (
-            <article key={idx} className="exp-panel" aria-hidden={idx !== activeIndex}>
-              <div className={`exp-panel-inner ${idx === activeIndex ? 'enter' : ''}`}>
-                <div className="header">
-                  <div className="accent" style={{ background: `linear-gradient(180deg, ${exp.color}, transparent)` }} />
+            <article key={idx} className="exp-panel" style={{
+              minWidth: '100%',
+              scrollSnapAlign: 'start',
+              scrollSnapStop: 'always',
+              display: 'flex',
+              alignItems: 'flex-start',
+              paddingRight: '2rem'
+            }} aria-hidden={idx !== activeIndex}>
+              <div className="exp-panel-inner" style={{
+                width: '100%',
+                animation: idx === activeIndex ? 'fadeIn 0.5s ease-in' : 'none'
+              }}>
+                <div className="header" style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  marginBottom: '1.5rem'
+                }}>
+                  <div className="accent" style={{
+                    width: '4px',
+                    height: '60px',
+                    borderRadius: '999px',
+                    flexShrink: 0,
+                    background: `linear-gradient(180deg, ${exp.color}, transparent)`
+                  }} />
                   <div>
-                    <h3 className="role" style={{ color: exp.color }}>{exp.role}</h3>
-                    <div className="company">{exp.company}</div>
-                    <div className="period">{exp.period}</div>
+                    <h3 className="role" style={{
+                      fontSize: '1.75rem',
+                      fontWeight: '700',
+                      marginBottom: '0.25rem',
+                      color: exp.color
+                    }}>
+                      {exp.role}
+                    </h3>
+                    <div className="company" style={{
+                      fontSize: '1.1rem',
+                      color: 'rgba(255,255,255,0.6)',
+                      fontWeight: '500'
+                    }}>
+                      {exp.company}
+                    </div>
+                    <div className="period" style={{
+                      fontSize: '0.85rem',
+                      color: 'rgba(255,255,255,0.4)',
+                      marginTop: '0.25rem',
+                      fontStyle: 'italic'
+                    }}>
+                      {exp.period}
+                    </div>
                   </div>
                 </div>
 
-                <p className="desc">{exp.description}</p>
+                <p className="desc" style={{
+                  fontSize: '1rem',
+                  lineHeight: '1.8',
+                  color: 'rgba(255,255,255,0.7)',
+                  marginBottom: '1.5rem'
+                }}>
+                  {exp.description}
+                </p>
 
-                <div className="achievements">
-                  <h4>Key Achievements</h4>
-                  <ul>
+                <div className="achievements" style={{ marginBottom: '1.5rem' }}>
+                  <h4 style={{
+                    fontSize: '0.9rem',
+                    fontWeight: '600',
+                    color: 'rgba(255,255,255,0.9)',
+                    marginBottom: '0.75rem'
+                  }}>
+                    Key Achievements
+                  </h4>
+                  <ul style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.5rem',
+                    padding: 0,
+                    margin: 0,
+                    listStyle: 'none'
+                  }}>
                     {exp.achievements.map((a, i) => (
-                      <li key={i}>
-                        <span className="bullet" style={{ color: exp.color }}>▹</span>
-                        <span className="ach-text">{a}</span>
+                      <li key={i} style={{
+                        display: 'flex',
+                        gap: '0.75rem',
+                        alignItems: 'flex-start'
+                      }}>
+                        <span className="bullet" style={{
+                          color: exp.color,
+                          fontSize: '1rem',
+                          lineHeight: 1,
+                          marginTop: '0.25rem',
+                          flexShrink: 0
+                        }}>
+                          ▹
+                        </span>
+                        <span className="ach-text" style={{
+                          color: 'rgba(255,255,255,0.7)',
+                          fontSize: '0.9rem',
+                          lineHeight: '1.6'
+                        }}>
+                          {a}
+                        </span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
                 <div className="skills">
-                  <h4>Technologies & Skills</h4>
-                  <div className="skill-list">
+                  <h4 style={{
+                    fontSize: '0.9rem',
+                    fontWeight: '600',
+                    color: 'rgba(255,255,255,0.9)',
+                    marginBottom: '0.75rem'
+                  }}>
+                    Technologies & Skills
+                  </h4>
+                  <div className="skill-list" style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '0.5rem'
+                  }}>
                     {exp.skills.map((s, i) => (
-                      <span key={i} className="skill-pill" style={{ background: `${exp.color}15`, border: `1px solid ${exp.color}40`, color: exp.color }}>
+                      <span key={i} className="skill-pill" style={{
+                        padding: '0.4rem 0.85rem',
+                        borderRadius: '8px',
+                        fontSize: '0.8rem',
+                        fontWeight: '500',
+                        transition: 'all 0.2s ease',
+                        background: `${exp.color}15`,
+                        border: `1px solid ${exp.color}40`,
+                        color: exp.color
+                      }}>
                         {s}
                       </span>
                     ))}
@@ -251,208 +388,111 @@ export default function Experience() {
 
         {/* Right: slideshow */}
         <div className="slideshow-column" style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center' }}>
-          <div className="fade-left" />
+          <div className="fade-left" style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            bottom: 0,
+            width: '120px',
+            background: 'linear-gradient(to right, rgba(10, 14, 26, 1) 0%, rgba(10, 14, 26, 0.8) 40%, rgba(10, 14, 26, 0) 100%)',
+            zIndex: 2,
+            pointerEvents: 'none'
+          }} />
 
-          <div className="slideshow-container">
+          <div className="slideshow-container" style={{
+            position: 'relative',
+            width: '100%',
+            height: '100%',
+            minHeight: '500px',
+            borderRadius: '16px',
+            overflow: 'hidden',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
+            border: '1px solid rgba(255,255,255,0.1)'
+          }}>
             {currentExperience.images.map((img, idx) => (
               <div
                 key={idx}
-                className={`slide ${idx === currentImageIndex ? 'visible' : ''}`}
+                className="slide"
                 style={{
+                  position: 'absolute',
+                  inset: 0,
+                  opacity: idx === currentImageIndex ? 1 : 0,
+                  transition: 'opacity 1.2s ease-in-out',
                   backgroundImage: `url(${img})`,
                   backgroundSize: 'cover',
-                  backgroundPosition: 'center'
+                  backgroundPosition: 'center',
+                  backgroundColor: 'rgba(255,255,255,0.05)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  zIndex: idx === currentImageIndex ? 1 : 0
                 }}
               >
-                <div className="slide-fallback" style={{ background: `linear-gradient(135deg, ${currentExperience.color}20, ${currentExperience.color}05)` }}>
+                <div className="slide-fallback" style={{
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'rgba(255,255,255,0.5)',
+                  fontSize: '1rem',
+                  background: `linear-gradient(135deg, ${currentExperience.color}20, ${currentExperience.color}05)`
+                }}>
                   {currentExperience.company}
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="indicators">
+          <div className="indicators" style={{
+            position: 'absolute',
+            bottom: '1.5rem',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            gap: '0.5rem',
+            zIndex: 3
+          }}>
             {currentExperience.images.map((_, idx) => (
-              <div key={idx} className={`indicator ${idx === currentImageIndex ? 'active' : ''}`} />
+              <div
+                key={idx}
+                className="indicator"
+                style={{
+                  width: idx === currentImageIndex ? '32px' : '8px',
+                  height: '8px',
+                  borderRadius: '4px',
+                  background: idx === currentImageIndex 
+                    ? currentExperience.color
+                    : 'rgba(255,255,255,0.3)',
+                  transition: 'all 0.3s ease',
+                  boxShadow: idx === currentImageIndex 
+                    ? `0 0 12px ${currentExperience.color}80` 
+                    : 'none'
+                }}
+              />
             ))}
           </div>
         </div>
       </div>
 
-      {/* single styled-jsx tag (no nested tags) */}
       <style jsx>{`
-        /* Progress */
-        .progress-bg {
-          position: absolute;
-          left: 0;
-          right: 0;
-          top: 50%;
-          transform: translateY(-50%);
-          height: 3px;
-          background: transparent;
-          z-index: 0;
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          padding: 0 calc(50% / 5);
-        }
-        .progress-bg::before {
-          content: '';
-          flex: 1;
-          height: 3px;
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 999px;
-        }
-        .progress-bg::after {
-          content: '';
-          flex: 1;
-          height: 3px;
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 999px;
-        }
-        .tabs-wrapper::before,
-        .tabs-wrapper::after,
-        .year-button::before,
-        .year-button::after {
-          content: '';
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          height: 3px;
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 999px;
-          z-index: 0;
-        }
-        .tabs-wrapper::before {
-          left: 0;
-          width: calc((100% - (1rem * 4)) / 5 / 2);
-        }
-        .tabs-wrapper::after {
-          right: 0;
-          width: calc((100% - (1rem * 4)) / 5 / 2);
-        }
-        .year-button::after {
-          left: 100%;
-          width: 1rem;
-          margin-left: 0;
-        }
-        .year-button:last-child::after {
-          display: none;
-        }
-        .progress-fill {
-          position: absolute;
-          left: 0;
-          top: calc(50% - 1.5px);
-          height: 3px;
-          background: linear-gradient(90deg, hsl(var(--accent)), rgba(140, 255, 200, 0.6));
-          border-radius: 999px;
-          z-index: 1;
-          transition: width 0.3s ease;
-          box-shadow: 0 0 12px hsl(var(--accent) / 0.5);
-          pointer-events: none;
-        }
-
-        .year-tabs {
-          position: relative;
-          z-index: 2;
-          display: flex;
-          gap: 1rem;
-          justify-content: space-between;
-          align-items: center;
-        }
-
-        .year-button {
-          flex: 1;
-          min-width: 0;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 0.25rem;
-          padding: 1rem 1.5rem;
-          border-radius: 12px;
-          border: 2px solid rgba(255,255,255,0.1);
-          background: rgba(255,255,255,0.03);
-          cursor: pointer;
-          transition: all 0.25s ease;
-        }
-        .year-button:hover { transform: translateY(-3px); }
-        .year-button.active {
-          background: linear-gradient(135deg, hsl(var(--accent) / 0.25), hsl(var(--accent) / 0.1));
-          border: 2px solid hsl(var(--accent));
-          box-shadow: 0 4px 20px hsl(var(--accent) / 0.3);
-        }
-        .year { font-size: 1.5rem; font-weight: 700; color: rgba(255,255,255,0.6); transition: color 0.3s; }
-        .year-button.active .year { color: hsl(var(--accent)); }
-        .type { font-size: 0.65rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.05em; text-align: center; }
-
-        /* Scroll container */
-        .exp-scroll {
-          overflow-x: auto;
-          overflow-y: hidden;
-          scroll-snap-type: x mandatory;
-          display: flex;
-          gap: 0;
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        .exp-scroll::-webkit-scrollbar { display: none; }
-        .exp-panel {
-          min-width: 100%;
-          scroll-snap-align: start;
-          scroll-snap-stop: always;
-          display: flex;
-          align-items: flex-start;
-          padding-right: 2rem;
-        }
-        .exp-panel-inner { width: 100%; }
-        .exp-panel-inner.enter { animation: fadeIn 0.5s ease-in; }
-
-        .header { display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem; }
-        .accent { width:4px; height:60px; border-radius:999px; flex-shrink:0; }
-        .role { font-size:1.75rem; font-weight:700; margin-bottom:0.25rem; }
-        .company { font-size:1.1rem; color: rgba(255,255,255,0.6); font-weight:500; }
-        .period { font-size:0.85rem; color: rgba(255,255,255,0.4); margin-top:0.25rem; font-style:italic; }
-
-        .desc { font-size:1rem; line-height:1.8; color: rgba(255,255,255,0.7); margin-bottom:1.5rem; }
-
-        .achievements h4,
-        .skills h4 { font-size:0.9rem; font-weight:600; color: rgba(255,255,255,0.9); margin-bottom:0.75rem; }
-        .achievements ul { display:flex; flex-direction:column; gap:0.5rem; padding:0; margin:0; list-style:none; }
-        .achievements li { display:flex; gap:0.75rem; align-items:flex-start; }
-        .bullet { font-size:1rem; line-height:1; margin-top:0.25rem; flex-shrink:0; }
-        .ach-text { color: rgba(255,255,255,0.7); font-size:0.9rem; line-height:1.6; }
-
-        .skill-list { display:flex; flex-wrap:wrap; gap:0.5rem; }
-        .skill-pill { padding:0.4rem 0.85rem; border-radius:8px; font-size:0.8rem; font-weight:500; transition: all 0.2s ease; }
-
-        /* Slideshow */
-        .slideshow-column { display:flex; align-items:center; position:relative; }
-        .fade-left {
-          position:absolute; left:0; top:0; bottom:0; width:120px;
-          background: linear-gradient(to right, rgba(10, 14, 26, 1) 0%, rgba(10, 14, 26, 0.8) 40%, rgba(10, 14, 26, 0) 100%);
-          z-index:2; pointer-events:none;
-        }
-        .slideshow-container {
-          position:relative; width:100%; height:100%; min-height:500px; border-radius:16px; overflow:hidden;
-          box-shadow: 0 20px 60px rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1);
-        }
-        .slide { position:absolute; inset:0; opacity:0; transition: opacity 1.2s ease-in-out; background-color: rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; }
-        .slide.visible { opacity:1; z-index:1; }
-        .slide-fallback { width:100%; height:100%; display:flex; align-items:center; justify-content:center; color: rgba(255,255,255,0.5); font-size:1rem; }
-
-        .indicators { position:absolute; bottom:1.5rem; left:50%; transform:translateX(-50%); display:flex; gap:0.5rem; z-index:3; }
-        .indicator { width:8px; height:8px; border-radius:4px; background: rgba(255,255,255,0.3); transition: all 0.3s ease; }
-        .indicator.active { width:32px; height:8px; border-radius:4px; background: var(--indicator-color, rgba(255,255,255,0.9)); box-shadow: 0 0 12px rgba(255,255,255,0.3); }
-
         @keyframes fadeIn {
           from { opacity:0; transform:translateX(-20px); }
           to { opacity:1; transform:translateX(0); }
         }
 
-        /* Responsive: stack columns on small screens */
+        .year-button:hover {
+          transform: translateY(-3px);
+        }
+
         @media (max-width: 968px) {
-          .main-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
-          .slideshow-container { min-height: 320px; }
+          .main-grid { 
+            grid-template-columns: 1fr !important; 
+            gap: 2rem !important; 
+          }
+          .slideshow-container { 
+            min-height: 320px; 
+          }
         }
       `}</style>
     </section>

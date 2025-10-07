@@ -106,12 +106,15 @@ export default function Events() {
       </div>
 
       {/* Polaroid Collage Grid - Scrollable */}
-      <div style={{
-        flex: 1,
-        overflowY: 'auto',
-        overflowX: 'hidden',
-        paddingRight: '0.5rem'
-      }}>
+      <div 
+        className="events-scroll-container"
+        style={{
+          flex: 1,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          paddingRight: '0.5rem'
+        }}
+      >
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
@@ -377,6 +380,30 @@ export default function Events() {
 
       <style jsx>{`
         @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&display=swap');
+
+        .events-scroll-container {
+          scrollbar-width: thin;
+          scrollbar-color: hsl(140, 70%, 60%) rgba(255, 255, 255, 0.05);
+        }
+
+        .events-scroll-container::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        .events-scroll-container::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 14px;
+        }
+
+        .events-scroll-container::-webkit-scrollbar-thumb {
+          background: hsl(140, 70%, 60%);
+          border-radius: 4px;
+          transition: background 0.3s ease;
+        }
+
+        .events-scroll-container::-webkit-scrollbar-thumb:hover {
+          background: hsl(140, 70%, 50%);
+        }
 
         .polaroid-card:hover {
           transform: rotate(0deg) scale(1.02) translateY(-8px) !important;
