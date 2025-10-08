@@ -1,9 +1,12 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 export default function Events() {
   const SCALE = 0.75
   const [selectedEvent, setSelectedEvent] = useState(null)
+  const EVENTS_PER_PAGE = 3
+  const [currentPage, setCurrentPage] = useState(0)
+  const scrollContainerRef = useRef(null)
 
   const events = [
     {
@@ -80,6 +83,8 @@ export default function Events() {
     events.reduce((acc, event) => ({ ...acc, [event.id]: 0 }), {})
   )
 
+  const totalPages = Math.ceil(events.length / EVENTS_PER_PAGE)
+
   // Auto-advance slideshows
   useEffect(() => {
     const interval = setInterval(() => {
@@ -95,6 +100,47 @@ export default function Events() {
     return () => clearInterval(interval)
   }, [events])
 
+  // Scroll detection
+  useEffect(() => {
+    const container = scrollContainerRef.current
+    if (!container) return
+
+    const handleScroll = () => {
+      const scrollLeft = container.scrollLeft
+      const containerWidth = container.clientWidth
+      const page = Math.round(scrollLeft / containerWidth)
+      setCurrentPage(Math.min(page, totalPages - 1))
+    }
+
+    container.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+
+    return () => container.removeEventListener('scroll', handleScroll)
+  }, [totalPages])
+
+  const scrollToPage = (pageIndex) => {
+    const container = scrollContainerRef.current
+    if (!container) return
+    
+    const containerWidth = container.clientWidth
+    container.scrollTo({
+      left: containerWidth * pageIndex,
+      behavior: 'smooth'
+    })
+  }
+
+  const goToNext = () => {
+    if (currentPage < totalPages - 1) {
+      scrollToPage(currentPage + 1)
+    }
+  }
+
+  const goToPrevious = () => {
+    if (currentPage > 0) {
+      scrollToPage(currentPage - 1)
+    }
+  }
+
   return (
     <div style={{ maxWidth: '1300px', margin: '0 auto', height: '100%', display: 'flex', flexDirection: 'column' }}>
       <div style={{ transform: `scale(${SCALE})`, transformOrigin: 'center top', flexShrink: 0, marginBottom: '2rem' }}>
@@ -105,23 +151,22 @@ export default function Events() {
         </p>
       </div>
 
-      {/* Polaroid Collage Grid - Scrollable */}
+      {/* Horizontal Scroll Container */}
       <div 
-        className="events-scroll-container"
+        ref={scrollContainerRef}
         style={{
           flex: 1,
-          overflowY: 'auto',
-          overflowX: 'hidden',
-          paddingRight: '0.5rem'
+          overflowX: 'auto',
+          overflowY: 'hidden',
+          scrollSnapType: 'x mandatory',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+          WebkitOverflowScrolling: 'touch',
+          display: 'flex',
+          gap: '2rem',
+          padding: '2rem 0'
         }}
       >
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '2rem',
-          padding: '2rem 0',
-          alignItems: 'start'
-        }}>
         {events.map((event, idx) => (
           <div
             key={event.id}
@@ -130,7 +175,10 @@ export default function Events() {
               cursor: 'pointer',
               transform: `rotate(${event.rotation}deg) scale(${selectedEvent?.id === event.id ? 1.05 : 1})`,
               transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-              marginTop: idx % 2 === 0 ? '0' : '2rem'
+              minWidth: 'calc(33.333% - 1.35rem)',
+              maxWidth: 'calc(33.333% - 1.35rem)',
+              flexShrink: 0,
+              scrollSnapAlign: 'start'
             }}
             className="polaroid-card"
           >
@@ -146,7 +194,7 @@ export default function Events() {
               position: 'relative',
               overflow: 'hidden'
             }}>
-              {/* Year Badge - Top Left */}
+              {/* Year Badge */}
               <div style={{
                 position: 'absolute',
                 top: '1.5rem',
@@ -206,7 +254,7 @@ export default function Events() {
                   {event.year}
                 </div>
 
-                {/* Type Badge - Top Right */}
+                {/* Type Badge */}
                 <div style={{
                   position: 'absolute',
                   top: '1rem',
@@ -375,34 +423,101 @@ export default function Events() {
             )}
           </div>
         ))}
+      </div>
+
+      {/* Navigation Controls */}
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '1rem',
+        marginTop: '2rem',
+        flexShrink: 0
+      }}>
+        <button
+          onClick={goToPrevious}
+          disabled={currentPage === 0}
+          style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            background: currentPage === 0 
+              ? 'rgba(255, 255, 255, 0.05)' 
+              : 'rgba(255, 255, 255, 0.1)',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            cursor: currentPage === 0 ? 'not-allowed' : 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: currentPage === 0 ? 0.3 : 1,
+            transition: 'all 0.3s ease'
+          }}
+          aria-label="Previous page"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+
+        <div style={{ 
+          display: 'flex', 
+          gap: '0.5rem',
+          alignItems: 'center'
+        }}>
+          {Array.from({ length: totalPages }).map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => scrollToPage(idx)}
+              style={{
+                width: idx === currentPage ? '48px' : '32px',
+                height: '6px',
+                borderRadius: '3px',
+                background: idx === currentPage 
+                  ? 'hsl(var(--accent))' 
+                  : 'rgba(255, 255, 255, 0.15)',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                boxShadow: idx === currentPage 
+                  ? '0 0 12px hsl(var(--accent) / 0.5)' 
+                  : 'none'
+              }}
+              aria-label={`Go to page ${idx + 1}`}
+            />
+          ))}
         </div>
+
+        <button
+          onClick={goToNext}
+          disabled={currentPage === totalPages - 1}
+          style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            background: currentPage === totalPages - 1 
+              ? 'rgba(255, 255, 255, 0.05)' 
+              : 'rgba(255, 255, 255, 0.1)',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            cursor: currentPage === totalPages - 1 ? 'not-allowed' : 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: currentPage === totalPages - 1 ? 0.3 : 1,
+            transition: 'all 0.3s ease'
+          }}
+          aria-label="Next page"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
       </div>
 
       <style jsx>{`
         @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&display=swap');
 
-        .events-scroll-container {
-          scrollbar-width: thin;
-          scrollbar-color: hsl(140, 70%, 60%) rgba(255, 255, 255, 0.05);
-        }
-
         .events-scroll-container::-webkit-scrollbar {
-          width: 8px;
-        }
-
-        .events-scroll-container::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 14px;
-        }
-
-        .events-scroll-container::-webkit-scrollbar-thumb {
-          background: hsl(140, 70%, 60%);
-          border-radius: 4px;
-          transition: background 0.3s ease;
-        }
-
-        .events-scroll-container::-webkit-scrollbar-thumb:hover {
-          background: hsl(140, 70%, 50%);
+          display: none;
         }
 
         .polaroid-card:hover {
@@ -417,6 +532,15 @@ export default function Events() {
         @media (max-width: 768px) {
           .polaroid-card {
             transform: rotate(0deg) !important;
+            min-width: 80% !important;
+            max-width: 80% !important;
+          }
+        }
+
+        @media (max-width: 1024px) {
+          .polaroid-card {
+            min-width: calc(50% - 1rem) !important;
+            max-width: calc(50% - 1rem) !important;
           }
         }
       `}</style>
