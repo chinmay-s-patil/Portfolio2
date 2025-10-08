@@ -27,7 +27,12 @@ export default function Experience() {
         '/experience/2024/img1.jpg',
         '/experience/2024/img2.jpg',
         '/experience/2024/img3.jpg'
-      ]
+      ],
+      documents: {
+        offerLetter: '/docs/aerotech-offer.pdf',
+        certificate: null,
+        experienceLetter: null
+      }
     },
     {
       year: '2023',
@@ -48,7 +53,12 @@ export default function Experience() {
         '/experience/2023/img1.jpg',
         '/experience/2023/img2.jpg',
         '/experience/2023/img3.jpg'
-      ]
+      ],
+      documents: {
+        offerLetter: '/docs/fluiddynamics-offer.pdf',
+        certificate: null,
+        experienceLetter: '/docs/fluiddynamics-experience.pdf'
+      }
     },
     {
       year: '2022',
@@ -69,7 +79,12 @@ export default function Experience() {
         '/experience/2022/img1.jpg',
         '/experience/2022/img2.jpg',
         '/experience/2022/img3.jpg'
-      ]
+      ],
+      documents: {
+        offerLetter: '/docs/tum-appointment.pdf',
+        certificate: '/docs/tum-certificate.pdf',
+        experienceLetter: '/docs/tum-experience.pdf'
+      }
     },
     {
       year: '2021',
@@ -90,7 +105,12 @@ export default function Experience() {
         '/experience/2021/img1.jpg',
         '/experience/2021/img2.jpg',
         '/experience/2021/img3.jpg'
-      ]
+      ],
+      documents: {
+        offerLetter: null,
+        certificate: null,
+        experienceLetter: null
+      }
     },
     {
       year: '2020',
@@ -111,7 +131,12 @@ export default function Experience() {
         '/experience/2020/img1.jpg',
         '/experience/2020/img2.jpg',
         '/experience/2020/img3.jpg'
-      ]
+      ],
+      documents: {
+        offerLetter: '/docs/csir-offer.pdf',
+        certificate: '/docs/csir-certificate.pdf',
+        experienceLetter: '/docs/csir-experience.pdf'
+      }
     }
   ]
 
@@ -179,7 +204,7 @@ export default function Experience() {
         </p>
       </div>
 
-      {/* Year Tabs - No Progress Bar */}
+      {/* Year Tabs */}
       <div className="tabs-wrapper" style={{ position: 'relative', marginBottom: '3rem', flexShrink: 0 }}>
         <div className="year-tabs" style={{
           display: 'flex',
@@ -351,7 +376,7 @@ export default function Experience() {
                   </ul>
                 </div>
 
-                <div className="skills">
+                <div className="skills" style={{ marginBottom: '1.5rem' }}>
                   <h4 style={{
                     fontSize: '0.9rem',
                     fontWeight: '600',
@@ -379,6 +404,122 @@ export default function Experience() {
                         {s}
                       </span>
                     ))}
+                  </div>
+                </div>
+
+                {/* Document Buttons */}
+                <div className="documents" style={{ marginTop: '1.5rem' }}>
+                  <h4 style={{
+                    fontSize: '0.9rem',
+                    fontWeight: '600',
+                    color: 'rgba(255,255,255,0.9)',
+                    marginBottom: '0.75rem'
+                  }}>
+                    Documents
+                  </h4>
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '0.75rem'
+                  }}>
+                    {exp.documents.offerLetter && (
+                      <a
+                        href={exp.documents.offerLetter}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          padding: '0.6rem 1rem',
+                          borderRadius: '8px',
+                          fontSize: '0.85rem',
+                          fontWeight: '500',
+                          background: 'rgba(255, 255, 255, 0.06)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          color: 'rgba(255, 255, 255, 0.9)',
+                          textDecoration: 'none',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          transition: 'all 0.2s ease'
+                        }}
+                        className="doc-button"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M14 2V8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        Offer Letter
+                      </a>
+                    )}
+                    
+                    {exp.documents.certificate && (
+                      <a
+                        href={exp.documents.certificate}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          padding: '0.6rem 1rem',
+                          borderRadius: '8px',
+                          fontSize: '0.85rem',
+                          fontWeight: '500',
+                          background: 'rgba(255, 255, 255, 0.06)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          color: 'rgba(255, 255, 255, 0.9)',
+                          textDecoration: 'none',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          transition: 'all 0.2s ease'
+                        }}
+                        className="doc-button"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 15C15.866 15 19 11.866 19 8C19 4.13401 15.866 1 12 1C8.13401 1 5 4.13401 5 8C5 11.866 8.13401 15 12 15Z" stroke="currentColor" strokeWidth="2"/>
+                          <path d="M8.21 13.89L7 23L12 20L17 23L15.79 13.88" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        Certificate
+                      </a>
+                    )}
+                    
+                    {exp.documents.experienceLetter && (
+                      <a
+                        href={exp.documents.experienceLetter}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          padding: '0.6rem 1rem',
+                          borderRadius: '8px',
+                          fontSize: '0.85rem',
+                          fontWeight: '500',
+                          background: 'rgba(255, 255, 255, 0.06)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          color: 'rgba(255, 255, 255, 0.9)',
+                          textDecoration: 'none',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          transition: 'all 0.2s ease'
+                        }}
+                        className="doc-button"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M14 2V8H20M16 13H8M16 17H8M10 9H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        Experience Letter
+                      </a>
+                    )}
+
+                    {!exp.documents.offerLetter && !exp.documents.certificate && !exp.documents.experienceLetter && (
+                      <span style={{
+                        padding: '0.6rem 1rem',
+                        borderRadius: '8px',
+                        fontSize: '0.85rem',
+                        color: 'rgba(255, 255, 255, 0.4)',
+                        fontStyle: 'italic'
+                      }}>
+                        No documents available
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -483,6 +624,12 @@ export default function Experience() {
 
         .year-button:hover {
           transform: translateY(-3px);
+        }
+
+        .doc-button:hover {
+          background: rgba(255, 255, 255, 0.1) !important;
+          border-color: rgba(255, 255, 255, 0.2) !important;
+          transform: translateY(-2px);
         }
 
         @media (max-width: 968px) {
