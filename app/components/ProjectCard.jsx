@@ -1,72 +1,75 @@
-'use client'
-
-export default function ProjectCard({ title, subtitle, description, href, tags = [] }) {
+export default function ProjectCard({ title, period, learnings = [], onClick }) {
   return (
     <article className="project-card card group">
-      <div style={{ padding: '1.5rem' }}>
+      <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', height: '100%' }}>
         {/* Header */}
-        <div style={{ marginBottom: '1rem' }}>
-          <h4 className="font-semibold text-xl mb-2 group-hover:text-[hsl(var(--accent))] transition-colors">
+        <div style={{ marginBottom: '1rem', flex: '0 0 auto' }}>
+          <h4 className="font-semibold text-xl mb-3 group-hover:text-[hsl(var(--accent))] transition-colors">
             {title}
           </h4>
           <div 
-            className="muted text-sm" 
             style={{ 
-              fontFamily: 'monospace',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
               fontSize: '0.85rem',
-              letterSpacing: '0.02em'
+              color: 'var(--muted)',
+              background: 'rgba(255, 255, 255, 0.05)',
+              padding: '0.4rem 0.85rem',
+              borderRadius: '8px',
+              border: '1px solid rgba(255, 255, 255, 0.08)'
             }}
           >
-            {subtitle}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
+              <path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+            {period}
           </div>
         </div>
 
-        {/* Description */}
-        <p 
-          className="muted" 
-          style={{ 
-            marginTop: '1rem',
-            lineHeight: '1.7',
-            fontSize: '0.95rem'
-          }}
-        >
-          {description}
-        </p>
-
-        {/* Tags */}
-        {tags && tags.length > 0 && (
-          <div style={{ 
-            marginTop: '1.25rem',
+        {/* Learnings */}
+        <div style={{ flex: '1 1 auto', marginBottom: '1.25rem' }}>
+          <div style={{
+            fontSize: '0.8rem',
+            fontWeight: '600',
+            marginBottom: '0.75rem',
+            color: 'rgba(255, 255, 255, 0.7)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em'
+          }}>
+            Key Learnings
+          </div>
+          <ul style={{
+            listStyle: 'none',
+            padding: 0,
             display: 'flex',
-            flexWrap: 'wrap',
+            flexDirection: 'column',
             gap: '0.5rem'
           }}>
-            {tags.map((tag, i) => (
-              <span
+            {learnings.slice(0, 3).map((learning, i) => (
+              <li
                 key={i}
                 style={{
-                  padding: '0.25rem 0.75rem',
-                  borderRadius: '6px',
-                  fontSize: '0.75rem',
-                  fontWeight: '500',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  color: 'var(--muted)',
-                  transition: 'all 0.2s ease'
+                  display: 'flex',
+                  gap: '0.5rem',
+                  fontSize: '0.85rem',
+                  lineHeight: '1.5',
+                  color: 'rgba(255, 255, 255, 0.75)'
                 }}
-                className="hover:bg-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.15)]"
               >
-                {tag}
-              </span>
+                <span style={{ color: 'hsl(var(--accent))', flexShrink: 0, marginTop: '0.15rem' }}>•</span>
+                <span>{learning}</span>
+              </li>
             ))}
-          </div>
-        )}
+          </ul>
+        </div>
 
         {/* Button */}
-        <div style={{ marginTop: '1.5rem' }}>
-          <a 
+        <div style={{ flex: '0 0 auto' }}>
+          <button 
             className="btn bg-white/6 border border-white/10" 
-            href={href}
+            onClick={onClick}
             style={{
               width: '100%',
               justifyContent: 'center',
@@ -74,7 +77,7 @@ export default function ProjectCard({ title, subtitle, description, href, tags =
               padding: '0.75rem 1.5rem'
             }}
           >
-            <span>View Project</span>
+            <span>View Details</span>
             <svg 
               width="14" 
               height="14" 
@@ -92,7 +95,7 @@ export default function ProjectCard({ title, subtitle, description, href, tags =
                 strokeLinejoin="round"
               />
             </svg>
-          </a>
+          </button>
         </div>
       </div>
     </article>
