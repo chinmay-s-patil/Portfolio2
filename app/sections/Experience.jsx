@@ -9,102 +9,24 @@ export default function Experience() {
 
   const experiences = [
     {
-      year: 'Oct 2024',
-      role: 'Senior CFD Engineer',
-      company: 'AeroTech Solutions',
+      year: 'Jun 2025',
+      role: 'Mechanical Research Engineer',
+      company: 'Raphe mPhibr',
       type: 'Full-time',
-      period: 'Jan 2024 — Present',
+      period: 'Jun 2025 — Sep 2025',
       description:
-        'Leading advanced simulation projects for aerospace applications, specializing in turbomachinery and external aerodynamics. Architecting automated workflows that reduced analysis time by 60%.',
+        'Designed and developed multiple drone platforms and critical components. Led DFAM design with focus on self-supporting structures and minimum layer height. Optimized data post-processing using Python.',
       achievements: [
-        'Implemented machine learning-enhanced mesh adaptation',
-        'Developed custom OpenFOAM solvers for specialized flows',
-        'Led team of 3 engineers on major aircraft component analysis'
+        'Led end-to-end drone design and manufacturing',
+        'Implemented Python optimizations for lab automation',
+        'Coordinated with multidisciplinary teams on project goals'
       ],
-      skills: ['OpenFOAM', 'Python', 'ML Integration', 'Team Leadership'],
+      skills: ['DFAM', 'Mechanical Design', 'Python', 'Team Coordination'],
       color: 'hsl(140, 70%, 60%)',
       images: [
-        '/experience/2024/img1.jpg',
-        '/experience/2024/img2.jpg',
-        '/experience/2024/img3.jpg'
-      ],
-      documents: {
-        offerLetter: '/docs/aerotech-offer.pdf',
-        certificate: null,
-        experienceLetter: null
-      }
-    },
-    {
-      year: '2023',
-      role: 'CFD Engineer',
-      company: 'FluidDynamics Corp',
-      type: 'Full-time',
-      period: 'Mar 2023 — Dec 2023',
-      description:
-        'Executed complex multi-physics simulations for industrial clients across automotive, energy, and HVAC sectors. Built automated post-processing pipelines and interactive dashboards.',
-      achievements: [
-        'Delivered 15+ successful client projects',
-        'Created Python toolkit adopted company-wide',
-        'Published technical blog posts on CFD best practices'
-      ],
-      skills: ['Ansys Fluent', 'Python', 'Automation', 'Consulting'],
-      color: 'hsl(160, 65%, 55%)',
-      images: [
-        '/experience/2023/img1.jpg',
-        '/experience/2023/img2.jpg',
-        '/experience/2023/img3.jpg'
-      ],
-      documents: {
-        offerLetter: '/docs/fluiddynamics-offer.pdf',
-        certificate: null,
-        experienceLetter: '/docs/fluiddynamics-experience.pdf'
-      }
-    },
-    {
-      year: '2022',
-      role: 'Graduate Research Assistant',
-      company: 'Technical University of Munich',
-      type: 'Part-time',
-      period: 'Oct 2022 — Feb 2023',
-      description:
-        'Conducted cutting-edge research in aeroacoustics and flow-induced noise. Developed novel methodologies for noise prediction in complex geometries using hybrid CFD-CAA approaches.',
-      achievements: [
-        'Co-authored 2 conference papers',
-        'Validated simulations against wind tunnel data',
-        'Contributed to open-source acoustic post-processing tools'
-      ],
-      skills: ['Research', 'Aeroacoustics', 'FW-H', 'Publication'],
-      color: 'hsl(180, 60%, 50%)',
-      images: [
-        '/experience/2022/img1.jpg',
-        '/experience/2022/img2.jpg',
-        '/experience/2022/img3.jpg'
-      ],
-      documents: {
-        offerLetter: '/docs/tum-appointment.pdf',
-        certificate: '/docs/tum-certificate.pdf',
-        experienceLetter: '/docs/tum-experience.pdf'
-      }
-    },
-    {
-      year: '2021',
-      role: 'Web Developer (Freelance)',
-      company: 'Self-Employed',
-      type: 'Freelance',
-      period: '2021 — Present',
-      description:
-        'Building modern web applications and visualization dashboards for engineering firms. Specializing in interactive 3D data visualization and responsive design for technical audiences.',
-      achievements: [
-        'Delivered 10+ client websites and dashboards',
-        'Created CFD visualization tools with Three.js',
-        'Integrated real-time simulation data displays'
-      ],
-      skills: ['Next.js', 'React', 'Three.js', 'D3.js'],
-      color: 'hsl(200, 55%, 45%)',
-      images: [
-        '/experience/2021/img1.jpg',
-        '/experience/2021/img2.jpg',
-        '/experience/2021/img3.jpg'
+        '/Raphe mPhibr/slideshow/a8136581f1ea988ac68be7396ae8fb2f017b012c9c027eb29283bbeaa845d752.jpg',
+        '/Raphe mPhibr/slideshow/Defence-Startup-Raphe-mPhibr-Raises-100-Million-1024x576.jpg',
+        '/Raphe mPhibr/slideshow/raphe-logistics-uav.jpg'
       ],
       documents: {
         offerLetter: null,
@@ -113,32 +35,111 @@ export default function Experience() {
       }
     },
     {
-      year: '2020',
-      role: 'Engineering Intern',
+      year: 'Apr 2025',
+      role: 'Research Intern',
+      company: 'NMCAD Lab, IISc Bangalore',
+      type: 'Internship',
+      period: 'Apr 2025 — Jun 2025',
+      description:
+        'Simulated high-fidelity rotor-wake interactions in OpenFOAM. Conducted LES-based aeroacoustic analysis in ANSYS Fluent, integrating Ffowcs Williams–Hawkings analogy for propeller noise prediction.',
+      achievements: [
+        'Contributed to advanced rotor-wake CFD models',
+        'Applied hybrid CFD/CAA techniques for noise studies',
+        'Collaborated with leading faculty on aerospace projects'
+      ],
+      skills: ['OpenFOAM', 'LES', 'Aeroacoustics', 'ANSYS Fluent'],
+      color: 'hsl(160, 65%, 55%)',
+      images: [
+        '/experience/2025b/img1.jpg',
+        '/experience/2025b/img2.jpg',
+        '/experience/2025b/img3.jpg'
+      ],
+      documents: {
+        offerLetter: null,
+        certificate: null,
+        experienceLetter: null
+      }
+    },
+    {
+      year: 'Jun 2024',
+      role: 'Research Intern',
       company: 'CSIR SERC',
       type: 'Internship',
-      period: 'Summer 2020',
+      period: 'Jun 2024 — Jul 2024',
       description:
-        'Gained foundational experience in wind engineering and experimental fluid mechanics. Assisted in validation studies comparing CFD predictions with wind tunnel measurements.',
+        'Worked in Wind Engineering Lab executing CFD with OpenFOAM to assess drone propeller efficiency. Gained exposure to advanced materials labs and experimental setups.',
       achievements: [
-        'Completed comprehensive lab safety training',
-        'Assisted in 5 wind tunnel test campaigns',
-        'Developed Python scripts for data processing'
+        'Independently learned and applied OpenFOAM',
+        'Ran drone propeller simulations for efficiency analysis',
+        'Assisted in validation of CFD with lab measurements'
       ],
-      skills: ['Wind Engineering', 'Experiments', 'Python', 'Data Analysis'],
-      color: 'hsl(220, 50%, 40%)',
+      skills: ['Wind Engineering', 'OpenFOAM', 'Lab Experiments', 'Python'],
+      color: 'hsl(180, 60%, 50%)',
       images: [
-        '/experience/2020/img1.jpg',
-        '/experience/2020/img2.jpg',
-        '/experience/2020/img3.jpg'
+        '/experience/2024/img1.jpg',
+        '/experience/2024/img2.jpg',
+        '/experience/2024/img3.jpg'
       ],
       documents: {
         offerLetter: '/docs/csir-offer.pdf',
         certificate: '/docs/csir-certificate.pdf',
         experienceLetter: '/docs/csir-experience.pdf'
       }
-    }
+    },
+    {
+      year: 'Nov 2023',
+      role: 'Project Intern',
+      company: 'VIT Chennai',
+      type: 'Internship',
+      period: 'Nov 2023 — Dec 2023',
+      description:
+        'Simulated angled crack propagation for fracture mechanics using COMSOL. Compiled 172k+ data points for advanced machine learning and created neural networks for simulation outcome prediction.',
+      achievements: [
+        'Compiled and analyzed large simulation datasets',
+        'Developed high-accuracy ML models for fracture mechanics',
+        'Automated simulation data workflows in Python'
+      ],
+      skills: ['COMSOL', 'Machine Learning', 'Python', 'Data Science'],
+      color: 'hsl(220, 50%, 40%)',
+      images: [
+        '/experience/2023b/img1.jpg',
+        '/experience/2023b/img2.jpg',
+        '/experience/2023b/img3.jpg'
+      ],
+      documents: {
+        offerLetter: null,
+        certificate: null,
+        experienceLetter: null
+      }
+    },
+    {
+      year: 'Sep 2023',
+      role: 'Full Stack Development Intern',
+      company: 'Appbell Technologies',
+      type: 'Internship',
+      period: 'Sep 2023 — Nov 2023',
+      description:
+        'Enhanced facial recognition algorithms using Python for attendance and integrated facial recognition API into legacy systems. Explored Android app development and improved UI accessibility.',
+      achievements: [
+        'Improved real-world facial recognition accuracy',
+        'Developed robust API for facial recognition integration',
+        'Contributed to Android frontend enhancements'
+      ],
+      skills: ['Python', 'API Development', 'Android', 'Facial Recognition'],
+      color: 'hsl(200, 55%, 45%)',
+      images: [
+        '/experience/2023a/img1.jpg',
+        '/experience/2023a/img2.jpg',
+        '/experience/2023a/img3.jpg'
+      ],
+      documents: {
+        offerLetter: null,
+        certificate: null,
+        experienceLetter: null
+      }
+    },
   ]
+
 
   const SCALE = 0.75
   const currentExperience = experiences[activeIndex]

@@ -5,125 +5,154 @@ import ProjectCard from '../components/ProjectCard'
 export default function Projects() {
   const projects = [
     {
-      title: 'Drone Propeller Simulation',
-      subtitle: 'OpenFOAM · Mesh / AMI',
-      description: 'Reverse engineered an S500 propeller geometry and optimized tip design through iterative CFD analysis. Implemented AMI (Arbitrary Mesh Interface) for accurate rotation modeling and detailed vortex shedding examination.',
+      title: 'Optimization of Pyrolysis-Based Plastic Oil Yield',
+      subtitle: 'B.Tech Thesis · ML Model',
+      description: 'Designed and executed Taguchi-based pyrolysis experiments on HDPE, PS, and blends. Analyzed pyrolysis oils and feedstocks with advanced instrumentation. Developed ML models achieving 95.96 R2 for yield prediction.',
+      href: '#',
+      tags: ['Alternative Fuels', 'Machine Learning', 'Thermal']
+    },
+    {
+      title: 'Hybrid Battery Cooling Mechanism',
+      subtitle: 'Thermal Management · Ansys CFD',
+      description: 'Engineered and simulated a cooling system utilizing TIM, PCM, and liquid coolant in SolidWorks and Ansys, achieving 67.31% efficiency improvement for compact batteries under variable load.',
+      href: '#',
+      tags: ['Thermal', 'CFD', 'Batteries']
+    },
+    {
+      title: 'Reverse Engineering S500 Drone',
+      subtitle: '3D Scanning · CAD/Geomagic',
+      description: 'Captured high-fidelity scans of S500 drone and reconstructed model in SolidWorks (0.01mm tolerance). Achieved full digital assembly with reference to manufacturer kit documentation.',
+      href: '#',
+      tags: ['Reverse Engineering', 'CAD', 'Drone']
+    },
+    {
+      title: 'CFD Evaluation of Drone Propeller Downwash',
+      subtitle: 'OpenFOAM · Aerodynamics',
+      description: 'Simulated propeller downwash to analyze aerodynamic performance and stability. Quantified downwash influence on lift coefficient for improved drone design.',
       href: '#',
       tags: ['CFD', 'Aerodynamics', 'OpenFOAM']
     },
     {
-      title: 'Solar Vortex Engine',
-      subtitle: 'Multi-region · Radiation',
-      description: 'Developed fvDOM radiation-driven natural convection model with carefully tuned mesh regions to accurately capture complex vortex formation and behavior patterns in solar thermal systems.',
+      title: 'Wind Turbine Performance with Vortex Generators',
+      subtitle: 'CFD · Energy',
+      description: 'Comparative simulations of turbine configurations (baseline + vortex generators) determined lift, flow stability and energy capture gains.',
       href: '#',
-      tags: ['Heat Transfer', 'Radiation', 'Multi-physics']
+      tags: ['CFD', 'Wind Energy', 'Turbine']
     },
     {
-      title: 'Interactive Portfolio',
-      subtitle: 'Next.js · Tailwind',
-      description: 'Modern, performant portfolio website with full-page scroll-snap navigation, smooth animations, and responsive design. Built with accessibility and user experience as primary considerations.',
+      title: 'Solar Parapet Roof Panel Aerodynamics',
+      subtitle: 'OpenFOAM · Custom ABL',
+      description: 'Simulated parapet roof-mounted solar panels to study wind loads, developed custom ABL boundary conditions, assessed parapet height effects on sheltering and panel durability.',
       href: '#',
-      tags: ['Web Dev', 'React', 'UI/UX']
+      tags: ['CFD', 'Solar', 'Building']
     },
     {
-      title: 'CFD Data Dashboard',
-      subtitle: 'Python · D3.js · WebGL',
-      description: 'Real-time visualization dashboard for simulation results with interactive 3D flow field rendering, time-series analysis tools, and automated report generation capabilities.',
+      title: 'Propeller Aeroacoustics Study',
+      subtitle: 'LES · FW-H · ANSYS Fluent',
+      description: 'Transient aeroacoustic simulation of propellers using sliding mesh and FW-H analogy at multiple receiver points, including geometric comparisons (standard, foldable, toroidal).',
       href: '#',
-      tags: ['Visualization', 'Python', 'Dashboard']
+      tags: ['Aeroacoustics', 'Noise', 'CFD']
     },
     {
-      title: 'Mesh Quality Analyzer',
-      subtitle: 'Python · OpenFOAM',
-      description: 'Automated mesh quality assessment tool that analyzes OpenFOAM meshes and provides detailed reports on cell quality metrics, aspect ratios, and skewness with visualization.',
+      title: 'Natural Gas Combustion Simulation',
+      subtitle: 'OpenFOAM · AMR',
+      description: 'Modeled combustion of Indian composition natural gas on a stove burner using adaptive mesh refinement to resolve flame, pollutant formation, and emissions under varying configuration.',
       href: '#',
-      tags: ['Automation', 'Meshing', 'Tools']
+      tags: ['Combustion', 'CFD', 'Energy']
     },
     {
-      title: 'Turbulence Model Comparison',
-      subtitle: 'OpenFOAM · Analysis',
-      description: 'Comprehensive comparative study of RANS turbulence models (k-ε, k-ω SST, Spalart-Allmaras) for external aerodynamics with validation against experimental data.',
+      title: 'Laser Bed Powder Fusion Simulations',
+      subtitle: 'Additive Manufacturing · Process Analysis',
+      description: 'Analyzed melting, solidification, and microstructure evolution in LBPF processes. Evaluated impacts of laser power, scan speed, powder types to minimize defects.',
       href: '#',
-      tags: ['Turbulence', 'Validation', 'Research']
+      tags: ['Additive', 'Thermal', 'Materials']
     },
     {
-      title: 'Heat Exchanger Optimization',
-      subtitle: 'Thermal · CFD',
-      description: 'Parametric study of fin geometries in compact heat exchangers using conjugate heat transfer simulations to maximize thermal performance while minimizing pressure drop.',
+      title: 'Immersion Cooling in Battery Thermal Management',
+      subtitle: 'Parametric · Simulation',
+      description: 'Systematically studied effects of coolant types, C-rating, inlet velocity on battery management, reporting a 43.99% improvement using OpenFOAM.',
       href: '#',
-      tags: ['Heat Transfer', 'Optimization', 'Research']
+      tags: ['Thermal', 'Batteries', 'Simulation']
     },
     {
-      title: 'Wind Farm Analysis',
-      subtitle: 'OpenFOAM · Large Scale',
-      description: 'Large-scale atmospheric boundary layer simulation to study wake effects and optimize turbine placement in wind farm configurations using actuator disk models.',
+      title: 'Simulation of Truck Platooning',
+      subtitle: 'OpenFOAM · Aerodynamics',
+      description: 'CFD study of drag reduction and fuel efficiency in truck platooning. Revealed aerodynamic interactions and optimization strategies for multi-vehicle setups.',
       href: '#',
-      tags: ['Renewable Energy', 'CFD', 'Optimization']
+      tags: ['CFD', 'Transport', 'Optimization']
     },
     {
-      title: 'Cavitation Studies',
-      subtitle: 'Multiphase · VOF',
-      description: 'Investigation of cavitation phenomena in marine propellers using Volume of Fluid method with vapor-liquid phase change modeling and erosion risk assessment.',
+      title: 'PINN for CFD Simulations',
+      subtitle: 'Physics-Informed Neural Net',
+      description: 'Developed a neural model for simulating flow around a cylinder, enabling future work on variable geometry and robust embedding.',
       href: '#',
-      tags: ['Multiphase', 'Marine', 'Advanced']
+      tags: ['Machine Learning', 'CFD', 'Physics']
     },
     {
-      title: 'HVAC System Design',
-      subtitle: 'Comfort · Energy',
-      description: 'Room air distribution analysis for HVAC systems focusing on thermal comfort indices, energy efficiency, and compliance with ventilation standards.',
+      title: 'Bullet Impact Simulations',
+      subtitle: 'Ansys Explicit · Dynamics',
+      description: 'Analyzed impact dynamics of a bullet on bolted plate, evaluating stress distribution and material deformation in high-speed events.',
       href: '#',
-      tags: ['HVAC', 'Comfort', 'Building']
+      tags: ['Impact', 'Simulation', 'Materials']
     },
     {
-      title: 'Aeroacoustics Study',
-      subtitle: 'Noise · FW-H',
-      description: 'Computational aeroacoustics analysis of flow-induced noise using Ffowcs Williams-Hawkings acoustic analogy for automotive side mirror design optimization.',
+      title: 'Aerodynamics of Ground-Mounted Solar Arrays',
+      subtitle: 'CFD · Pressure Mapping',
+      description: 'Performed steady-state and transient simulations to map pressure/force on solar arrays, guiding system design for optimized installations.',
       href: '#',
-      tags: ['Acoustics', 'Automotive', 'Noise']
+      tags: ['CFD', 'Solar', 'Optimization']
     },
     {
-      title: 'Particle Tracking System',
-      subtitle: 'Lagrangian · OpenFOAM',
-      description: 'Advanced particle tracking simulation for droplet dispersion studies in spray systems with custom injection models and collision detection.',
+      title: 'CAD Model of Solar Vortex Engine',
+      subtitle: 'SolidWorks · Design',
+      description: 'Created a precise CAD baseline for future solar vortex engine simulations, incorporating current research standards (1mm tolerance).',
       href: '#',
-      tags: ['Multiphase', 'Particles', 'Spray']
+      tags: ['CAD', 'Design', 'Energy']
     },
     {
-      title: 'Combustion Modeling',
-      subtitle: 'Reactive Flows · Chemistry',
-      description: 'Non-premixed combustion simulation with detailed chemistry mechanisms and radiation modeling for industrial burner optimization.',
+      title: 'Wind Tunnel Test Section Modeling',
+      subtitle: 'SolidWorks · Precision Modeling',
+      description: '3D engineered wind tunnel sections to a tolerance of 0.01mm from field measurements, supporting instrumentation and experimental analysis.',
       href: '#',
-      tags: ['Combustion', 'Chemistry', 'Energy']
+      tags: ['CAD', 'Experiment', 'Aero']
     },
     {
-      title: 'Microfluidics Design',
-      subtitle: 'Lab-on-Chip · Mixing',
-      description: 'Microscale fluid dynamics analysis for microfluidic device design focusing on mixing efficiency and flow distribution optimization.',
+      title: 'Fracture Mechanics Simulation',
+      subtitle: 'COMSOL · J-Integral',
+      description: 'Simulated angled crack propagation using COMSOL, compiled extensive dataset, and developed ML and neural network models with >99% prediction accuracy.',
       href: '#',
-      tags: ['Microfluidics', 'Mixing', 'Biomedical']
+      tags: ['Fracture', 'ML', 'Simulation']
     },
     {
-      title: 'Supersonic Flow Analysis',
-      subtitle: 'Compressible · Shock',
-      description: 'High-speed aerodynamics simulation of supersonic aircraft components with shock wave analysis and boundary layer interaction studies.',
+      title: 'Graphite Rupture Strength Prediction',
+      subtitle: 'Deep Learning · Materials',
+      description: 'Developed a model with 98.1% accuracy predicting graphite rupture strength using historic nuclear-grade graphite datasets.',
       href: '#',
-      tags: ['Supersonic', 'Compressible', 'Aerospace']
+      tags: ['Deep Learning', 'Materials', 'Prediction']
     },
     {
-      title: 'Blood Flow Modeling',
-      subtitle: 'Biomedical · FSI',
-      description: 'Fluid-structure interaction analysis of blood flow in arterial systems with compliant vessel walls and pulsatile flow conditions.',
+      title: 'Language Identification in Music',
+      subtitle: 'Python · PyTorch',
+      description: 'Built a deep learning system achieving 97% accuracy for language detection in music using MFCC and audio feature engineering.',
       href: '#',
-      tags: ['Biomedical', 'FSI', 'Healthcare']
+      tags: ['Deep Learning', 'Audio', 'ML']
     },
     {
-      title: 'Turbomachinery Analysis',
-      subtitle: 'Rotating · Performance',
-      description: 'Centrifugal pump performance analysis with rotating reference frames, cavitation prediction, and efficiency optimization studies.',
+      title: 'Guitar Design Project',
+      subtitle: 'CAD · Showcase',
+      description: 'Created a highly detailed and visually optimized guitar model in CAD (first-year showcase project).',
       href: '#',
-      tags: ['Turbomachinery', 'Pumps', 'Performance']
+      tags: ['Design', 'CAD', 'Showcase']
+    },
+    {
+      title: 'Aerodynamics Lab Experiments',
+      subtitle: 'Instrumentation · Wind',
+      description: 'Conducted hands-on experimentation in wind turbine instrumentation, anemometry, pitot tube analysis under faculty supervision.',
+      href: '#',
+      tags: ['Experiment', 'Wind', 'Instrumentation']
     }
   ]
+
 
   const PROJECTS_PER_PAGE = 6
   const totalPages = Math.ceil(projects.length / PROJECTS_PER_PAGE)

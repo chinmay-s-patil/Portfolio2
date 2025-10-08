@@ -52,12 +52,7 @@ export default function EducationSection() {
     period: 'October 2021 — Present',
     description: 'Pursuing advanced studies in aerospace engineering with specialization in computational fluid dynamics and aerodynamics. Engaging with cutting-edge research in turbulence modeling, high-performance computing, and numerical methods for complex flow simulations.',
     skills: [
-      'Advanced CFD',
-      'Turbulence Modeling',
-      'High-Performance Computing',
-      'Aerodynamic Design',
-      'Numerical Methods',
-      'Flow Visualization'
+      'Advanced CFD'
     ]
   };
 
@@ -66,15 +61,15 @@ export default function EducationSection() {
     title: 'Bachelor of Technology',
     institution: 'VIT Chennai',
     degree: 'Mechanical Engineering',
-    period: 'July 2017 — May 2021',
+    period: 'June 2021 — May 2025',
     description: 'Completed comprehensive undergraduate program in mechanical engineering, developing strong fundamentals in thermodynamics, fluid mechanics, and computational methods. Gained hands-on experience through laboratory work, projects, and industry internships.',
     skills: [
       'Fluid Mechanics',
+      'Computational Fluid Dynamics',
       'Heat Transfer',
       'Thermodynamics',
-      'CAD/CAM',
       'Engineering Analysis',
-      'Project Management'
+      'Mechanical Design'
     ]
   };
 
