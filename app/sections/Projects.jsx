@@ -20,8 +20,9 @@ export default function Projects() {
       ],
       tags: ['Alternative Fuels', 'Machine Learning', 'Thermal', 'Experimental Design'],
       media: [
-        { type: 'image', src: '/projects/pyrolysis-setup.jpg', caption: 'Experimental setup' },
-        { type: 'image', src: '/projects/pyrolysis-results.jpg', caption: 'Analysis results' }
+        { type: 'image', src: '/Projects/Pyrolysis of Plastics/Picture15.jpg', caption: 'Experimental setup' },
+        { type: 'image', src: '/Projects/Pyrolysis of Plastics/Picture13.jpg', caption: 'Analysis results' },
+        { type: 'image', src: '/Projects/Pyrolysis of Plastics/Picture14.jpg', caption: 'Analysis results' }
       ],
       href: '#'
     },
@@ -416,11 +417,43 @@ export default function Projects() {
 
   return (
     <>
-      <div className="max-w-6xl mx-auto" style={{ height: '100%', display: 'flex', flexDirection: 'column', paddingTop: '2rem' }}>
-        <div style={{ flexShrink: 0, marginBottom: '2rem' }}>
-          <div className="kicker">Portfolio</div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Selected Projects</h2>
-          <p className="muted text-lg mb-8" style={{ maxWidth: '60ch' }}>
+      <div style={{ 
+        maxWidth: 'min(90vw, 1400px)',
+        margin: '0 auto',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: 'clamp(1rem, 2vw, 2rem)'
+      }}>
+        {/* Header - using fluid typography */}
+        <div style={{ 
+          flexShrink: 0, 
+          marginBottom: 'clamp(1.5rem, 3vh, 2.5rem)' 
+        }}>
+          <div className="kicker" style={{
+            fontSize: 'clamp(0.75rem, 1.5vw, 0.9rem)',
+            marginBottom: 'clamp(0.5rem, 1vh, 1rem)'
+          }}>
+            Portfolio
+          </div>
+          <h2 style={{
+            fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+            fontWeight: '700',
+            marginBottom: 'clamp(0.75rem, 2vh, 1.25rem)',
+            background: 'linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.7) 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            lineHeight: '1.1'
+          }}>
+            Selected Projects
+          </h2>
+          <p className="muted" style={{ 
+            maxWidth: '65ch',
+            fontSize: 'clamp(0.95rem, 2vw, 1.125rem)',
+            lineHeight: '1.6',
+            marginBottom: 'clamp(1rem, 2vh, 1.5rem)'
+          }}>
             A showcase of computational fluid dynamics simulations, visualization tools, 
             and web applications that demonstrate my technical capabilities and problem-solving approach.
           </p>
@@ -431,17 +464,16 @@ export default function Projects() {
           display: 'flex', 
           justifyContent: 'center',
           alignItems: 'center',
-          gap: '1rem',
-          marginBottom: '2rem',
+          gap: 'clamp(0.75rem, 2vw, 1.25rem)',
+          marginBottom: 'clamp(1.5rem, 3vh, 2.5rem)',
           flexShrink: 0
         }}>
-          {/* Previous Button */}
           <button
             onClick={goToPrevious}
             disabled={currentPage === 0}
             style={{
-              width: '40px',
-              height: '40px',
+              width: 'clamp(36px, 5vw, 44px)',
+              height: 'clamp(36px, 5vw, 44px)',
               borderRadius: '50%',
               background: currentPage === 0 
                 ? 'rgba(255, 255, 255, 0.05)' 
@@ -454,6 +486,7 @@ export default function Projects() {
               opacity: currentPage === 0 ? 0.3 : 1,
               transition: 'all 0.3s ease'
             }}
+            className="nav-button-hover"
             aria-label="Previous page"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -461,10 +494,9 @@ export default function Projects() {
             </svg>
           </button>
 
-          {/* Page Indicators */}
           <div style={{ 
             display: 'flex', 
-            gap: '0.5rem',
+            gap: 'clamp(0.375rem, 1vw, 0.625rem)',
             alignItems: 'center'
           }}>
             {Array.from({ length: totalPages }).map((_, idx) => (
@@ -472,9 +504,9 @@ export default function Projects() {
                 key={idx}
                 onClick={() => scrollToPage(idx)}
                 style={{
-                  width: idx === currentPage ? '48px' : '32px',
-                  height: '6px',
-                  borderRadius: '3px',
+                  width: idx === currentPage ? 'clamp(40px, 6vw, 52px)' : 'clamp(28px, 4vw, 36px)',
+                  height: 'clamp(5px, 0.8vh, 7px)',
+                  borderRadius: '4px',
                   background: idx === currentPage 
                     ? 'hsl(var(--accent))' 
                     : 'rgba(255, 255, 255, 0.15)',
@@ -490,13 +522,12 @@ export default function Projects() {
             ))}
           </div>
 
-          {/* Next Button */}
           <button
             onClick={goToNext}
             disabled={currentPage === totalPages - 1}
             style={{
-              width: '40px',
-              height: '40px',
+              width: 'clamp(36px, 5vw, 44px)',
+              height: 'clamp(36px, 5vw, 44px)',
               borderRadius: '50%',
               background: currentPage === totalPages - 1 
                 ? 'rgba(255, 255, 255, 0.05)' 
@@ -509,6 +540,7 @@ export default function Projects() {
               opacity: currentPage === totalPages - 1 ? 0.3 : 1,
               transition: 'all 0.3s ease'
             }}
+            className="nav-button-hover"
             aria-label="Next page"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -520,7 +552,7 @@ export default function Projects() {
         {/* Horizontal Scroll Container */}
         <div 
           ref={scrollContainerRef}
-          className="projects-horizontal-container"
+          className="projects-scroll"
           style={{
             flex: 1,
             overflowX: 'auto',
@@ -529,13 +561,13 @@ export default function Projects() {
             msOverflowStyle: 'none',
             scrollSnapType: 'x mandatory',
             display: 'flex',
-            WebkitOverflowScrolling: 'touch'
+            WebkitOverflowScrolling: 'touch',
+            minHeight: 0
           }}
         >
           {Array.from({ length: totalPages }).map((_, pageIndex) => (
             <div
               key={pageIndex}
-              className="project-page"
               style={{
                 minWidth: '100%',
                 width: '100%',
@@ -543,16 +575,15 @@ export default function Projects() {
                 scrollSnapAlign: 'start',
                 scrollSnapStop: 'always',
                 display: 'flex',
-                alignItems: 'flex-start',
-                paddingRight: pageIndex === totalPages - 1 ? 0 : '2rem'
+                alignItems: 'flex-start'
               }}
             >
               <div style={{ width: '100%' }}>
-                <div style={{
+                <div className="projects-grid" style={{
                   display: 'grid',
-                  gap: '1.5rem',
-                  gridTemplateColumns: 'repeat(3, 1fr)',
-                  gridTemplateRows: 'repeat(2, 1fr)'
+                  gap: 'clamp(1rem, 2vw, 1.75rem)',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
+                  gridAutoRows: '1fr'
                 }}>
                   {projects
                     .slice(pageIndex * PROJECTS_PER_PAGE, (pageIndex + 1) * PROJECTS_PER_PAGE)
@@ -561,7 +592,7 @@ export default function Projects() {
                         key={pageIndex * PROJECTS_PER_PAGE + i}
                         title={p.title}
                         period={p.period}
-                        learnings={p.learnings}
+                        tags={p.tags}
                         onClick={() => setSelectedProject(p)}
                       />
                     ))}
@@ -570,35 +601,52 @@ export default function Projects() {
             </div>
           ))}
         </div>
-
-        <style jsx>{`
-          .projects-horizontal-container::-webkit-scrollbar {
-            display: none;
-          }
-
-          @media (max-width: 1200px) {
-            .project-page > div > div {
-              grid-template-columns: repeat(2, 1fr) !important;
-              grid-template-rows: repeat(3, 1fr) !important;
-            }
-          }
-
-          @media (max-width: 768px) {
-            .project-page > div > div {
-              grid-template-columns: 1fr !important;
-              grid-template-rows: auto !important;
-            }
-          }
-        `}</style>
       </div>
 
-      {/* Modal */}
       {selectedProject && (
         <ProjectModal 
           project={selectedProject} 
           onClose={() => setSelectedProject(null)} 
         />
       )}
+
+      <style jsx>{`
+        .projects-scroll::-webkit-scrollbar {
+          display: none;
+        }
+
+        .nav-button-hover:not(:disabled):hover {
+          background: rgba(255, 255, 255, 0.15) !important;
+          transform: scale(1.1);
+        }
+
+        /* Responsive grid breakpoints */
+        @media (min-width: 1400px) {
+          .projects-grid {
+            grid-template-columns: repeat(3, 1fr) !important;
+            grid-template-rows: repeat(2, 1fr);
+          }
+        }
+
+        @media (min-width: 900px) and (max-width: 1399px) {
+          .projects-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            grid-template-rows: repeat(3, 1fr);
+          }
+        }
+
+        @media (max-width: 899px) {
+          .projects-grid {
+            grid-template-columns: 1fr !important;
+            grid-auto-rows: auto;
+          }
+        }
+
+        /* Ensure consistent aspect ratio for cards */
+        .projects-grid > * {
+          min-height: clamp(200px, 30vh, 280px);
+        }
+      `}</style>
     </>
   )
 }
