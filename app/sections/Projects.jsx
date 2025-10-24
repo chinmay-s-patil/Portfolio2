@@ -20,9 +20,9 @@ export default function Projects() {
       ],
       tags: ['Alternative Fuels', 'Machine Learning', 'Thermal', 'Experimental Design'],
       media: [
-        { type: 'image', src: '/Projects/Pyrolysis of Plastics/Picture15.jpg', caption: 'Experimental setup' },
-        { type: 'image', src: '/Projects/Pyrolysis of Plastics/Picture13.jpg', caption: 'Analysis results' },
-        { type: 'image', src: '/Projects/Pyrolysis of Plastics/Picture14.jpg', caption: 'Analysis results' }
+        { type: 'image', src: '/Projects/Pyrolysis of Plastics/Pyrolysis of Plastics (1).jpg', caption: 'Experimental setup' },
+        { type: 'image', src: '/Projects/Pyrolysis of Plastics/Pyrolysis of Plastics (2).jpg', caption: 'Analysis results' },
+        { type: 'image', src: '/Projects/Pyrolysis of Plastics/Pyrolysis of Plastics (3).jpg', caption: 'Analysis results' }
       ],
       href: '#'
     },
@@ -39,7 +39,10 @@ export default function Projects() {
       ],
       tags: ['Thermal Management', 'CFD', 'Batteries', 'Ansys'],
       media: [
-        { type: 'image', src: '/projects/battery-cooling.jpg' }
+        { type: 'image', src: '/Projects/Battery Thermal Management System/Battery Thermal Management System (1).jpg' },
+        { type: 'image', src: '/Projects/Battery Thermal Management System/Battery Thermal Management System (2).jpg' },
+        { type: 'image', src: '/Projects/Battery Thermal Management System/Battery Thermal Management System (3).jpg' },
+        { type: 'image', src: '/Projects/Battery Thermal Management System/Battery Thermal Management System (4).jpg' }
       ],
       href: '#'
     },
@@ -243,7 +246,7 @@ export default function Projects() {
       ],
       tags: ['CFD', 'Solar', 'Optimization', 'Wind Loading'],
       media: [
-        { type: 'image', src: '/projects/solar-arrays.jpg' }
+        { type: 'video', src: '/Projects/Aerodynamics of Ground-Mounted Solar Arrays/Aerodynamics of Ground-Mounted Solar Arrays.mp4' }
       ],
       href: '#'
     },
@@ -260,7 +263,8 @@ export default function Projects() {
       ],
       tags: ['CAD', 'Design', 'Energy', 'SolidWorks'],
       media: [
-        { type: 'image', src: '/projects/vortex-engine.jpg' }
+        { type: 'image', src: 'Projects/SVE/SVE (1).png' },
+        { type: 'image', src: 'Projects/SVE/SVE (2).png' },
       ],
       href: '#'
     },
@@ -277,12 +281,13 @@ export default function Projects() {
       ],
       tags: ['CAD', 'Experiment', 'Aerodynamics', 'SolidWorks'],
       media: [
-        { type: 'image', src: '/projects/wind-tunnel.jpg' }
+        { type: 'image', src: 'Projects/CAD Modeling of Wind Tunnel Test Section/CAD Modeling of Wind Tunnel Test Section.jpg' },
+        { type: 'image', src: 'Projects/CAD Modeling of Wind Tunnel Test Section/CAD Modeling of Wind Tunnel Test Section.png' }
       ],
       href: '#'
     },
     {
-      title: 'Fracture Mechanics Simulation',
+      title: 'Computational Correlation of J-Integral parameter for Inclined Crack using FEM and ML',
       category: 'Structural Analysis',
       subtitle: 'COMSOL · J-Integral · ML',
       period: 'Dec 2019 — Feb 2020',
@@ -294,7 +299,16 @@ export default function Projects() {
       ],
       tags: ['Fracture', 'ML', 'FEA', 'COMSOL'],
       media: [
-        { type: 'image', src: '/projects/fracture.jpg' }
+        { type: 'image', src: '/Projects/Inclined Crack/Inclined Crack (1).png' },
+        { type: 'image', src: '/Projects/Inclined Crack/Inclined Crack (10).png' },
+        { type: 'image', src: '/Projects/Inclined Crack/Inclined Crack (2).png' },
+        { type: 'image', src: '/Projects/Inclined Crack/Inclined Crack (3).png' },
+        { type: 'image', src: '/Projects/Inclined Crack/Inclined Crack (4).png' },
+        { type: 'image', src: '/Projects/Inclined Crack/Inclined Crack (5).png' },
+        { type: 'image', src: '/Projects/Inclined Crack/Inclined Crack (6).png' },
+        { type: 'image', src: '/Projects/Inclined Crack/Inclined Crack (7).png' },
+        { type: 'image', src: '/Projects/Inclined Crack/Inclined Crack (8).png' },
+        { type: 'image', src: '/Projects/Inclined Crack/Inclined Crack (9).png' }
       ],
       href: '#'
     },
@@ -311,7 +325,8 @@ export default function Projects() {
       ],
       tags: ['Deep Learning', 'Materials', 'Prediction', 'Neural Networks'],
       media: [
-        { type: 'image', src: '/projects/graphite.jpg' }
+        { type: 'image', src: '/Projects/Nuclear Graphite/Nuclear Graphite (1).png' },
+        { type: 'image', src: '/Projects/Nuclear Graphite/Nuclear Graphite (2).png' }
       ],
       href: '#'
     },
@@ -328,7 +343,7 @@ export default function Projects() {
       ],
       tags: ['Deep Learning', 'Audio', 'PyTorch', 'Signal Processing'],
       media: [
-        { type: 'image', src: '/projects/music-language.jpg' }
+        { type: 'image', src: '/projects/music-language.jpg' },
       ],
       href: '#'
     },
@@ -345,7 +360,12 @@ export default function Projects() {
       ],
       tags: ['Design', 'CAD', 'Showcase', 'Product Design'],
       media: [
-        { type: 'image', src: '/projects/guitar.jpg' }
+        { type: 'image', src: '/Projects/Guitar Design Project/Guitar Design Project (1).jpg' },
+        { type: 'image', src: '/Projects/Guitar Design Project/Guitar Design Project (2).jpg' },
+        { type: 'image', src: '/Projects/Guitar Design Project/Guitar Design Project (3).jpg' },
+        { type: 'image', src: '/Projects/Guitar Design Project/Guitar Design Project (4).jpg' },
+        { type: 'image', src: '/Projects/Guitar Design Project/Guitar Design Project (5).jpg' },
+        { type: 'image', src: '/Projects/Guitar Design Project/Guitar Design Project (6).jpg' }
       ],
       href: '#'
     },
@@ -362,7 +382,10 @@ export default function Projects() {
       ],
       tags: ['Experiment', 'Wind', 'Instrumentation', 'Measurement'],
       media: [
-        { type: 'image', src: '/projects/aero-lab.jpg' }
+        { type: 'image', src: '/Projects/Aerodynamics Lab Experiments/Aerodynamics Lab Experiments (1).jpg' },
+        { type: 'image', src: '/Projects/Aerodynamics Lab Experiments/Aerodynamics Lab Experiments (2).jpg' },
+        { type: 'image', src: '/Projects/Aerodynamics Lab Experiments/Aerodynamics Lab Experiments (3).jpg' },
+        { type: 'image', src: '/Projects/Aerodynamics Lab Experiments/Aerodynamics Lab Experiments (4).jpg' },
       ],
       href: '#'
     }

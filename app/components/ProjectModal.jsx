@@ -181,7 +181,10 @@ export default function ProjectModal({ project, onClose }) {
               marginBottom: '2rem',
               borderRadius: '16px',
               overflow: 'hidden',
-              background: 'rgba(0, 0, 0, 0.4)'
+              background: 'rgba(0, 0, 0, 0.4)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
             }}>
               {project.media.map((item, idx) => (
                 <div
@@ -190,7 +193,10 @@ export default function ProjectModal({ project, onClose }) {
                     position: 'absolute',
                     inset: 0,
                     opacity: idx === currentMediaIndex ? 1 : 0,
-                    transition: 'opacity 0.5s ease'
+                    transition: 'opacity 0.5s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
                   }}
                 >
                   {item.type === 'video' ? (
@@ -210,7 +216,7 @@ export default function ProjectModal({ project, onClose }) {
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover'
+                        objectFit: 'contain'
                       }}
                     />
                   )}
