@@ -3,139 +3,222 @@
 import { useState } from 'react'
 
 export default function OpenFOAMSection() {
-  const [selectedSim, setSelectedSim] = useState(null)
-  const [hoveredId, setHoveredId] = useState(null)
+    const [selectedSim, setSelectedSim] = useState(null)
+    const [hoveredId, setHoveredId] = useState(null)
 
-  const simulations = [
-    {
-      id: 1,
-      title: 'Drone Propeller Flow Analysis',
-      category: 'Aerodynamics',
-      solver: 'simpleFoam',
-      year: '2024',
-      description: 'High-fidelity RANS simulation of drone propeller wake interaction with downstream surfaces. Analyzed velocity profiles, pressure distributions, and vortex structures.',
-      specs: {
-        cells: '~2.5M',
-        turbulence: 'k-ω SST',
-        runtime: '48 hours',
-        cores: '24'
-      },
-      tags: ['RANS', 'Propeller', 'Wake Analysis'],
-      thumbnail: '/openfoam/propeller-thumb.jpg',
-      images: [
-        '/openfoam/propeller-1.jpg',
-        '/openfoam/propeller-2.jpg',
-        '/openfoam/propeller-3.jpg'
-      ],
-      color: '#14ffc8'
+    const simulations = [
+  {
+    id: 1,
+    title: 'BubbleSim',
+    category: 'Multiphase Flow',
+    solver: 'interIsoFoam',
+    year: '2024',
+    description: 'Two-phase bubble dynamics simulation capturing interface evolution and surface tension effects using the Volume of Fluid (VOF) method.',
+    specs: {
+      cells: '~1.2M',
+      turbulence: 'LAMINAR',
+      runtime: '12 hours',
+      cores: '8'
     },
-    {
-      id: 2,
-      title: 'Solar Array Wind Loading',
-      category: 'Wind Engineering',
-      solver: 'simpleFoam',
-      year: '2024',
-      description: 'Atmospheric boundary layer simulation over ground-mounted solar panels with custom ABL profiles. Evaluated structural loads under various wind conditions.',
-      specs: {
-        cells: '~3.2M',
-        turbulence: 'k-ε',
-        runtime: '36 hours',
-        cores: '32'
-      },
-      tags: ['ABL', 'Wind Loading', 'Solar'],
-      thumbnail: '/openfoam/solar-thumb.jpg',
-      images: [
-        '/openfoam/solar-1.jpg',
-        '/openfoam/solar-2.jpg'
-      ],
-      color: '#00d4aa'
+    tags: ['VOF', 'Multiphase', 'Interface Tracking'],
+    thumbnail: '/openfoam/bubblesim-thumb.jpg',
+    images: [
+      '/openfoam/bubblesim-1.jpg',
+      '/openfoam/bubblesim-2.jpg'
+    ],
+    color: '#00c4b3'
+  },
+  {
+    id: 2,
+    title: 'F1',
+    category: 'Vehicle Aerodynamics',
+    solver: 'pimpleFoam',
+    year: '2025',
+    description: 'Aerodynamic analysis of a Formula 1 car under ground effect conditions. Simulated flow separation, diffuser efficiency, and pressure distribution.',
+    specs: {
+      cells: '~15M',
+      turbulence: 'k-ω SST',
+      runtime: '180 hours',
+      cores: '96'
     },
-    {
-      id: 3,
-      title: 'Battery Immersion Cooling',
-      category: 'Thermal Management',
-      solver: 'buoyantSimpleFoam',
-      year: '2023',
-      description: 'Conjugate heat transfer simulation of battery pack with immersion cooling. Parametric study of coolant properties and flow rates.',
-      specs: {
-        cells: '~1.8M',
-        turbulence: 'k-ω SST',
-        runtime: '24 hours',
-        cores: '16'
-      },
-      tags: ['CHT', 'Thermal', 'Batteries'],
-      thumbnail: '/openfoam/battery-thumb.jpg',
-      images: [
-        '/openfoam/battery-1.jpg',
-        '/openfoam/battery-2.jpg',
-        '/openfoam/battery-3.jpg'
-      ],
-      color: '#00b890'
+    tags: ['CFD', 'Aerodynamics', 'Motorsport'],
+    thumbnail: '/openfoam/f1-thumb.jpg',
+    images: [
+      '/openfoam/f1-1.jpg',
+      '/openfoam/f1-2.jpg'
+    ],
+    color: '#ff006e'
+  },
+  {
+    id: 3,
+    title: 'FSAE Car Sim',
+    category: 'Vehicle Aerodynamics',
+    solver: 'pimpleFoam',
+    year: '2024',
+    description: 'Flow simulation of a Formula SAE racecar to optimize aerodynamic balance and drag-to-lift ratio using transient PIMPLE coupling.',
+    specs: {
+      cells: '~6M',
+      turbulence: 'k-ω SST',
+      runtime: '72 hours',
+      cores: '48'
     },
-    {
-      id: 4,
-      title: 'Natural Gas Burner Combustion',
-      category: 'Combustion',
-      solver: 'reactingFoam',
-      year: '2023',
-      description: 'Reactive flow simulation with detailed chemistry for domestic gas burner. Implemented adaptive mesh refinement for flame front resolution.',
-      specs: {
-        cells: '~4.5M (AMR)',
-        turbulence: 'LES',
-        runtime: '120 hours',
-        cores: '48'
-      },
-      tags: ['Combustion', 'AMR', 'Chemistry'],
-      thumbnail: '/openfoam/combustion-thumb.jpg',
-      images: [
-        '/openfoam/combustion-1.jpg'
-      ],
-      color: '#009c76'
+    tags: ['FSAE', 'Transient', 'Vehicle'],
+    thumbnail: '/openfoam/fsae-thumb.jpg',
+    images: [
+      '/openfoam/fsae-1.jpg',
+      '/openfoam/fsae-2.jpg'
+    ],
+    color: '#00b4d8'
+  },
+  {
+    id: 4,
+    title: 'Propeller Simulation',
+    category: 'Aeroacoustics & Propulsion',
+    solver: 'pimpleFoam',
+    year: '2025',
+    description: 'Unsteady simulation of rotating propeller blades capturing wake interaction and thrust generation under realistic RPM conditions.',
+    specs: {
+      cells: '~10M',
+      turbulence: 'LES (WALE)',
+      runtime: '200 hours',
+      cores: '64'
     },
-    {
-      id: 5,
-      title: 'Truck Platoon Aerodynamics',
-      category: 'Vehicle Aerodynamics',
-      solver: 'simpleFoam',
-      year: '2023',
-      description: 'Multi-body aerodynamic simulation quantifying drag reduction in truck platooning configurations. Optimized spacing for maximum efficiency.',
-      specs: {
-        cells: '~5.1M',
-        turbulence: 'k-ω SST',
-        runtime: '72 hours',
-        cores: '40'
-      },
-      tags: ['Drag Reduction', 'Multi-body', 'Transport'],
-      thumbnail: '/openfoam/truck-thumb.jpg',
-      images: [
-        '/openfoam/truck-1.jpg',
-        '/openfoam/truck-2.jpg'
-      ],
-      color: '#14c8aa'
+    tags: ['LES', 'Rotation', 'Propulsion'],
+    thumbnail: '/openfoam/propeller-thumb.jpg',
+    images: [
+      '/openfoam/propeller-1.jpg',
+      '/openfoam/propeller-2.jpg'
+    ],
+    color: '#48cae4'
+  },
+  {
+    id: 5,
+    title: 'SimpleEngineCombustion',
+    category: 'Combustion',
+    solver: 'reactingFoam',
+    year: '2024',
+    description: 'Simplified combustion chamber simulation using detailed reaction mechanisms to predict flame propagation and heat release.',
+    specs: {
+      cells: '~3M',
+      turbulence: 'RANS (k-ε)',
+      runtime: '60 hours',
+      cores: '32'
     },
-    {
-      id: 6,
-      title: 'Rotor-Wake Interaction (LES)',
-      category: 'Rotorcraft',
-      solver: 'pimpleFoam',
-      year: '2024',
-      description: 'Large Eddy Simulation of rotor wake with sliding mesh technique. Captured unsteady vortex structures and blade-wake interactions.',
-      specs: {
-        cells: '~8.2M',
-        turbulence: 'LES (Smagorinsky)',
-        runtime: '240 hours',
-        cores: '64'
-      },
-      tags: ['LES', 'Rotating Mesh', 'Unsteady'],
-      thumbnail: '/openfoam/rotor-thumb.jpg',
-      images: [
-        '/openfoam/rotor-1.jpg',
-        '/openfoam/rotor-2.jpg',
-        '/openfoam/rotor-3.jpg'
-      ],
-      color: '#0aa890'
-    }
-  ]
+    tags: ['Combustion', 'CHT', 'Energy'],
+    thumbnail: '/openfoam/engine-thumb.jpg',
+    images: [
+      '/openfoam/engine-1.jpg',
+      '/openfoam/engine-2.jpg'
+    ],
+    color: '#ff7b00'
+  },
+  {
+    id: 6,
+    title: 'SolarPanel',
+    category: 'Wind Engineering',
+    solver: 'simpleFoam, pimpleFoam',
+    year: '2024',
+    description: 'Aerodynamic loading study on solar panels. RANS and transient PIMPLE simulations performed to determine optimal tilt-angle load characteristics.',
+    specs: {
+      cells: '~4M',
+      turbulence: 'k-ε',
+      runtime: '48 hours',
+      cores: '24'
+    },
+    tags: ['Wind Load', 'ABL', 'Transient'],
+    thumbnail: '/openfoam/solar-thumb.jpg',
+    images: [
+      '/openfoam/solar-1.jpg',
+      '/openfoam/solar-2.jpg'
+    ],
+    color: '#90e0ef'
+  },
+  {
+    id: 7,
+    title: 'stirringTank',
+    category: 'Multiphase Mixing',
+    solver: 'interIsoFoam',
+    year: '2023',
+    description: 'Mixing simulation inside a stirred tank with impeller motion and free surface tracking. Evaluated mixing time and vortex pattern formation.',
+    specs: {
+      cells: '~2M',
+      turbulence: 'k-ω SST',
+      runtime: '36 hours',
+      cores: '24'
+    },
+    tags: ['Mixing', 'VOF', 'Impeller'],
+    thumbnail: '/openfoam/tank-thumb.jpg',
+    images: [
+      '/openfoam/tank-1.jpg',
+      '/openfoam/tank-2.jpg'
+    ],
+    color: '#00a896'
+  },
+  {
+    id: 8,
+    title: 'SupersonicAirfoil',
+    category: 'High-Speed Flow',
+    solver: 'sonicFoam',
+    year: '2025',
+    description: 'Supersonic flow simulation over a wedge-type airfoil capturing shock formation, expansion fans, and pressure distribution at Mach 2.0.',
+    specs: {
+      cells: '~2.8M',
+      turbulence: 'Spalart–Allmaras',
+      runtime: '30 hours',
+      cores: '20'
+    },
+    tags: ['Compressible', 'Shock', 'Supersonic'],
+    thumbnail: '/openfoam/airfoil-thumb.jpg',
+    images: [
+      '/openfoam/airfoil-1.jpg',
+      '/openfoam/airfoil-2.jpg'
+    ],
+    color: '#0077b6'
+  },
+  {
+    id: 9,
+    title: 'SupersonicPrism',
+    category: 'High-Speed Flow',
+    solver: 'sonicFoam',
+    year: '2025',
+    description: 'Compressible flow past a sharp-edged prism generating oblique shock structures and expansion fans, analyzed for Mach 3 freestream.',
+    specs: {
+      cells: '~3.5M',
+      turbulence: 'Spalart–Allmaras',
+      runtime: '40 hours',
+      cores: '24'
+    },
+    tags: ['Mach Flow', 'Shock Wave', 'Compressible'],
+    thumbnail: '/openfoam/prism-thumb.jpg',
+    images: [
+      '/openfoam/prism-1.jpg',
+      '/openfoam/prism-2.jpg'
+    ],
+    color: '#023e8a'
+  },
+  {
+    id: 10,
+    title: 'WaterDrop',
+    category: 'Multiphase Flow',
+    solver: 'interIsoFoam',
+    year: '2025',
+    description: 'High-resolution simulation of a droplet impact event on a water surface capturing crown formation and secondary breakup dynamics.',
+    specs: {
+      cells: '~1.5M',
+      turbulence: 'LES',
+      runtime: '20 hours',
+      cores: '16'
+    },
+    tags: ['Impact', 'VOF', 'Splash'],
+    thumbnail: '/openfoam/waterdrop-thumb.jpg',
+    images: [
+      '/openfoam/waterdrop-1.jpg',
+      '/openfoam/waterdrop-2.jpg'
+    ],
+    color: '#00b4d8'
+  }
+]
+
 
   return (
     <div style={{ maxWidth: '1400px', margin: '0 auto', height: '100%', display: 'flex', flexDirection: 'column' }}>
