@@ -8,6 +8,7 @@ import Education from './sections/Education'
 import Experience from './sections/Experience'
 import Skills from './sections/Skills'
 import Projects from './sections/Projects'
+import OpenFOAM from './sections/OpenFOAM'
 import Events from './sections/Events'
 import Footer from './components/Footer'
 
@@ -18,6 +19,7 @@ const sectionsMeta = [
   { id: 'experience', label: 'Experience' },
   { id: 'skills', label: 'Skills' },
   { id: 'projects', label: 'Projects' },
+  { id: 'openfoam', label: 'OpenFOAM' },
   { id: 'events', label: 'Events' }
 ]
 
@@ -28,6 +30,7 @@ const sectionComponents = {
   experience: Experience,
   skills: Skills,
   projects: Projects,
+  openfoam: OpenFOAM,
   events: Events
 }
 
