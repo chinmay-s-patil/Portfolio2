@@ -11,21 +11,21 @@ export default function EducationSection() {
 
   // Slideshow data
   const mastersImages = [
-    '/TUM/Slideshow/1533559592php3XzNsk.jpeg',
-    '/TUM/Slideshow/1533559592phpn8Vt65.jpeg',
-    '/TUM/Slideshow/1533559592phpsYF8Oy.jpeg',
-    '/TUM/Slideshow/1533559592phpxHu6nD.jpeg',
-    '/TUM/Slideshow/1533559593phpr35XFa.jpeg',
-    '/TUM/Slideshow/6244f144-e799-4122-9ea5-6cf251ab69c4_TUM internet picture1_8e811d4e_750x400.jpg',
-    '/TUM/Slideshow/Technical-University-of-Munich-–-TUM-campus-610x406.jpg',
+    '/Education/TUM/Slideshow/1533559592php3XzNsk.jpeg',
+    '/Education/TUM/Slideshow/1533559592phpn8Vt65.jpeg',
+    '/Education/TUM/Slideshow/1533559592phpsYF8Oy.jpeg',
+    '/Education/TUM/Slideshow/1533559592phpxHu6nD.jpeg',
+    '/Education/TUM/Slideshow/1533559593phpr35XFa.jpeg',
+    '/Education/TUM/Slideshow/6244f144-e799-4122-9ea5-6cf251ab69c4_TUM internet picture1_8e811d4e_750x400.jpg',
+    '/Education/TUM/Slideshow/Technical-University-of-Munich-–-TUM-campus-610x406.jpg',
   ];
 
   const bachelorsImages = [
-    '/VITC/slideshow/13469604894_02d812d4ca_b.jpg',
-    '/VITC/slideshow/5th-Floor-VOC-Auditorium-4.jpg',
-    '/VITC/slideshow/campus-banner.jpg',
-    '/VITC/slideshow/R.jpeg',
-    '/VITC/slideshow/vitchennai3.png',
+    '/Education/VITC/slideshow/13469604894_02d812d4ca_b.jpg',
+    '/Education/VITC/slideshow/5th-Floor-VOC-Auditorium-4.jpg',
+    '/Education/VITC/slideshow/campus-banner.jpg',
+    '/Education/VITC/slideshow/R.jpeg',
+    '/Education/VITC/slideshow/vitchennai3.png',
   ];
 
   const currentImages = activeTab === 'masters' ? mastersImages : bachelorsImages;

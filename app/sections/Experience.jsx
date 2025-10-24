@@ -19,9 +19,9 @@ export default function Experience() {
       skills: ['DFAM', 'Mechanical Design', 'Python', 'Team Coordination'],
       color: 'hsl(140, 70%, 60%)',
       images: [
-        '/Raphe/slideshow/Raphe1.jpg',
-        '/Raphe/slideshow/Raphe2.jpg',
-        '/Raphe/slideshow/Raphe3.jpg',
+        '/Experience/Raphe/slideshow/Raphe1.jpg',
+        '/Experience/Raphe/slideshow/Raphe2.jpg',
+        '/Experience/Raphe/slideshow/Raphe3.jpg',
       ],
       documents: { offerLetter: null, certificate: null, experienceLetter: null }
     },
@@ -36,9 +36,9 @@ export default function Experience() {
       skills: ['OpenFOAM', 'LES', 'Aeroacoustics', 'ANSYS Fluent'],
       color: 'hsl(160, 65%, 55%)',
       images: [
-        '/IISc/Slideshow/IISc1.jpg',
-        '/IISc/Slideshow/IISc2.jpg',
-        '/IISc/Slideshow/IISc3.jpeg',
+        '/Experience/IISc/Slideshow/IISc1.jpg',
+        '/Experience/IISc/Slideshow/IISc2.jpg',
+        '/Experience/IISc/Slideshow/IISc3.jpeg',
       ],
       documents: { offerLetter: null, certificate: null, experienceLetter: null }
     },
@@ -53,9 +53,9 @@ export default function Experience() {
       skills: ['Wind Engineering', 'OpenFOAM', 'Lab Experiments', 'Python'],
       color: 'hsl(180, 60%, 50%)',
       images: [
-        '/IISc/Slideshow/IISc1.jpg',
-        '/IISc/Slideshow/IISc2.jpg',
-        '/IISc/Slideshow/IISc3.jpeg',
+        '/Experience/IISc/Slideshow/IISc1.jpg',
+        '/Experience/IISc/Slideshow/IISc2.jpg',
+        '/Experience/IISc/Slideshow/IISc3.jpeg',
       ],
       documents: { offerLetter: '/docs/csir-offer.pdf', certificate: '/docs/csir-certificate.pdf', experienceLetter: '/docs/csir-experience.pdf' }
     },
@@ -70,9 +70,9 @@ export default function Experience() {
       skills: ['COMSOL', 'Machine Learning', 'Python', 'Data Science'],
       color: 'hsl(220, 50%, 40%)',
       images: [
-        '/IISc/Slideshow/IISc1.jpg',
-        '/IISc/Slideshow/IISc2.jpg',
-        '/IISc/Slideshow/IISc3.jpeg',
+        '/Experience/IISc/Slideshow/IISc1.jpg',
+        '/Experience/IISc/Slideshow/IISc2.jpg',
+        '/Experience/IISc/Slideshow/IISc3.jpeg',
       ],
       documents: { offerLetter: null, certificate: null, experienceLetter: null }
     },
