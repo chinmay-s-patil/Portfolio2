@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import ProjectModal from '../components/ProjectModal'
+import SimulationModal from '../components/SimulationModal'
 
 export default function OpenFOAMSection() {
   const [selectedSim, setSelectedSim] = useState(null)
@@ -44,7 +44,7 @@ export default function OpenFOAMSection() {
         cells: '~15M',
         turbulence: 'k-ω SST',
         runtime: '180 hours',
-        cores: '96'
+        cores: '8'
       },
       tags: ['CFD', 'Aerodynamics', 'Motorsport'],
       media: [
@@ -68,7 +68,7 @@ export default function OpenFOAMSection() {
         cells: '~6M',
         turbulence: 'k-ω SST',
         runtime: '72 hours',
-        cores: '48'
+        cores: '8'
       },
       tags: ['FSAE', 'Transient', 'Vehicle'],
       media: [
@@ -94,7 +94,7 @@ export default function OpenFOAMSection() {
         cells: '~10M',
         turbulence: 'LES (WALE)',
         runtime: '200 hours',
-        cores: '64'
+        cores: '8'
       },
       tags: ['LES', 'Rotation', 'Propulsion'],
       media: [
@@ -119,7 +119,7 @@ export default function OpenFOAMSection() {
         cells: '~3M',
         turbulence: 'RANS (k-ε)',
         runtime: '60 hours',
-        cores: '32'
+        cores: '8'
       },
       tags: ['Combustion', 'CHT', 'Energy'],
       media: [
@@ -144,7 +144,7 @@ export default function OpenFOAMSection() {
         cells: '~4M',
         turbulence: 'k-ε',
         runtime: '48 hours',
-        cores: '24'
+        cores: '8'
       },
       tags: ['Wind Load', 'ABL', 'Transient'],
       media: [
@@ -169,7 +169,7 @@ export default function OpenFOAMSection() {
         cells: '~2M',
         turbulence: 'k-ω SST',
         runtime: '36 hours',
-        cores: '24'
+        cores: '8'
       },
       tags: ['Mixing', 'VOF', 'Impeller'],
       media: [
@@ -194,7 +194,7 @@ export default function OpenFOAMSection() {
         cells: '~2.8M',
         turbulence: 'Spalart–Allmaras',
         runtime: '30 hours',
-        cores: '20'
+        cores: '8'
       },
       tags: ['Compressible', 'Shock', 'Supersonic'],
       media: [
@@ -219,7 +219,7 @@ export default function OpenFOAMSection() {
         cells: '~3.5M',
         turbulence: 'Spalart–Allmaras',
         runtime: '40 hours',
-        cores: '24'
+        cores: '8'
       },
       tags: ['Mach Flow', 'Shock Wave', 'Compressible'],
       media: [
@@ -244,7 +244,7 @@ export default function OpenFOAMSection() {
         cells: '~1.5M',
         turbulence: 'LES',
         runtime: '20 hours',
-        cores: '16'
+        cores: '8'
       },
       tags: ['Impact', 'VOF', 'Splash'],
       media: [
@@ -674,8 +674,8 @@ export default function OpenFOAMSection() {
 
       {/* Modal */}
       {selectedSim && (
-        <ProjectModal 
-          project={selectedSim} 
+        <SimulationModal 
+          simulation={selectedSim} 
           onClose={() => setSelectedSim(null)} 
         />
       )}

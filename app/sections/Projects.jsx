@@ -20,9 +20,12 @@ export default function Projects() {
       ],
       tags: ['Alternative Fuels', 'Machine Learning', 'Thermal', 'Experimental Design'],
       media: [
-        { type: 'image', src: '/Projects/Pyrolysis of Plastics/Pyrolysis of Plastics (1).jpg', caption: 'Experimental setup' },
-        { type: 'image', src: '/Projects/Pyrolysis of Plastics/Pyrolysis of Plastics (2).jpg', caption: 'Analysis results' },
-        { type: 'image', src: '/Projects/Pyrolysis of Plastics/Pyrolysis of Plastics (3).jpg', caption: 'Analysis results' }
+        { type: 'image', src: '/Projects/Pyrolysis of Plastics/Pyrolysis of Plastics (1).jpg'},
+        { type: 'image', src: '/Projects/Pyrolysis of Plastics/Pyrolysis of Plastics (2).jpg'},
+        { type: 'image', src: '/Projects/Pyrolysis of Plastics/Pyrolysis of Plastics (3).jpg'},
+        { type: 'image', src: '/Projects/Pyrolysis of Plastics/Pyrolysis of Plastics (4).jpg'},
+        { type: 'image', src: '/Projects/Pyrolysis of Plastics/Pyrolysis of Plastics (5).jpg'},
+        { type: 'image', src: '/Projects/Pyrolysis of Plastics/Pyrolysis of Plastics (6).jpg'},
       ],
       href: '#'
     },
