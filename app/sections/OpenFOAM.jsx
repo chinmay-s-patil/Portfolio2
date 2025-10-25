@@ -1,11 +1,36 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import SimulationModal from '../components/SimulationModal'
+
+// Placeholder modal component
+function SimulationModal({ simulation, onClose }) {
+  return (
+    <div onClick={onClose} style={{
+      position: 'fixed',
+      inset: 0,
+      background: 'rgba(0, 0, 0, 0.8)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1000
+    }}>
+      <div onClick={e => e.stopPropagation()} style={{
+        background: '#1a1a1a',
+        padding: '2rem',
+        borderRadius: '16px',
+        maxWidth: '600px'
+      }}>
+        <h2>{simulation.title}</h2>
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>
+  )
+}
 
 export default function OpenFOAMSection() {
   const [selectedSim, setSelectedSim] = useState(null)
   const [activeFilter, setActiveFilter] = useState('all')
+  const [currentPage, setCurrentPage] = useState(0)
   const scrollContainerRef = useRef(null)
 
   const simulations = [
@@ -160,27 +185,27 @@ export default function OpenFOAMSection() {
     },
     {
       id: 7,
-      title: 'Stirring Tank',
+      title: 'Stirred Tank Mixing',
       category: 'Multiphase Flow',
-      solver: 'interIsoFoam',
+      solver: 'twoPhaseEulerFoam',
       year: '2023',
-      description: 'Mixing simulation inside a stirred tank with impeller motion and free surface tracking. Evaluated mixing time and vortex pattern formation.',
+      description: 'Multiphase mixing simulation in a stirred tank using the MRF approach to model impeller rotation. Captured gas–liquid interaction and evaluated mixing efficiency and flow patterns.',
       specs: {
         cells: '~2M',
-        turbulence: 'k-ω SST',
+        turbulence: 'mixture k-ε',
         runtime: '36 hours',
         cores: '8'
       },
-      tags: ['Mixing', 'VOF', 'Impeller'],
+      tags: ['Mixing', 'MRF', 'Gas-Liquid'],
       media: [
         { type: 'video', src: '/openfoam/tank.mp4' },
         { type: 'image', src: '/openfoam/tank-1.jpg' }
       ],
       color: '#00a896',
       learnings: [
-        'Modeled impeller motion',
-        'Tracked free surface dynamics',
-        'Optimized mixing time'
+        'Implemented MRF for impeller rotation',
+        'Simulated gas–liquid flow behavior',
+        'Analyzed mixing uniformity and turbulence characteristics'
       ]
     },
     {
@@ -268,16 +293,34 @@ export default function OpenFOAMSection() {
     ? simulations 
     : simulations.filter(s => s.solver === activeFilter)
 
-  // Auto-scroll functionality
-  const scrollLeft = () => {
+  const itemsPerPage = 3
+  const totalPages = Math.ceil(filteredSimulations.length / itemsPerPage)
+
+  // Reset to first page when filter changes
+  useEffect(() => {
+    setCurrentPage(0)
+  }, [activeFilter])
+
+  // Scroll to specific page
+  const scrollToPage = (pageIndex) => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -400, behavior: 'smooth' })
+      const container = scrollContainerRef.current
+      const cardWidth = container.scrollWidth / filteredSimulations.length
+      const scrollPosition = pageIndex * itemsPerPage * cardWidth
+      container.scrollTo({ left: scrollPosition, behavior: 'smooth' })
+      setCurrentPage(pageIndex)
+    }
+  }
+
+  const scrollLeft = () => {
+    if (currentPage > 0) {
+      scrollToPage(currentPage - 1)
     }
   }
 
   const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 400, behavior: 'smooth' })
+    if (currentPage < totalPages - 1) {
+      scrollToPage(currentPage + 1)
     }
   }
 
@@ -298,7 +341,11 @@ export default function OpenFOAMSection() {
         }}>
           <div className="kicker" style={{
             fontSize: 'clamp(0.75rem, 1.5vw, 0.9rem)',
-            marginBottom: 'clamp(0.5rem, 1vh, 0.75rem)'
+            marginBottom: 'clamp(0.5rem, 1vh, 0.75rem)',
+            color: 'rgba(255, 255, 255, 0.6)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            fontWeight: '600'
           }}>
             Computational Fluid Dynamics
           </div>
@@ -314,10 +361,11 @@ export default function OpenFOAMSection() {
           }}>
             OpenFOAM Simulations
           </h2>
-          <p className="muted" style={{ 
+          <p style={{ 
             maxWidth: '65ch',
             fontSize: 'clamp(0.95rem, 2vw, 1.125rem)',
-            lineHeight: '1.6'
+            lineHeight: '1.6',
+            color: 'rgba(255, 255, 255, 0.7)'
           }}>
             Production-grade CFD simulations showcasing advanced meshing strategies, turbulence modeling, 
             and high-performance computing workflows.
@@ -344,18 +392,18 @@ export default function OpenFOAMSection() {
                 fontSize: 'clamp(0.8rem, 1.5vw, 0.9rem)',
                 fontWeight: '600',
                 background: activeFilter === solver
-                  ? 'linear-gradient(135deg, hsl(var(--accent) / 0.25), hsl(var(--accent) / 0.1))'
+                  ? 'linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(59, 130, 246, 0.1))'
                   : 'rgba(255, 255, 255, 0.05)',
                 border: activeFilter === solver
-                  ? '2px solid hsl(var(--accent))'
+                  ? '2px solid rgb(59, 130, 246)'
                   : '2px solid rgba(255, 255, 255, 0.1)',
                 color: activeFilter === solver
-                  ? 'hsl(var(--accent))'
+                  ? 'rgb(59, 130, 246)'
                   : 'rgba(255, 255, 255, 0.7)',
                 cursor: 'pointer',
                 transition: 'all 0.25s ease',
                 boxShadow: activeFilter === solver
-                  ? '0 4px 16px hsl(var(--accent) / 0.25)'
+                  ? '0 4px 16px rgba(59, 130, 246, 0.25)'
                   : 'none',
                 whiteSpace: 'nowrap',
                 fontFamily: 'monospace'
@@ -371,48 +419,63 @@ export default function OpenFOAMSection() {
         <div style={{
           display: 'flex',
           justifyContent: 'center',
+          alignItems: 'center',
           gap: '1rem',
           marginBottom: 'clamp(1rem, 2vh, 1.5rem)',
           flexShrink: 0
         }}>
           <button
             onClick={scrollLeft}
+            disabled={currentPage === 0}
             style={{
-                width: '44px',
-                height: '44px',
-                borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.1)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'all 0.3s ease'
+              width: '44px',
+              height: '44px',
+              borderRadius: '50%',
+              background: currentPage === 0 ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              cursor: currentPage === 0 ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.3s ease',
+              opacity: currentPage === 0 ? 0.3 : 1
             }}
             className="scroll-button"
-            aria-label="Scroll left"
-            >
+            aria-label="Previous page"
+          >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            </button>
+          </button>
 
-            <button
+          <div style={{
+            fontSize: '0.9rem',
+            fontWeight: '600',
+            color: 'rgba(255, 255, 255, 0.7)',
+            minWidth: '80px',
+            textAlign: 'center'
+          }}>
+            {filteredSimulations.length > 0 ? `${currentPage + 1} / ${totalPages}` : '0 / 0'}
+          </div>
+
+          <button
             onClick={scrollRight}
+            disabled={currentPage >= totalPages - 1}
             style={{
-                width: '44px',
-                height: '44px',
-                borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.1)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'all 0.3s ease'
+              width: '44px',
+              height: '44px',
+              borderRadius: '50%',
+              background: currentPage >= totalPages - 1 ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              cursor: currentPage >= totalPages - 1 ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.3s ease',
+              opacity: currentPage >= totalPages - 1 ? 0.3 : 1
             }}
             className="scroll-button"
-            aria-label="Scroll right"
+            aria-label="Next page"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -424,12 +487,12 @@ export default function OpenFOAMSection() {
         <div
           ref={scrollContainerRef}
           style={{
-            display: 'flex',
+            display: 'grid',
+            gridAutoFlow: 'column',
+            gridAutoColumns: 'calc(33.333% - 1.33rem)',
             gap: 'clamp(1.5rem, 3vw, 2rem)',
-            overflowX: 'auto',
-            overflowY: 'hidden',
-            scrollbarWidth: 'thin',
-            scrollbarColor: 'rgba(255, 255, 255, 0.2) transparent',
+            overflowX: 'hidden',
+            scrollbarWidth: 'none',
             paddingBottom: '1rem',
             flex: 1,
             alignItems: 'stretch'
@@ -441,9 +504,6 @@ export default function OpenFOAMSection() {
               key={sim.id}
               onClick={() => setSelectedSim(sim)}
               style={{
-                minWidth: 'clamp(320px, 40vw, 420px)',
-                maxWidth: 'clamp(320px, 40vw, 420px)',
-                flexShrink: 0,
                 position: 'relative',
                 borderRadius: '16px',
                 overflow: 'hidden',
@@ -682,21 +742,7 @@ export default function OpenFOAMSection() {
 
       <style jsx>{`
         .openfoam-scroll::-webkit-scrollbar {
-          height: 8px;
-        }
-
-        .openfoam-scroll::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 4px;
-        }
-
-        .openfoam-scroll::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.2);
-          border-radius: 4px;
-        }
-
-        .openfoam-scroll::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.3);
+          display: none;
         }
 
         .sim-card-horizontal:hover {
@@ -707,10 +753,10 @@ export default function OpenFOAMSection() {
 
         .sim-card-horizontal:hover .card-arrow {
           opacity: 1;
-          background: hsl(var(--accent));
+          background: rgb(59, 130, 246);
         }
 
-        .scroll-button:hover {
+        .scroll-button:not(:disabled):hover {
           background: rgba(255, 255, 255, 0.15);
           transform: scale(1.1);
         }
@@ -720,10 +766,15 @@ export default function OpenFOAMSection() {
           transform: translateY(-2px);
         }
 
+        @media (max-width: 1024px) {
+          .openfoam-scroll {
+            grid-auto-columns: calc(50% - 0.75rem) !important;
+          }
+        }
+
         @media (max-width: 768px) {
-          .sim-card-horizontal {
-            min-width: 280px !important;
-            max-width: 280px !important;
+          .openfoam-scroll {
+            grid-auto-columns: 100% !important;
           }
         }
       `}</style>
