@@ -107,7 +107,12 @@ export default function Experience() {
       achievements: ['Improved real-world facial recognition accuracy', 'Developed robust API for facial recognition integration', 'Contributed to Android frontend enhancements'],
       skills: ['Python', 'API Development', 'Android', 'Facial Recognition'],
       color: 'hsl(200, 55%, 45%)',
-      images: ['/experience/2023a/img1.jpg', '/experience/2023a/img2.jpg', '/experience/2023a/img3.jpg'],
+      images: [
+        '/Experience/AppBell/AppBell (1).png',
+        '/Experience/AppBell/AppBell (2).png',
+        '/Experience/AppBell/AppBell (3).png',
+        '/Experience/AppBell/AppBell (1).jpg',
+      ],
       documents: { offerLetter: null, certificate: null, experienceLetter: null }
     },
   ]
