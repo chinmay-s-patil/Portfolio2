@@ -47,7 +47,6 @@ export default function Projects() {
         { type: 'image', src: '/Projects/Battery Thermal Management System/Battery Thermal Management System (3).jpg' },
         { type: 'image', src: '/Projects/Battery Thermal Management System/Battery Thermal Management System (4).jpg' }
       ],
-      href: '#'
     },
     {
       title: 'Reverse Engineering S500 Drone',
@@ -62,7 +61,18 @@ export default function Projects() {
       ],
       tags: ['Reverse Engineering', 'CAD', 'SolidWorks', '3D Scanning'],
       media: [
-        { type: 'image', src: '/projects/drone-scan.jpg' }
+        { type: 'image', src: '/Projects/Reverse Engineering of a S500 Drone/Reverse Engineering of a S500 Drone (1).jpg' },
+        { type: 'video', src: '/Projects/Reverse Engineering of a S500 Drone/Reverse Engineering of a S500 Drone (1).mp4' },
+        { type: 'image', src: '/Projects/Reverse Engineering of a S500 Drone/Reverse Engineering of a S500 Drone (2).jpg' },
+        { type: 'video', src: '/Projects/Reverse Engineering of a S500 Drone/Reverse Engineering of a S500 Drone (2).mp4' },
+        { type: 'image', src: '/Projects/Reverse Engineering of a S500 Drone/Reverse Engineering of a S500 Drone (3).jpg' },
+        { type: 'video', src: '/Projects/Reverse Engineering of a S500 Drone/Reverse Engineering of a S500 Drone (3).mp4' },
+        { type: 'image', src: '/Projects/Reverse Engineering of a S500 Drone/Reverse Engineering of a S500 Drone (4).jpg' },
+        { type: 'video', src: '/Projects/Reverse Engineering of a S500 Drone/Reverse Engineering of a S500 Drone (4).mp4' },
+        { type: 'image', src: '/Projects/Reverse Engineering of a S500 Drone/Reverse Engineering of a S500 Drone (5).jpg' },
+        { type: 'video', src: '/Projects/Reverse Engineering of a S500 Drone/Reverse Engineering of a S500 Drone (5).mp4' },
+        { type: 'image', src: '/Projects/Reverse Engineering of a S500 Drone/Reverse Engineering of a S500 Drone (6).jpg' },
+        { type: 'image', src: '/Projects/Reverse Engineering of a S500 Drone/Reverse Engineering of a S500 Drone (7).jpg' },
       ],
       href: '#'
     },

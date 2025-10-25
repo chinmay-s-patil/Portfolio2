@@ -1,8 +1,9 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 export default function ProjectModal({ project, onClose }) {
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0)
+  const videoRefs = useRef([])
 
   useEffect(() => {
     // Prevent body scroll when modal is open
@@ -20,6 +21,22 @@ export default function ProjectModal({ project, onClose }) {
     window.addEventListener('keydown', handleEscape)
     return () => window.removeEventListener('keydown', handleEscape)
   }, [onClose])
+
+  // Autoplay current video when media changes
+  useEffect(() => {
+    const currentVideo = videoRefs.current[currentMediaIndex]
+    if (currentVideo && project.media[currentMediaIndex]?.type === 'video') {
+      currentVideo.play().catch(err => console.log('Autoplay prevented:', err))
+    }
+    
+    // Pause all other videos
+    videoRefs.current.forEach((video, idx) => {
+      if (video && idx !== currentMediaIndex) {
+        video.pause()
+        video.currentTime = 0
+      }
+    })
+  }, [currentMediaIndex, project.media])
 
   if (!project) return null
 
@@ -104,12 +121,15 @@ export default function ProjectModal({ project, onClose }) {
         </button>
 
         {/* Content */}
-        <div style={{ 
-          overflowY: 'auto', 
-          overflowX: 'hidden',
-          padding: '2.5rem',
-          flex: 1
-        }}>
+        <div 
+          className="modal-content-scroll"
+          style={{ 
+            overflowY: 'auto', 
+            overflowX: 'hidden',
+            padding: '2.5rem',
+            flex: 1
+          }}
+        >
           {/* Header */}
           <div style={{ marginBottom: '2rem' }}>
             <div style={{
@@ -196,13 +216,17 @@ export default function ProjectModal({ project, onClose }) {
                     transition: 'opacity 0.5s ease',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    pointerEvents: idx === currentMediaIndex ? 'auto' : 'none'
                   }}
                 >
                   {item.type === 'video' ? (
                     <video
+                      ref={el => videoRefs.current[idx] = el}
                       src={item.src}
-                      controls
+                      loop
+                      muted
+                      playsInline
                       style={{
                         width: '100%',
                         height: '100%',
@@ -243,7 +267,8 @@ export default function ProjectModal({ project, onClose }) {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      transition: 'all 0.2s ease'
+                      transition: 'all 0.2s ease',
+                      zIndex: 10
                     }}
                     className="hover:bg-[rgba(255,255,255,0.2)]"
                     aria-label="Previous media"
@@ -270,7 +295,8 @@ export default function ProjectModal({ project, onClose }) {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      transition: 'all 0.2s ease'
+                      transition: 'all 0.2s ease',
+                      zIndex: 10
                     }}
                     className="hover:bg-[rgba(255,255,255,0.2)]"
                     aria-label="Next media"
@@ -287,7 +313,8 @@ export default function ProjectModal({ project, onClose }) {
                     left: '50%',
                     transform: 'translateX(-50%)',
                     display: 'flex',
-                    gap: '0.5rem'
+                    gap: '0.5rem',
+                    zIndex: 10
                   }}>
                     {project.media.map((_, idx) => (
                       <button
@@ -501,6 +528,33 @@ export default function ProjectModal({ project, onClose }) {
             opacity: 1;
             transform: translateY(0);
           }
+        }
+
+        /* Custom scrollbar styling */
+        .modal-content-scroll::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        .modal-content-scroll::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 4px;
+        }
+
+        .modal-content-scroll::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, hsl(var(--accent)), rgba(140, 255, 200, 0.6));
+          border-radius: 4px;
+          transition: background 0.3s ease;
+        }
+
+        .modal-content-scroll::-webkit-scrollbar-thumb:hover {
+          background: hsl(var(--accent));
+          box-shadow: 0 0 8px hsl(var(--accent) / 0.5);
+        }
+
+        /* Firefox scrollbar */
+        .modal-content-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: hsl(var(--accent)) rgba(255, 255, 255, 0.05);
         }
       `}</style>
     </div>

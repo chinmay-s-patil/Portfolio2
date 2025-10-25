@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 
 export default function Experience() {
   const [activeIndex, setActiveIndex] = useState(0)
-  const [currentImageIndices, setCurrentImageIndices] = useState({})
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const scrollContainerRef = useRef(null)
 
   const experiences = [
@@ -119,28 +119,20 @@ export default function Experience() {
 
   const currentExperience = experiences[activeIndex]
 
-  // Initialize image indices for all experiences
+  // Auto-advance slideshow every 4 seconds
   useEffect(() => {
-    const initialIndices = {}
-    experiences.forEach((exp, index) => {
-      initialIndices[index] = 0
-    })
-    setCurrentImageIndices(initialIndices)
-  }, [])
-
-  // Auto-advance slideshow for current experience only
-  useEffect(() => {
-    if (!currentExperience || !currentExperience.images.length) return
+    if (!currentExperience?.images?.length) return
 
     const timer = setInterval(() => {
-      setCurrentImageIndices(prev => ({
-        ...prev,
-        [activeIndex]: (prev[activeIndex] + 1) % currentExperience.images.length
-      }))
+      setCurrentImageIndex((prev) => (prev + 1) % currentExperience.images.length)
     }, 4000)
-
     return () => clearInterval(timer)
-  }, [activeIndex, currentExperience?.images.length])
+  }, [currentExperience?.images?.length])
+
+  // Reset image index when switching tabs
+  useEffect(() => {
+    setCurrentImageIndex(0)
+  }, [activeIndex])
 
   useEffect(() => {
     const container = scrollContainerRef.current
@@ -231,15 +223,24 @@ export default function Experience() {
         <div className="slideshow-column" style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center' }}>
           <div className="fade-left" style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 'clamp(80px, 15vw, 120px)', background: 'linear-gradient(to right, rgba(10, 14, 26, 1) 0%, rgba(10, 14, 26, 0.8) 40%, rgba(10, 14, 26, 0) 100%)', zIndex: 2, pointerEvents: 'none' }} />
           <div className="slideshow-container" style={{ position: 'relative', width: '100%', height: '100%', minHeight: 'clamp(350px, 60vh, 500px)', borderRadius: 'clamp(12px, 2vw, 16px)', overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.1)' }}>
-            {currentExperience.images.map((img, idx) => (
-              <div key={idx} className="slide" style={{ position: 'absolute', inset: 0, opacity: idx === (currentImageIndices[activeIndex] || 0) ? 1 : 0, transition: 'opacity 1.2s ease-in-out', backgroundImage: `url(${img})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundColor: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: idx === (currentImageIndices[activeIndex] || 0) ? 1 : 0 }}>
-                {/* Fallback content removed for clarity */}
+            {currentExperience?.images?.map((img, idx) => (
+              <div key={`${activeIndex}-${idx}`} className="slide" style={{ position: 'absolute', inset: 0, opacity: idx === currentImageIndex ? 1 : 0, transition: 'opacity 1.2s ease-in-out', zIndex: idx === currentImageIndex ? 1 : 0 }}>
+                <img 
+                  src={img} 
+                  alt={`${currentExperience.company} - Image ${idx + 1}`}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  onError={(e) => {
+                    console.error(`Failed to load: ${img}`)
+                    e.target.style.display = 'none'
+                  }}
+                  onLoad={() => console.log(`Loaded: ${img}`)}
+                />
               </div>
             ))}
           </div>
           <div className="indicators" style={{ position: 'absolute', bottom: 'clamp(1rem, 2vh, 1.5rem)', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 'clamp(0.4rem, 0.8vw, 0.5rem)', zIndex: 3 }}>
-            {currentExperience.images.map((_, idx) => (
-              <div key={idx} className="indicator" style={{ width: idx === (currentImageIndices[activeIndex] || 0) ? 'clamp(24px, 4vw, 32px)' : 'clamp(6px, 1vw, 8px)', height: 'clamp(6px, 1vh, 8px)', borderRadius: 'clamp(3px, 0.6vw, 4px)', background: idx === (currentImageIndices[activeIndex] || 0) ? currentExperience.color : 'rgba(255,255,255,0.3)', transition: 'all 0.3s ease', boxShadow: idx === (currentImageIndices[activeIndex] || 0) ? `0 0 12px ${currentExperience.color}80` : 'none' }} />
+            {currentExperience?.images?.map((_, idx) => (
+              <div key={idx} className="indicator" style={{ width: idx === currentImageIndex ? 'clamp(24px, 4vw, 32px)' : 'clamp(6px, 1vw, 8px)', height: 'clamp(6px, 1vh, 8px)', borderRadius: 'clamp(3px, 0.6vw, 4px)', background: idx === currentImageIndex ? currentExperience.color : 'rgba(255,255,255,0.3)', transition: 'all 0.3s ease', boxShadow: idx === currentImageIndex ? `0 0 12px ${currentExperience.color}80` : 'none' }} />
             ))}
           </div>
         </div>
