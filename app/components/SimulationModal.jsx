@@ -187,6 +187,36 @@ export default function SimulationModal({ simulation, onClose }) {
               }}>
                 {simulation.year}
               </div>
+
+              {/* Turbulence Model Badge */}
+              {simulation.specs?.turbulence && (
+                <div style={{
+                  padding: '0.5rem 1.25rem',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  borderRadius: '8px',
+                  border: `1px solid ${simulation.color}30`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}>
+                  <span style={{
+                    fontSize: '0.75rem',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                    color: 'rgba(255, 255, 255, 0.5)'
+                  }}>
+                    Model:
+                  </span>
+                  <span style={{
+                    fontSize: '0.9rem',
+                    fontWeight: '700',
+                    color: simulation.color,
+                    fontFamily: 'monospace'
+                  }}>
+                    {simulation.specs.turbulence}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -357,125 +387,6 @@ export default function SimulationModal({ simulation, onClose }) {
               }}>
                 {simulation.description}
               </p>
-            </div>
-          )}
-
-          {/* Simulation Specifications */}
-          {simulation.specs && (
-            <div style={{ marginBottom: '2rem' }}>
-              <h3 style={{
-                fontSize: '1.25rem',
-                fontWeight: '600',
-                marginBottom: '1rem',
-                color: 'rgba(255, 255, 255, 0.95)'
-              }}>
-                Simulation Details
-              </h3>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                gap: '1rem'
-              }}>
-                <div style={{
-                  padding: '1.25rem',
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  borderRadius: '12px'
-                }}>
-                  <div style={{
-                    fontSize: '0.75rem',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.1em',
-                    color: 'rgba(255, 255, 255, 0.5)',
-                    marginBottom: '0.5rem'
-                  }}>
-                    Mesh Size
-                  </div>
-                  <div style={{
-                    fontSize: '1.25rem',
-                    fontWeight: '700',
-                    color: simulation.color,
-                    fontFamily: 'monospace'
-                  }}>
-                    {simulation.specs.cells}
-                  </div>
-                </div>
-
-                <div style={{
-                  padding: '1.25rem',
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  borderRadius: '12px'
-                }}>
-                  <div style={{
-                    fontSize: '0.75rem',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.1em',
-                    color: 'rgba(255, 255, 255, 0.5)',
-                    marginBottom: '0.5rem'
-                  }}>
-                    Turbulence Model
-                  </div>
-                  <div style={{
-                    fontSize: '1.25rem',
-                    fontWeight: '700',
-                    color: simulation.color,
-                    fontFamily: 'monospace'
-                  }}>
-                    {simulation.specs.turbulence}
-                  </div>
-                </div>
-
-                <div style={{
-                  padding: '1.25rem',
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  borderRadius: '12px'
-                }}>
-                  <div style={{
-                    fontSize: '0.75rem',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.1em',
-                    color: 'rgba(255, 255, 255, 0.5)',
-                    marginBottom: '0.5rem'
-                  }}>
-                    Runtime
-                  </div>
-                  <div style={{
-                    fontSize: '1.25rem',
-                    fontWeight: '700',
-                    color: simulation.color,
-                    fontFamily: 'monospace'
-                  }}>
-                    {simulation.specs.runtime}
-                  </div>
-                </div>
-
-                <div style={{
-                  padding: '1.25rem',
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  borderRadius: '12px'
-                }}>
-                  <div style={{
-                    fontSize: '0.75rem',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.1em',
-                    color: 'rgba(255, 255, 255, 0.5)',
-                    marginBottom: '0.5rem'
-                  }}>
-                    Cores
-                  </div>
-                  <div style={{
-                    fontSize: '1.25rem',
-                    fontWeight: '700',
-                    color: simulation.color,
-                    fontFamily: 'monospace'
-                  }}>
-                    {simulation.specs.cores}
-                  </div>
-                </div>
-              </div>
             </div>
           )}
 

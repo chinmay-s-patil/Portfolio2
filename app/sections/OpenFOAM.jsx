@@ -2,30 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 
-// Placeholder modal component
-function SimulationModal({ simulation, onClose }) {
-  return (
-    <div onClick={onClose} style={{
-      position: 'fixed',
-      inset: 0,
-      background: 'rgba(0, 0, 0, 0.8)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 1000
-    }}>
-      <div onClick={e => e.stopPropagation()} style={{
-        background: '#1a1a1a',
-        padding: '2rem',
-        borderRadius: '16px',
-        maxWidth: '600px'
-      }}>
-        <h2>{simulation.title}</h2>
-        <button onClick={onClose}>Close</button>
-      </div>
-    </div>
-  )
-}
+import SimulationModal from '../components/SimulationModal'
 
 export default function OpenFOAMSection() {
   const [selectedSim, setSelectedSim] = useState(null)
@@ -42,10 +19,7 @@ export default function OpenFOAMSection() {
       year: '2024',
       description: 'Two-phase bubble dynamics simulation capturing interface evolution and surface tension effects using the Volume of Fluid (VOF) method.',
       specs: {
-        cells: '~1.2M',
         turbulence: 'LAMINAR',
-        runtime: '12 hours',
-        cores: '8'
       },
       tags: ['VOF', 'Multiphase', 'Interface Tracking'],
       media: [
@@ -66,10 +40,7 @@ export default function OpenFOAMSection() {
       year: '2025',
       description: 'Aerodynamic analysis of a Formula 1 car under ground effect conditions. Simulated flow separation, diffuser efficiency, and pressure distribution.',
       specs: {
-        cells: '~15M',
         turbulence: 'k-ω SST',
-        runtime: '180 hours',
-        cores: '8'
       },
       tags: ['CFD', 'Aerodynamics', 'Motorsport'],
       media: [
@@ -90,10 +61,7 @@ export default function OpenFOAMSection() {
       year: '2024',
       description: 'Flow simulation of a Formula SAE racecar to optimize aerodynamic balance and drag-to-lift ratio using transient PIMPLE coupling.',
       specs: {
-        cells: '~6M',
         turbulence: 'k-ω SST',
-        runtime: '72 hours',
-        cores: '8'
       },
       tags: ['FSAE', 'Transient', 'Vehicle'],
       media: [
@@ -116,15 +84,11 @@ export default function OpenFOAMSection() {
       year: '2025',
       description: 'Unsteady simulation of rotating propeller blades capturing wake interaction and thrust generation under realistic RPM conditions.',
       specs: {
-        cells: '~10M',
         turbulence: 'LES (WALE)',
-        runtime: '200 hours',
-        cores: '8'
       },
       tags: ['LES', 'Rotation', 'Propulsion'],
       media: [
-        { type: 'video', src: '/Openfoam/Propeller Simulation/Propeller Simulation.mp4' },
-        // { type: 'image', src: '/openfoam/propeller-1.jpg' }
+        { type: 'video', src: '/OpenFoam/Propeller Simulation/Propeller Simulation.mp4' },
       ],
       color: '#48cae4',
       learnings: [
@@ -141,15 +105,12 @@ export default function OpenFOAMSection() {
       year: '2024',
       description: 'Simplified combustion chamber simulation using detailed reaction mechanisms to predict flame propagation and heat release.',
       specs: {
-        cells: '~3M',
-        turbulence: 'RANS (k-ε)',
-        runtime: '60 hours',
-        cores: '8'
+        turbulence: 'LES (WALE)',
       },
       tags: ['Combustion', 'CHT', 'Energy'],
       media: [
-        { type: 'video', src: '/openfoam/engine.mp4' },
-        { type: 'image', src: '/openfoam/engine-1.jpg' }
+        { type: 'video', src: '/Openfoam/Engine Combustion/Engine Combustion CO2.mp4' },
+        { type: 'video', src: '/Openfoam/Engine Combustion/Engine Combustion CH4.mp4' },
       ],
       color: '#ff7b00',
       learnings: [
@@ -166,15 +127,11 @@ export default function OpenFOAMSection() {
       year: '2024',
       description: 'Aerodynamic loading study on solar panels. RANS and transient PIMPLE simulations performed to determine optimal tilt-angle load characteristics.',
       specs: {
-        cells: '~4M',
         turbulence: 'k-ε',
-        runtime: '48 hours',
-        cores: '8'
       },
       tags: ['Wind Load', 'ABL', 'Transient'],
       media: [
-        { type: 'video', src: '/openfoam/solar.mp4' },
-        { type: 'image', src: '/openfoam/solar-1.jpg' }
+        { type: 'video', src: '/Openfoam/SolarPanel/SolarPanelBig (1).mp4' },
       ],
       color: '#90e0ef',
       learnings: [
@@ -198,8 +155,7 @@ export default function OpenFOAMSection() {
       },
       tags: ['Mixing', 'MRF', 'Gas-Liquid'],
       media: [
-        { type: 'video', src: '/openfoam/tank.mp4' },
-        { type: 'image', src: '/openfoam/tank-1.jpg' }
+        { type: 'video', src: '/OpenFoam/stirringTank/stirringTank.mp4' },
       ],
       color: '#00a896',
       learnings: [
@@ -223,8 +179,8 @@ export default function OpenFOAMSection() {
       },
       tags: ['Compressible', 'Shock', 'Supersonic'],
       media: [
-        { type: 'video', src: '/openfoam/airfoil.mp4' },
-        { type: 'image', src: '/openfoam/airfoil-1.jpg' }
+        { type: 'video', src: '/OpenFoam/SupersonicAirfoil/SupersonicAirfoil U.mp4' },
+        { type: 'video', src: '/OpenFoam/SupersonicAirfoil/SupersonicAirfoil p.mp4' },
       ],
       color: '#0077b6',
       learnings: [

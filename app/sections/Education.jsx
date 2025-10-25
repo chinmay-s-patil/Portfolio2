@@ -21,11 +21,19 @@ export default function EducationSection() {
   ];
 
   const bachelorsImages = [
-    '/Education/VITC/slideshow/13469604894_02d812d4ca_b.jpg',
-    '/Education/VITC/slideshow/5th-Floor-VOC-Auditorium-4.jpg',
-    '/Education/VITC/slideshow/campus-banner.jpg',
-    '/Education/VITC/slideshow/R.jpeg',
-    '/Education/VITC/slideshow/vitchennai3.png',
+    '/Education/VITC/VITC (1).jpeg',
+    '/Education/VITC/VITC (1).jpg',
+    '/Education/VITC/VITC (1).png',
+    '/Education/VITC/VITC (10).jpg',
+    '/Education/VITC/VITC (11).jpg',
+    '/Education/VITC/VITC (2).JPG',
+    '/Education/VITC/VITC (3).jpg',
+    '/Education/VITC/VITC (4).jpg',
+    '/Education/VITC/VITC (5).jpg',
+    '/Education/VITC/VITC (6).jpg',
+    '/Education/VITC/VITC (7).jpg',
+    '/Education/VITC/VITC (8).jpg',
+    '/Education/VITC/VITC (9).jpg',
   ];
 
   const currentImages = activeTab === 'masters' ? mastersImages : bachelorsImages;
