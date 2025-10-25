@@ -22,8 +22,6 @@ export default function EducationSection() {
 
   const bachelorsImages = [
     '/Education/VITC/VITC (1).jpeg',
-    '/Education/VITC/VITC (1).jpg',
-    '/Education/VITC/VITC (1).png',
     '/Education/VITC/VITC (10).jpg',
     '/Education/VITC/VITC (11).jpg',
     '/Education/VITC/VITC (2).JPG',
@@ -34,6 +32,8 @@ export default function EducationSection() {
     '/Education/VITC/VITC (7).jpg',
     '/Education/VITC/VITC (8).jpg',
     '/Education/VITC/VITC (9).jpg',
+    '/Education/VITC/VITC (1).jpg',
+    '/Education/VITC/VITC (1).png',
   ];
 
   const currentImages = activeTab === 'masters' ? mastersImages : bachelorsImages;
@@ -41,16 +41,15 @@ export default function EducationSection() {
   // Auto-advance slideshow every 4 seconds
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % currentImages.length);
-    }, 4000);
-
-    return () => clearInterval(timer);
-  }, [currentImages.length]);
+      setCurrentImageIndex((prev) => (prev + 1) % currentImages.length)
+    }, 4000)
+    return () => clearInterval(timer)
+  }, [currentImages.length])
 
   // Reset image index when switching tabs
   useEffect(() => {
-    setCurrentImageIndex(0);
-  }, [activeTab]);
+    setCurrentImageIndex(0)
+  }, [activeTab])
 
   const mastersData = {
     kicker: 'Academic Background',
@@ -116,7 +115,7 @@ export default function EducationSection() {
         gridTemplateColumns: '48% 52%',
         gap: '2rem',
         alignItems: 'stretch',
-        height: SECTION_HEIGHT, // ensures both columns equal height
+        height: SECTION_HEIGHT,
         transition: 'height 0.3s ease'
       }}>
         {/* Left Side - Text Content */}
@@ -227,7 +226,7 @@ export default function EducationSection() {
           position: 'relative',
           width: '100%',
           height: '100%',
-          minHeight: '100%'
+          minHeight: 'clamp(400px, 60vh, 600px)'
         }}>
           {/* Gradient Fade Overlay - Left to Right */}
           <div style={{
@@ -243,13 +242,13 @@ export default function EducationSection() {
 
           {/* Slideshow Container */}
           <div style={{
-            position: 'relative',
-            width: '100%',
-            height: '100%',
-            borderRadius: '16px',
+            position: 'absolute',
+            inset: 0,
+            borderRadius: 'clamp(12px, 2vw, 16px)',
             overflow: 'hidden',
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
-            border: '1px solid rgba(255, 255, 255, 0.08)'
+            boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
+            border: '1px solid rgba(255,255,255,0.1)',
+            backgroundColor: 'rgba(20, 20, 30, 0.5)'
           }}>
             {currentImages.map((img, idx) => (
               <div
@@ -259,13 +258,24 @@ export default function EducationSection() {
                   inset: 0,
                   opacity: idx === currentImageIndex ? 1 : 0,
                   transition: 'opacity 1.2s ease-in-out',
-                  backgroundImage: `url(${img})`,
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundSize: 'cover',
-                  backgroundColor: 'rgba(255, 255, 255, 0.03)'
+                  zIndex: idx === currentImageIndex ? 1 : 0
                 }}
-              />
+              >
+                <img
+                  src={img}
+                  alt={`${currentData.institution} - Image ${idx + 1}`}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block'
+                  }}
+                  onError={(e) => {
+                    console.error(`Failed to load image: ${img}`)
+                    e.target.style.display = 'none'
+                  }}
+                />
+              </div>
             ))}
           </div>
         </div>
@@ -289,16 +299,15 @@ export default function EducationSection() {
           transform: translateY(-2px);
         }
 
-        /* Responsive: on small screens stack columns and reduce height to avoid overflow */
         @media (max-width: 968px) {
           .education-grid {
             grid-template-columns: 1fr !important;
-            height: auto !important; /* let content determine height on small screens */
+            height: auto !important;
             gap: 1.5rem !important;
           }
 
           .education-grid > div {
-            min-height: 50vh; /* keep slideshow reasonably tall on mobile */
+            min-height: 50vh;
           }
         }
       `}</style>
