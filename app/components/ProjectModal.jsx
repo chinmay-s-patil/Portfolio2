@@ -22,6 +22,8 @@ export default function ProjectModal({ project, onClose }) {
 
   // Only manage local video playback
   useEffect(() => {
+    if (!project.media || project.media.length === 0) return
+    
     const currentMedia = project.media[currentMediaIndex]
     
     // Pause all local videos
@@ -67,16 +69,18 @@ export default function ProjectModal({ project, onClose }) {
   const getYouTubeEmbedUrl = (url) => {
     // Extract video ID from various YouTube URL formats
     const patterns = [
-      /(?:youtube\.com\/watch\?v=)([^&\s]+)/,           // youtube.com/watch?v=VIDEO_ID
-      /(?:youtube\.com\/embed\/)([^?\s]+)/,             // youtube.com/embed/VIDEO_ID
-      /(?:youtu\.be\/)([^?\s]+)/,                        // youtu.be/VIDEO_ID
-      /(?:youtube\.com\/v\/)([^?\s]+)/                   // youtube.com/v/VIDEO_ID
+      /(?:youtube\.com\/watch\?v=)([^&\s]+)/,
+      /(?:youtube\.com\/embed\/)([^?\s]+)/,
+      /(?:youtu\.be\/)([^?\s]+)/,
+      /(?:youtube\.com\/v\/)([^?\s]+)/
     ]
     
     for (const pattern of patterns) {
       const match = url.match(pattern)
       if (match && match[1]) {
-        return `https://www.youtube.com/embed/${match[1]}`
+        const videoId = match[1]
+        // Add parameters: autoplay, loop, mute, no controls, playlist (required for loop)
+        return `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&mute=1&controls=0&playlist=${videoId}`
       }
     }
     
@@ -163,6 +167,7 @@ export default function ProjectModal({ project, onClose }) {
             overflowY: 'auto', 
             overflowX: 'hidden',
             padding: '2.5rem',
+            paddingTop: '4rem',
             flex: 1
           }}
         >
@@ -228,7 +233,7 @@ export default function ProjectModal({ project, onClose }) {
             </div>
           </div>
 
-          {/* Media Section */}
+          {/* Media Section - Only show if media exists */}
           {project.media && project.media.length > 0 && (
             <div style={{
               position: 'relative',
@@ -527,6 +532,7 @@ export default function ProjectModal({ project, onClose }) {
             <div style={{
               display: 'flex',
               gap: '1rem',
+              flexWrap: 'wrap',
               marginTop: '2rem',
               paddingTop: '2rem',
               borderTop: '1px solid rgba(255, 255, 255, 0.1)'
@@ -557,6 +563,35 @@ export default function ProjectModal({ project, onClose }) {
                   </svg>
                 </a>
               )}
+              
+              {project.links && Array.isArray(project.links) && project.links.map((link, idx) => (
+                <a
+                  key={idx}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    padding: '0.75rem 1.5rem',
+                    background: 'rgba(255, 255, 255, 0.06)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    color: '#fff',
+                    borderRadius: '12px',
+                    fontWeight: '600',
+                    fontSize: '0.95rem',
+                    textDecoration: 'none',
+                    transition: 'all 0.2s ease'
+                  }}
+                  className="hover:bg-[rgba(255,255,255,0.1)]"
+                >
+                  {link.label || 'View Link'}
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </a>
+              ))}
             </div>
           )}
         </div>

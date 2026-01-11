@@ -40,6 +40,11 @@ const EventsNormalized = dynamic(() => import('./sections/EventsNormalized'), {
   loading: () => null,
 })
 
+const UpcomingNormalized = dynamic(() => import('./sections/Upcoming'), {
+  loading: () => null,
+})
+
+
 const sectionsMeta = [
   { id: 'landing', label: 'Landing' },
   { id: 'education', label: 'Education' },
@@ -50,6 +55,7 @@ const sectionsMeta = [
   { id: 'cad', label: 'CAD' },
   { id: 'visualization', label: 'Visualization' },
   { id: 'events', label: 'Events' },
+  { id: 'upcoming', label: 'Upcoming' },
 ]
 
 export default function Page() {
@@ -93,6 +99,10 @@ export default function Page() {
         
         <section id="events" className="section">
           <EventsNormalized />
+        </section>
+
+        <section id="upcoming" className="section">
+          <UpcomingNormalized />
         </section>
         
         <section id="contact" className="section" style={{ minHeight: 'auto', height: 'auto', padding: 0 }}>

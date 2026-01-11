@@ -19,7 +19,7 @@ const projectsList = [
         { type: 'image', src: '/Projects/Pyrolysis of Plastics/Pyrolysis of Plastics (5).jpg'},
         { type: 'image', src: '/Projects/Pyrolysis of Plastics/Pyrolysis of Plastics (6).jpg'},
         ],
-        // href: '#'
+        // 
     },
     {
         title: 'Hybrid Battery Cooling Mechanism',
@@ -66,25 +66,25 @@ const projectsList = [
         { type: 'image', src: '/Projects/Reverse Engineering of a S500 Drone/Reverse Engineering of a S500 Drone (6).jpg' },
         { type: 'image', src: '/Projects/Reverse Engineering of a S500 Drone/Reverse Engineering of a S500 Drone (7).jpg' },
         ],
-        href: '#'
+        
     },
-    {
-        title: 'CFD Evaluation of Drone Propeller Downwash',
-        category: 'CFD',
-        subtitle: 'OpenFOAM · Flow Analysis',
-        period: 'Jan 2025 — Feb 2025',
-        description: 'Simulated drone propeller downwash in OpenFOAM. Quantified lift coefficient distribution and provided design recommendations for improved flight stability.',
-        learnings: [
-        'Simulated propeller aerodynamics in OpenFOAM',
-        'Quantified downwash effects on lift coefficient',
-        'Developed design optimization recommendations'
-        ],
-        tags: ['CFD', 'Aerodynamics', 'OpenFOAM', 'Propeller'],
-        media: [
-        { type: 'video', src: '/Projects/CFD Evaluation of Drone Propeller Downwash/CFD Evaluation of Drone Propeller Downwash.mp4' }
-        ],
-        href: '#'
-    },
+    // {
+    //     title: 'CFD Evaluation of Drone Propeller Downwash',
+    //     category: 'CFD',
+    //     subtitle: 'OpenFOAM · Flow Analysis',
+    //     period: 'Jan 2025 — Feb 2025',
+    //     description: 'Simulated drone propeller downwash in OpenFOAM. Quantified lift coefficient distribution and provided design recommendations for improved flight stability.',
+    //     learnings: [
+    //     'Simulated propeller aerodynamics in OpenFOAM',
+    //     'Quantified downwash effects on lift coefficient',
+    //     'Developed design optimization recommendations'
+    //     ],
+    //     tags: ['CFD', 'Aerodynamics', 'OpenFOAM', 'Propeller'],
+    //     media: [
+    //     { type: 'video', src: '/Projects/CFD Evaluation of Drone Propeller Downwash/CFD Evaluation of Drone Propeller Downwash.mp4' }
+    //     ],
+    //     
+    // },
     {
         title: 'Wind Turbine Simulation in StarCCM+',
         category: 'CFD',
@@ -98,9 +98,10 @@ const projectsList = [
         ],
         tags: ['CFD', 'Wind Energy', 'StarCCM+', 'Simulation'],
         media: [
-        { type: 'video', src: '/Projects/Wind Turbine Simulation/Wind Turbine Simulation.mp4' }
+        { type: 'link', src: 'https://youtu.be/zUCs9P6_Ok0' },
+        { type: 'link', src: 'https://youtu.be/PDuDxi86K8k' },
         ],
-        href: '#'
+        
     },
     {
         title: 'Solar Parapet Roof Panel Aerodynamics',
@@ -120,7 +121,24 @@ const projectsList = [
             {type: 'image', src: 'Projects/Solar Parapet Roof Panel Aerodynamics/Solar Parapet Roof Panel Aerodynamics (3).jpeg',},
             {type: 'image', src: 'Projects/Solar Parapet Roof Panel Aerodynamics/Solar Parapet Roof Panel Aerodynamics (4).jpeg',},
         ],
-        // href: '#'
+        // 
+    },
+    {
+        title: 'Coffee Heater Multiphase Simulation',
+        category: 'CFD',
+        subtitle: 'Multiphase · Phase Change · Ansys Fluent',
+        period: 'May 2025',
+        description: 'Multiphase CFD simulation of a coffee heater immersed in a water cup using Ansys Fluent. Modeled three-phase flow system consisting of air, liquid water, and water vapor with phase change phenomena. Analyzed conjugate heat transfer from the heater element, buoyancy-driven convection patterns, and vapor generation dynamics at the water surface.',
+        learnings: [
+        'Simulated multiphase flow with phase change modeling',
+        'Captured water-to-vapor phase transition dynamics',
+        'Analyzed buoyancy-driven convection and heat transfer',
+        'Modeled conjugate heat transfer from heating element'
+        ],
+        tags: ['Multiphase', 'Phase Change', 'Heat Transfer', 'Evaporation', 'Ansys Fluent'],
+        media: [
+        { type: 'link', src: 'https://youtu.be/qS2XWqEUUwk' }
+        ]
     },
     {
         title: 'Propeller Aeroacoustics Study',
@@ -134,10 +152,10 @@ const projectsList = [
         'Compared acoustic performance of multiple designs'
         ],
         tags: ['Aeroacoustics', 'Noise', 'CFD', 'LES', 'Ansys'],
-        media: [
-        { type: 'image', src: '/projects/propeller-acoustics.jpg' }
-        ],
-        href: '#'
+        // media: [
+        // { type: 'image', src: '/projects/propeller-acoustics.jpg' }
+        // ],
+        
     },
     // {
     //     title: 'Natural Gas Combustion Simulation',
@@ -154,7 +172,7 @@ const projectsList = [
     //     media: [
     //     { type: 'image', src: '/projects/combustion.jpg' }
     //     ],
-    //     href: '#'
+    //     
     // },
     // {
     //     title: 'Laser Bed Powder Fusion Simulations',
@@ -171,7 +189,7 @@ const projectsList = [
     //     media: [
     //     { type: 'image', src: '/projects/lbpf.jpg' }
     //     ],
-    //     href: '#'
+    //     
     // },
     {
         title: 'Immersion Cooling in Battery Thermal Management',
@@ -185,10 +203,10 @@ const projectsList = [
         'Compared multiple coolant configurations'
         ],
         tags: ['Thermal', 'Batteries', 'CFD', 'OpenFOAM'],
-        media: [
-        { type: 'image', src: '/projects/Immersion Cooling in Battery Thermal Management/Immersion Cooling in Battery Thermal Management.png' }
-        ],
-        href: '#'
+        // media: [
+        // { type: 'image', src: '/projects/Immersion Cooling in Battery Thermal Management/Immersion Cooling in Battery Thermal Management.png' }
+        // ],
+        // 
     },
     {
         title: 'Simulation of Truck Platooning',
@@ -205,7 +223,7 @@ const projectsList = [
         media: [
         { type: 'image', src: '/projects/truck-platoon.jpg' }
         ],
-        href: '#'
+        // 
     },
     // {
     //     title: 'PINN for CFD Simulations',
@@ -222,7 +240,7 @@ const projectsList = [
     //     media: [
     //     { type: 'image', src: '/projects/pinn.jpg' }
     //     ],
-    //     href: '#'
+    //     
     // },
     {
         title: 'Bullet Impact Simulations',
@@ -237,10 +255,10 @@ const projectsList = [
         ],
         tags: ['Impact', 'FEA', 'Materials', 'Abaqus'],
         media: [
-        { type: 'video', src: '/Projects/Bullet Impact Simulations/Bullet Impact Simulations 1.mp4' },
-        { type: 'video', src: '/Projects/Bullet Impact Simulations/Bullet Impact Simulations 2.mp4' }
+        { type: 'link', src: 'https://youtu.be/dGgJ6lmnyjk' },
+        { type: 'link', src: 'https://youtu.be/BAfsRZVK2jI' }
         ],
-        href: '#'
+        
     },
     {
         title: 'Aerodynamics of Ground-Mounted Solar Arrays',
@@ -255,14 +273,10 @@ const projectsList = [
         ],
         tags: ['CFD', 'Solar', 'Optimization', 'Wind Loading'],
         media: [
-            {type: 'video', src: '/Projects/Aerodynamics of Ground-Mounted Solar Arrays/Aerodynamics of Ground-Mounted Solar Arrays (1).mp4'},
-            {type: 'video', src: '/Projects/Aerodynamics of Ground-Mounted Solar Arrays/Aerodynamics of Ground-Mounted Solar Arrays (2).mp4'},
-            {type: 'video', src: '/Projects/Aerodynamics of Ground-Mounted Solar Arrays/Aerodynamics of Ground-Mounted Solar Arrays (3).mp4'},
-            {type: 'video', src: '/Projects/Aerodynamics of Ground-Mounted Solar Arrays/Aerodynamics of Ground-Mounted Solar Arrays (4).mp4'},
-            {type: 'video', src: '/Projects/Aerodynamics of Ground-Mounted Solar Arrays/Aerodynamics of Ground-Mounted Solar Arrays (5).mp4'},
-            {type: 'video', src: '/Projects/Aerodynamics of Ground-Mounted Solar Arrays/Aerodynamics of Ground-Mounted Solar Arrays (6).mp4'},
+            {type: 'link', src: 'https://youtu.be/4Jfo9_4OumM'},
+            {type: 'link', src: 'https://youtu.be/vk0DZnuVfNo'},
         ],
-        // href: '#'
+        // 
     },
     {
         title: 'CAD Model of Solar Vortex Engine',
@@ -280,7 +294,7 @@ const projectsList = [
         { type: 'image', src: 'Projects/SVE/SVE (1).png' },
         { type: 'image', src: 'Projects/SVE/SVE (2).png' }
         ],
-        href: '#'
+        
     },
     {
         title: 'Wind Tunnel Test Section Modeling',
@@ -298,7 +312,7 @@ const projectsList = [
         { type: 'image', src: 'Projects/CAD Modeling of Wind Tunnel Test Section/CAD Modeling of Wind Tunnel Test Section.jpg' },
         { type: 'image', src: 'Projects/CAD Modeling of Wind Tunnel Test Section/CAD Modeling of Wind Tunnel Test Section.png' }
         ],
-        href: '#'
+        
     },
     {
         title: 'Computational Correlation of J-Integral parameter for Inclined Crack using FEM and ML',
@@ -324,7 +338,7 @@ const projectsList = [
         { type: 'image', src: '/Projects/Inclined Crack/Inclined Crack (8).png' },
         { type: 'image', src: '/Projects/Inclined Crack/Inclined Crack (9).png' }
         ],
-        href: '#'
+        
     },
     {
         title: 'Graphite Rupture Strength Prediction',
@@ -342,7 +356,7 @@ const projectsList = [
         { type: 'image', src: '/Projects/Nuclear Graphite/Nuclear Graphite (1).png' },
         { type: 'image', src: '/Projects/Nuclear Graphite/Nuclear Graphite (2).png' }
         ],
-        href: '#'
+        
     },
     {
         title: 'Language Identification in Music',
@@ -356,10 +370,10 @@ const projectsList = [
         'Built end-to-end audio processing pipeline'
         ],
         tags: ['Deep Learning', 'Audio', 'PyTorch', 'Signal Processing'],
-        media: [
-        { type: 'image', src: '/projects/music-language.jpg' }
-        ],
-        href: '#'
+        // media: [
+        // { type: 'image', src: '/projects/music-language.jpg' }
+        // ],
+        
     },
     {
         title: 'Guitar Design Project',
@@ -381,7 +395,7 @@ const projectsList = [
         { type: 'image', src: '/Projects/Guitar Design Project/Guitar Design Project (5).jpg' },
         { type: 'image', src: '/Projects/Guitar Design Project/Guitar Design Project (6).jpg' }
         ],
-        href: '#'
+        
     },
     {
         title: 'Aerodynamics Lab Experiments',
@@ -401,7 +415,7 @@ const projectsList = [
         { type: 'image', src: '/Projects/Aerodynamics Lab Experiments/Aerodynamics Lab Experiments (3).jpg' },
         { type: 'image', src: '/Projects/Aerodynamics Lab Experiments/Aerodynamics Lab Experiments (4).jpg' }
         ],
-        href: '#'
+        
     }
 ]
 
