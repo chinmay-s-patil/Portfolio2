@@ -1,46 +1,46 @@
 import dynamic from 'next/dynamic'
-import NavDots from './components/NavDots'
+import NavDots from './Navigation/NavDots'
 import HeaderNormalized from './components/HeaderNormalized'
 import Footer from './components/Footer'
 
 // Lazy load heavy sections to reduce initial bundle size
-const LandingNormalized = dynamic(() => import('./sections/LandingNormalized'), {
+const LandingNormalized = dynamic(() => import('./LandingSection/LandingNormalized'), {
   loading: () => null,
 })
 
-const EducationNormalized = dynamic(() => import('./sections/EducationNormalized'), {
+const EducationNormalized = dynamic(() => import('./EducationSection/EducationNormalized'), {
   loading: () => null,
 })
 
-const ExperienceNormalized = dynamic(() => import('./sections/ExperienceNormalized'), {
+const ExperienceNormalized = dynamic(() => import('./ExperienceSection/ExperienceNormalized'), {
   loading: () => null,
 })
 
-const SkillsNormalized = dynamic(() => import('./sections/SkillsNormalized'), {
+const SkillsNormalized = dynamic(() => import('./SkillsSection/SkillsNormalized'), {
   loading: () => null,
 })
 
-const ProjectsNormalized = dynamic(() => import('./sections/ProjectsNormalized'), {
+const ProjectsNormalized = dynamic(() => import('./ProjectsSection/ProjectsNormalized'), {
   loading: () => null,
 })
 
-const OpenFOAMNormalized = dynamic(() => import('./sections/OpenFOAMNormalized'), {
+const OpenFOAMNormalized = dynamic(() => import('./OpenFoamSection/OpenFOAMNormalized'), {
   loading: () => null,
 })
 
-const CADNormalized = dynamic(() => import('./sections/CADglTBNormalized'), {
+const CADNormalized = dynamic(() => import('./CADSection/CADglTBNormalized'), {
   loading: () => null,
 })
 
-const VisualizationNormalized = dynamic(() => import('./sections/VisualizationNormalized'), {
+const VisualizationNormalized = dynamic(() => import('./VisualizationSection/VisualizationNormalized'), {
   loading: () => null,
 })
 
-const EventsNormalized = dynamic(() => import('./sections/EventsNormalized'), {
+const EventsNormalized = dynamic(() => import('./EventsSection/EventsNormalized'), {
   loading: () => null,
 })
 
-const UpcomingNormalized = dynamic(() => import('./sections/Upcoming'), {
+const UpcomingNormalized = dynamic(() => import('./UpcomingSection/UpcomingNormalized'), {
   loading: () => null,
 })
 

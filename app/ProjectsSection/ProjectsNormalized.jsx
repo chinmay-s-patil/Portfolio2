@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import ProjectCard from '../components/ProjectCard'
-import ProjectModal from '../components/ProjectModal'
-import projectsList from '../consts/ProjectList'
+import ProjectCard from './ProjectCard'
+import ProjectModal from './ProjectModal'
+import projectsList from './ProjectList'
 
 export default function ProjectsNormalized() {
   const [selectedProject, setSelectedProject] = useState(null)

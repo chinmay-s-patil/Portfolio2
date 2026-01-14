@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import SimulationModal from '../components/SimulationModal'
-import simulationsList from '../consts/OpenfoamList'
+import SimulationModal from './SimulationModal'
+import simulationsList from './OpenfoamList'
 
 export default function OpenFOAMNormalized() {
   const [selectedSim, setSelectedSim] = useState(null)

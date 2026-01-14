@@ -65,9 +65,9 @@ const visualizationsList = [
     color: '#9d4edd',
     icon: '📊',
     screenshots: [
-      '/Visualizations/polymerpostmortem-1.jpg',
-      '/Visualizations/polymerpostmortem-2.jpg',
-      '/Visualizations/polymerpostmortem-3.jpg'
+      '/Visualization/PolymerPostmortem/PolymerPostmortem (1).png',
+      '/Visualization/PolymerPostmortem/PolymerPostmortem (2).png',
+      '/Visualization/PolymerPostmortem/PolymerPostmortem (3).png'
     ],
     accessType: 'Request Access',
     ctaText: 'Contact me for access',

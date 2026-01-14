@@ -1,8 +1,8 @@
+// CADglTBNormalized.jsx - Modified with touch support, transparency, color & background fixes
 "use client"
 import { useState, useEffect, useRef } from 'react'
-import CADGLTFList from '../consts/CADGLTFList'
+import CADGLTFList from './CADGLTFList'
 
-// GLTFViewerModal Component with STL Support and Model Rotation
 function GLTFViewerModal({ project, onClose }) {
   const containerRef = useRef(null)
   const sceneRef = useRef(null)
@@ -15,8 +15,9 @@ function GLTFViewerModal({ project, onClose }) {
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [error, setError] = useState(null)
   const [showPopup, setShowPopup] = useState(false)
-  const [isTransparent, setIsTransparent] = useState(project.transparency > 0)
+  const [isTransparent, setIsTransparent] = useState(true) // Default to transparent
   const [showInfo, setShowInfo] = useState(true)
+  const [isTouchDevice, setIsTouchDevice] = useState(false)
   const [modelRotation, setModelRotation] = useState(project.modelRotation || { x: 0, y: 0, z: 0 })
 
   const ctrlRef = useRef({
@@ -30,14 +31,29 @@ function GLTFViewerModal({ project, onClose }) {
     viewState: { x: 0, y: 0, z: 0, perp: 0 }
   })
 
+  // Touch state management
+  const touchStateRef = useRef({
+    isTouching: false,
+    touchStartX: 0,
+    touchStartY: 0,
+    initialPinchDistance: null,
+    lastCenterX: 0,
+    lastCenterY: 0
+  })
+
   const fileExtension = project.gltfFile.toLowerCase().split('.').pop()
   const isSTL = fileExtension === 'stl'
   const isGLTF = fileExtension === 'gltf' || fileExtension === 'glb'
+  const effectiveTransparency = project.transparency > 0 ? project.transparency : 50 // Default 50%
 
   useEffect(() => {
     if (typeof window === 'undefined') return
     
+    // Detect touch device
+    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0)
+    
     const loadThreeJS = async () => {
+      // ... (keep existing Three.js loading logic)
       if (!window.THREE) {
         const script = document.createElement('script')
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'
@@ -111,7 +127,7 @@ function GLTFViewerModal({ project, onClose }) {
     document.body.style.overflow = 'hidden'
 
     const scene = new THREE.Scene()
-    scene.background = new THREE.Color(0x0a0e1a)
+    scene.background = new THREE.Color(0x000000) // Pure black background
     sceneRef.current = scene
 
     const cam = new THREE.PerspectiveCamera(
@@ -128,13 +144,24 @@ function GLTFViewerModal({ project, onClose }) {
     containerRef.current.appendChild(renderer.domElement)
     rendererRef.current = renderer
 
-    scene.add(new THREE.AmbientLight(0xffffff, 0.6))
-    const d1 = new THREE.DirectionalLight(0xffffff, 0.8)
+    // Improved lighting for true colors
+    // Increase ambient light
+    scene.add(new THREE.AmbientLight(0xffffff, 0.7))
+
+    // Keep strong key light
+    const d1 = new THREE.DirectionalLight(0xffffff, 1.5) // Increased from 1.2
     d1.position.set(5, 5, 5)
     scene.add(d1)
-    const d2 = new THREE.DirectionalLight(0xffffff, 0.4)
+
+    // Keep fill light
+    const d2 = new THREE.DirectionalLight(0xffffff, 0.8) // Increased from 0.6
     d2.position.set(-5, -5, -5)
     scene.add(d2)
+
+    // ADD: Third light from top
+    const d3 = new THREE.DirectionalLight(0xffffff, 0.5)
+    d3.position.set(0, 10, 0) // Top-down light
+    scene.add(d3)
 
     ctrlRef.current.target = new THREE.Vector3()
     ctrlRef.current.spherical = new THREE.Spherical(5, Math.PI / 3, Math.PI / 4)
@@ -168,6 +195,85 @@ function GLTFViewerModal({ project, onClose }) {
     }
   }, [project, threeReady])
 
+  // Touch event handlers
+  const handleTouchStart = (e) => {
+    e.preventDefault()
+    const touches = e.touches
+    touchStateRef.current.isTouching = true
+    
+    if (touches.length === 1) {
+      // Single touch - rotation
+      ctrlRef.current.isRotating = true
+      ctrlRef.current.lastX = touches[0].clientX
+      ctrlRef.current.lastY = touches[0].clientY
+    } else if (touches.length === 2) {
+      // Two touches - pinch zoom/pan
+      const dx = touches[0].clientX - touches[1].clientX
+      const dy = touches[0].clientY - touches[1].clientY
+      touchStateRef.current.initialPinchDistance = Math.sqrt(dx * dx + dy * dy)
+      touchStateRef.current.lastCenterX = (touches[0].clientX + touches[1].clientX) / 2
+      touchStateRef.current.lastCenterY = (touches[0].clientY + touches[1].clientY) / 2
+      ctrlRef.current.isPanning = true
+    }
+  }
+
+  const handleTouchMove = (e) => {
+    e.preventDefault()
+    const touches = e.touches
+    const c = ctrlRef.current
+    const t = touchStateRef.current
+
+    if (!t.isTouching) return
+
+    if (touches.length === 1 && c.isRotating) {
+      // Single touch rotation
+      const dx = touches[0].clientX - c.lastX
+      const dy = touches[0].clientY - c.lastY
+      c.spherical.theta -= dx * 0.01
+      c.spherical.phi += dy * 0.01
+      c.spherical.phi = window.THREE.MathUtils.clamp(c.spherical.phi, 0.1, Math.PI - 0.1)
+      c.lastX = touches[0].clientX
+      c.lastY = touches[0].clientY
+    } else if (touches.length === 2) {
+      // Two touch pinch zoom and pan
+      const dx = touches[0].clientX - touches[1].clientX
+      const dy = touches[0].clientY - touches[1].clientY
+      const distance = Math.sqrt(dx * dx + dy * dy)
+      
+      // Pinch zoom
+      if (t.initialPinchDistance) {
+        const scale = distance / t.initialPininDistance
+        const delta = (scale - 1) * 2
+        c.spherical.radius = Math.max(1, Math.min(20, c.spherical.radius - delta))
+        t.initialPinchDistance = distance
+      }
+
+      // Two-finger pan
+      const centerX = (touches[0].clientX + touches[1].clientX) / 2
+      const centerY = (touches[0].clientY + touches[1].clientY) / 2
+      const panX = centerX - t.lastCenterX
+      const panY = centerY - t.lastCenterY
+
+      if (Math.abs(panX) > 1 || Math.abs(panY) > 1) {
+        const pan = new window.THREE.Vector3()
+        pan.copy(cameraRef.current.position).sub(c.target).normalize()
+        pan.cross(cameraRef.current.up).setLength(panX * 0.008)
+        pan.addScaledVector(cameraRef.current.up, panY * 0.008)
+        c.panOffset.add(pan)
+        
+        t.lastCenterX = centerX
+        t.lastCenterY = centerY
+      }
+    }
+  }
+
+  const handleTouchEnd = () => {
+    ctrlRef.current.isRotating = false
+    ctrlRef.current.isPanning = false
+    touchStateRef.current.isTouching = false
+    touchStateRef.current.initialPinchDistance = null
+  }
+
   function loadModel(url) {
     const THREE = window.THREE
     setLoadingProgress(40)
@@ -181,6 +287,7 @@ function GLTFViewerModal({ project, onClose }) {
   }
 
   function loadSTLModel(url, THREE) {
+    // ... (keep existing STL loading logic)
     if (!THREE.STLLoader) {
       setError('STL Loader not available')
       setShowPopup(true)
@@ -204,9 +311,9 @@ function GLTFViewerModal({ project, onClose }) {
         const material = new THREE.MeshPhongMaterial({
           color: new THREE.Color(project.modelColor || project.color),
           transparent: isTransparent,
-          opacity: isTransparent ? project.transparency / 100 : 1.0,
+          opacity: effectiveTransparency / 100,
           side: THREE.DoubleSide,
-          shininess: 30
+          shininess: 10 // Reduced for less dull effect
         })
         
         const mesh = new THREE.Mesh(geometry, material)
@@ -237,6 +344,7 @@ function GLTFViewerModal({ project, onClose }) {
   }
 
   function loadGLTFModel(url, THREE) {
+    // ... (keep existing GLTF loading logic)
     if (!THREE.GLTFLoader) {
       setError('GLTF Loader not available')
       setShowPopup(true)
@@ -267,10 +375,9 @@ function GLTFViewerModal({ project, onClose }) {
             if (project.modelColor) {
               child.material.color = new THREE.Color(project.modelColor)
             }
-            if (isTransparent) {
-              child.material.transparent = true
-              child.material.opacity = project.transparency / 100
-            }
+            // Apply transparency to all models
+            child.material.transparent = isTransparent
+            child.material.opacity = effectiveTransparency / 100
             child.material.needsUpdate = true
           }
         })
@@ -358,19 +465,17 @@ function GLTFViewerModal({ project, onClose }) {
     if (!meshRef.current) return
     const newTransparent = !isTransparent
     setIsTransparent(newTransparent)
+    const opacity = newTransparent ? effectiveTransparency / 100 : 1.0
     
     if (isSTL) {
       meshRef.current.material.transparent = newTransparent
-      meshRef.current.material.opacity = newTransparent ? project.transparency / 100 : 1.0
+      meshRef.current.material.opacity = opacity
       meshRef.current.material.needsUpdate = true
     } else {
       meshRef.current.traverse((child) => {
         if (child.isMesh) {
           child.material.transparent = newTransparent
-          child.material.opacity = newTransparent ? project.transparency / 100 : 1.0
-          if (project.modelColor) {
-            child.material.color = new window.THREE.Color(project.modelColor)
-          }
+          child.material.opacity = opacity
           child.material.needsUpdate = true
         }
       })
@@ -453,15 +558,30 @@ function GLTFViewerModal({ project, onClose }) {
             <button onClick={rotateModelZ} title="Rotate Model Z+90°" style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(100,100,255,.15)', border: '1px solid rgba(100,100,255,.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '.75rem', fontWeight: '700', color: '#6464ff', cursor: 'pointer', flexDirection: 'column', lineHeight: '1' }}><span>Z</span><span style={{ fontSize: '.6rem' }}>↻</span></button>
             <div style={{ width: '1px', height: '40px', background: 'rgba(255,255,255,.2)', margin: '0 .25rem' }} />
             <button onClick={resetView} title="Reset View" style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,.1)', border: '1px solid rgba(255,255,255,.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 109 9 9 9 0 00-9-9z" stroke="currentColor" strokeWidth="2" /><path d="M12 7v5l3 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg></button>
-            {project.transparency > 0 && (<button onClick={toggleTransparency} title="Toggle Transparency" style={{ width: '40px', height: '40px', borderRadius: '10px', background: isTransparent ? 'rgba(255,255,255,.2)' : 'rgba(255,255,255,.1)', border: '1px solid rgba(255,255,255,.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" opacity="0.5" /><circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="2" /></svg></button>)}
+            {/* Always show transparency button */}
+            <button onClick={toggleTransparency} title="Toggle Transparency" style={{ width: '40px', height: '40px', borderRadius: '10px', background: isTransparent ? 'rgba(255,255,255,.2)' : 'rgba(255,255,255,.1)', border: '1px solid rgba(255,255,255,.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" opacity="0.5" /><circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="2" /></svg></button>
           </div>
           <button onClick={onClose} style={{ position: 'absolute', top: '2rem', right: '2rem', width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(0,0,0,.8)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, cursor: 'pointer', color: '#fff' }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
-          <div ref={containerRef} onClick={(e) => e.stopPropagation()} onWheel={handleWheel} onMouseDown={handleMouseDown} onContextMenu={(e) => e.preventDefault()} style={{ flex: 1, position: 'relative', display: 'flex', cursor: ctrlRef.current.isRotating || ctrlRef.current.isPanning ? 'grabbing' : 'grab', userSelect: 'none' }}>
+          <div ref={containerRef} onClick={(e) => e.stopPropagation()} onWheel={handleWheel} onMouseDown={handleMouseDown} onContextMenu={(e) => e.preventDefault()} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd} style={{ flex: 1, position: 'relative', display: 'flex', cursor: ctrlRef.current.isRotating || ctrlRef.current.isPanning ? 'grabbing' : 'grab', userSelect: 'none', touchAction: 'none' }}>
             {isLoading && (<div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#fff', gap: '1.5rem', background: 'rgba(10, 14, 26, 0.95)' }}><div style={{ width: '60px', height: '60px', border: '4px solid rgba(255, 255, 255, 0.1)', borderTop: '4px solid hsl(30, 100%, 60%)', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div><div style={{ textAlign: 'center', maxWidth: '300px' }}>Loading 3D model...</div>{loadingProgress > 0 && (<div style={{ width: '300px', height: '6px', background: 'rgba(255,255,255,.1)', borderRadius: '3px', overflow: 'hidden' }}><div style={{ width: `${loadingProgress}%`, height: '100%', background: 'linear-gradient(90deg, hsl(30, 100%, 60%), hsl(30, 100%, 70%))', transition: 'width 0.3s ease' }} /></div>)}</div>)}
           </div>
           {showInfo && (<div onClick={(e) => e.stopPropagation()} style={{ position: 'absolute', right: '2rem', top: '50%', transform: 'translateY(-50%)', width: '320px', maxHeight: '80vh', overflowY: 'auto', background: 'rgba(0,0,0,.9)', backdropFilter: 'blur(12px)', borderRadius: '16px', border: '1px solid rgba(255,255,255,.1)', padding: '1.5rem', zIndex: 10 }}><button onClick={() => setShowInfo(false)} style={{ position: 'absolute', top: '1rem', right: '1rem', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(255,255,255,.1)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>✕</button><div style={{ fontSize: '12px', color: project.color, fontWeight: '600', marginBottom: '8px' }}>{project.category}</div><h3 style={{ fontSize: '24px', fontWeight: '700', color: '#fff', marginBottom: '16px' }}>{project.title}</h3><p style={{ fontSize: '14px', lineHeight: '1.6', color: 'rgba(255,255,255,.7)', marginBottom: '20px' }}>{project.description}</p><div style={{ marginBottom: '16px' }}><div style={{ fontSize: '12px', color: 'rgba(255,255,255,.5)', marginBottom: '8px' }}>YEAR</div><div style={{ fontSize: '16px', color: '#fff', fontWeight: '600' }}>{project.year}</div></div><div style={{ marginBottom: '16px' }}><div style={{ fontSize: '12px', color: 'rgba(255,255,255,.5)', marginBottom: '8px' }}>FILE FORMAT</div><div style={{ fontSize: '14px', color: '#fff', fontWeight: '600', padding: '6px 12px', background: 'rgba(255,255,255,.1)', borderRadius: '6px', display: 'inline-block', fontFamily: 'monospace' }}>{fileExtension.toUpperCase()}</div></div><div><div style={{ fontSize: '12px', color: 'rgba(255,255,255,.5)', marginBottom: '8px' }}>MODEL ROTATION (deg)</div><div style={{ fontSize: '12px', fontFamily: 'monospace', color: 'rgba(255,255,255,.7)', display: 'flex', gap: '12px' }}><span>X: {Math.round(modelRotation.x * 180 / Math.PI)}°</span><span>Y: {Math.round(modelRotation.y * 180 / Math.PI)}°</span><span>Z: {Math.round(modelRotation.z * 180 / Math.PI)}°</span></div></div></div>)}
           {!showInfo && (<button onClick={() => setShowInfo(true)} style={{ position: 'absolute', right: '2rem', top: '50%', transform: 'translateY(-50%)', width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(0,0,0,.8)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', zIndex: 10 }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" /><line x1="12" y1="16" x2="12" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /><line x1="12" y1="8" x2="12.01" y2="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg></button>)}
-          <div style={{ position: 'absolute', bottom: '2rem', left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,.8)', backdropFilter: 'blur(12px)', padding: '.75rem 1.5rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,.1)', fontSize: '.85rem', color: 'rgba(255,255,255,.7)', display: 'flex', gap: '2rem', zIndex: 10 }}><span><kbd style={{ background: 'rgba(255,255,255,.1)', padding: '.25rem .5rem', borderRadius: '4px', fontFamily: 'monospace', fontSize: '.8rem' }}>Drag</kbd> to rotate</span><span><kbd style={{ background: 'rgba(255,255,255,.1)', padding: '.25rem .5rem', borderRadius: '4px', fontFamily: 'monospace', fontSize: '.8rem' }}>Scroll</kbd> to zoom</span><span><kbd style={{ background: 'rgba(255,255,255,.1)', padding: '.25rem .5rem', borderRadius: '4px', fontFamily: 'monospace', fontSize: '.8rem' }}>Right-click</kbd> to pan</span></div>
+          <div style={{ position: 'absolute', bottom: '2rem', left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,.8)', backdropFilter: 'blur(12px)', padding: '.75rem 1.5rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,.1)', fontSize: '.85rem', color: 'rgba(255,255,255,.7)', display: 'flex', gap: '2rem', zIndex: 10 }}>
+            {isTouchDevice ? (
+              <>
+                <span><kbd style={{ background: 'rgba(255,255,255,.1)', padding: '.25rem .5rem', borderRadius: '4px', fontFamily: 'monospace', fontSize: '.8rem' }}>Tap & Drag</kbd> to rotate</span>
+                <span><kbd style={{ background: 'rgba(255,255,255,.1)', padding: '.25rem .5rem', borderRadius: '4px', fontFamily: 'monospace', fontSize: '.8rem' }}>Pinch</kbd> to zoom</span>
+                <span><kbd style={{ background: 'rgba(255,255,255,.1)', padding: '.25rem .5rem', borderRadius: '4px', fontFamily: 'monospace', fontSize: '.8rem' }}>2 Finger Drag</kbd> to pan</span>
+              </>
+            ) : (
+              <>
+                <span><kbd style={{ background: 'rgba(255,255,255,.1)', padding: '.25rem .5rem', borderRadius: '4px', fontFamily: 'monospace', fontSize: '.8rem' }}>Drag</kbd> to rotate</span>
+                <span><kbd style={{ background: 'rgba(255,255,255,.1)', padding: '.25rem .5rem', borderRadius: '4px', fontFamily: 'monospace', fontSize: '.8rm' }}>Scroll</kbd> to zoom</span>
+                <span><kbd style={{ background: 'rgba(255,255,255,.1)', padding: '.25rem .5rem', borderRadius: '4px', fontFamily: 'monospace', fontSize: '.8rem' }}>Right-click</kbd> to pan</span>
+              </>
+            )}
+          </div>
           <style jsx>{`@keyframes spin { from { transform: rotate(0deg) } to { transform: rotate(360deg) } } @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } } @keyframes slideUp { from { transform: translateY(20px); opacity: 0 } to { transform: translateY(0); opacity: 1 } }`}</style>
         </div>
       )}

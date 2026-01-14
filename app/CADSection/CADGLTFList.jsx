@@ -35,7 +35,7 @@ const CADGLTFList = [
     coverPhoto: '/CAD/Burner Head/burner-perview.jpg',
     gltfFile: '/CAD/Burner Head/BurnerAssem.gltf',
     color: '#ff7b00',
-    modelColor: '#8efa45ff',
+    modelColor: 'rgb(69, 250, 241)',
     modelRotation: { x: Math.PI / 2, y: 0, z: Math.PI / 2 },
     transparency: 0
   },
@@ -60,8 +60,8 @@ const CADGLTFList = [
     description: 'Complete reverse-engineered S500 quadcopter frame from 3D scans with 0.01mm tolerance. Includes motor mounts, landing gear, and electronics housing with optimized weight distribution.',
     coverPhoto: '/Projects/Reverse Engineering of a S500 Drone/Reverse Engineering of a S500 Drone (1).jpg',
     gltfFile: '/CAD/S500-Frame/Base Frame.gltf',
-    color: '#06ffa5',
-    modelColor: '#2C2C2C',
+    color: '#00ffa2',
+    modelColor: '#afafaf',
     // modelRotation: { x: Math.PI / 2, y: 0, z: Math.PI / 2 },
     transparency: 0
   },
@@ -87,7 +87,7 @@ const CADGLTFList = [
     coverPhoto: '/Projects/SVE/SVE (1).png',
     gltfFile: '/CAD/SVE/SVE.gltf',
     color: '#ffbe0b',
-    modelColor: '#FFD700',
+    modelColor: '#4e8eb9',
     modelRotation: { x: Math.PI / 2, y: 0, z: Math.PI / 2 },
     transparency: 10
   },
@@ -99,8 +99,8 @@ const CADGLTFList = [
     description: 'Detailed tire model featuring realistic tread pattern, sidewall geometry, and structural components. Suitable for vehicle dynamics simulation and contact mechanics analysis.',
     coverPhoto: '/CAD/Tire/Tire.jpg',
     gltfFile: '/CAD/Tire/Tire.gltf',
-    color: '#2C2C2C',
-    modelColor: '#1C1C1C',
+    color: '#65ce45',
+    modelColor: '#79acb3',
     modelRotation: { x: Math.PI / 2, y: 0, z: Math.PI / 2 },
     transparency: 0
   },

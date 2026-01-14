@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import DocumentViewer from '../components/DocumentViewer'
-import experienceList from '../consts/ExperienceList'
+import DocumentViewer from './DocumentViewer'
+import experienceList from './ExperienceList'
 
 export default function Experience() {
   const [activeIndex, setActiveIndex] = useState(0)

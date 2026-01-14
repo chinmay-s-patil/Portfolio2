@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import eventsList from '../consts/EventsList'
-import EventsModal from '../components/EventsModal'
+import eventsList from './EventsList'
+import EventsModal from './EventsModal'
 
 export default function EventsNormalized() {
   const [selectedEvent, setSelectedEvent] = useState(null)
