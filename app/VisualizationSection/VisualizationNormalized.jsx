@@ -12,7 +12,7 @@ export default function VisualizationNormalized() {
   
   const BASE_WIDTH = 1920
   const BASE_HEIGHT = 1080
-  const ITEMS_PER_PAGE = 3 // Changed from 6 to 3
+  const ITEMS_PER_PAGE = 3
 
   // Scale calculation
   useEffect(() => {
