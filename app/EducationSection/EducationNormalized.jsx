@@ -55,7 +55,7 @@ export default function EducationNormalized() {
     degree: 'Aerospace Engineering',
     title: 'Master of Science',
     institution: 'Technical University of Munich (TUM)',
-    period: 'October 2025 — Present',
+    period: 'October 2025 - Present',
     description: 'Pursuing advanced studies in aerospace engineering with specialization in computational fluid dynamics and aerodynamics. Engaging with cutting-edge research in turbulence modeling, high-performance computing, and numerical methods for complex flow simulations.',
     skills: [
       'Advanced CFD'
@@ -66,7 +66,7 @@ export default function EducationNormalized() {
     degree: 'Mechanical Engineering',
     title: 'Bachelor of Technology',
     institution: 'VIT Chennai',
-    period: 'June 2021 — May 2025',
+    period: 'June 2021 - May 2025',
     description: 'Completed comprehensive undergraduate program in mechanical engineering, developing strong fundamentals in thermodynamics, fluid mechanics, and computational methods. Gained hands-on experience through laboratory work, projects, and industry internships.',
     skills: [
       'Fluid Mechanics',
@@ -153,7 +153,7 @@ export default function EducationNormalized() {
               color: 'rgba(255, 255, 255, 0.68)',
               maxWidth: '900px'
             }}>
-              Explore my academic foundation — from fundamental engineering principles to cutting-edge computational research.
+              Explore my academic foundation - from fundamental engineering principles to cutting-edge computational research.
             </p>
           </div>
 

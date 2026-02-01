@@ -58,7 +58,7 @@ export default function CADGalleryNormalized() {
           <div style={{ flexShrink: 0, marginBottom: '32px' }}>
             <div style={{ fontSize: '14px', color: 'hsl(140, 70%, 60%)', fontWeight: '600', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>3D Design Portfolio</div>
             <h2 style={{ fontSize: '56px', fontWeight: '700', marginBottom: '16px', background: 'linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.7) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', lineHeight: '1.1' }}>CAD Projects</h2>
-            <p style={{ fontSize: '18px', lineHeight: '1.6', color: 'rgba(255, 255, 255, 0.68)', maxWidth: '900px' }}>Explore my mechanical design work — from precision engineering to creative product design.</p>
+            <p style={{ fontSize: '18px', lineHeight: '1.6', color: 'rgba(255, 255, 255, 0.68)', maxWidth: '900px' }}>Explore my mechanical design work - from precision engineering to creative product design.</p>
           </div>
 
           {/* Navigation */}

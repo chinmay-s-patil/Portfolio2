@@ -1,4 +1,4 @@
-// CADglTBNormalized.jsx - Modified with touch support, transparency, color & background fixes
+// CADglTBNormalized.jsx - OPTIMIZED WITH LAZY LOADING
 "use client"
 import { useState, useEffect, useRef } from 'react'
 import CADGLTFList from './CADGLTFList'
@@ -15,7 +15,7 @@ function GLTFViewerModal({ project, onClose }) {
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [error, setError] = useState(null)
   const [showPopup, setShowPopup] = useState(false)
-  const [isTransparent, setIsTransparent] = useState(true) // Default to transparent
+  const [isTransparent, setIsTransparent] = useState(true)
   const [showInfo, setShowInfo] = useState(true)
   const [isTouchDevice, setIsTouchDevice] = useState(false)
   const [modelRotation, setModelRotation] = useState(project.modelRotation || { x: 0, y: 0, z: 0 })
@@ -31,7 +31,6 @@ function GLTFViewerModal({ project, onClose }) {
     viewState: { x: 0, y: 0, z: 0, perp: 0 }
   })
 
-  // Touch state management
   const touchStateRef = useRef({
     isTouching: false,
     touchStartX: 0,
@@ -44,16 +43,15 @@ function GLTFViewerModal({ project, onClose }) {
   const fileExtension = project.gltfFile.toLowerCase().split('.').pop()
   const isSTL = fileExtension === 'stl'
   const isGLTF = fileExtension === 'gltf' || fileExtension === 'glb'
-  const effectiveTransparency = project.transparency > 0 ? project.transparency : 50 // Default 50%
+  const effectiveTransparency = project.transparency > 0 ? project.transparency : 50
 
+  // ===== LAZY LOADING: Three.js library loading =====
   useEffect(() => {
     if (typeof window === 'undefined') return
     
-    // Detect touch device
     setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0)
     
     const loadThreeJS = async () => {
-      // ... (keep existing Three.js loading logic)
       if (!window.THREE) {
         const script = document.createElement('script')
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'
@@ -120,6 +118,7 @@ function GLTFViewerModal({ project, onClose }) {
     loadThreeJS()
   }, [isSTL, isGLTF])
 
+  // ===== LAZY LOADING: Scene setup - only when modal opens =====
   useEffect(() => {
     if (!threeReady || !containerRef.current) return
 
@@ -127,7 +126,7 @@ function GLTFViewerModal({ project, onClose }) {
     document.body.style.overflow = 'hidden'
 
     const scene = new THREE.Scene()
-    scene.background = new THREE.Color(0x000000) // Pure black background
+    scene.background = new THREE.Color(0x000000)
     sceneRef.current = scene
 
     const cam = new THREE.PerspectiveCamera(
@@ -140,33 +139,27 @@ function GLTFViewerModal({ project, onClose }) {
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
     renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight)
-    renderer.setPixelRatio(window.devicePixelRatio)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)) // Limit pixel ratio for performance
     containerRef.current.appendChild(renderer.domElement)
     rendererRef.current = renderer
 
-    // Improved lighting for true colors
-    // Increase ambient light
+    // Lighting
     scene.add(new THREE.AmbientLight(0xffffff, 0.7))
-
-    // Keep strong key light
-    const d1 = new THREE.DirectionalLight(0xffffff, 1.5) // Increased from 1.2
+    const d1 = new THREE.DirectionalLight(0xffffff, 1.5)
     d1.position.set(5, 5, 5)
     scene.add(d1)
-
-    // Keep fill light
-    const d2 = new THREE.DirectionalLight(0xffffff, 0.8) // Increased from 0.6
+    const d2 = new THREE.DirectionalLight(0xffffff, 0.8)
     d2.position.set(-5, -5, -5)
     scene.add(d2)
-
-    // ADD: Third light from top
     const d3 = new THREE.DirectionalLight(0xffffff, 0.5)
-    d3.position.set(0, 10, 0) // Top-down light
+    d3.position.set(0, 10, 0)
     scene.add(d3)
 
     ctrlRef.current.target = new THREE.Vector3()
     ctrlRef.current.spherical = new THREE.Spherical(5, Math.PI / 3, Math.PI / 4)
     ctrlRef.current.panOffset = new THREE.Vector3()
 
+    // LAZY LOAD: Only load model when modal opens
     loadModel(project.gltfFile)
 
     const onResize = () => {
@@ -188,26 +181,63 @@ function GLTFViewerModal({ project, onClose }) {
       document.body.style.overflow = ''
       window.removeEventListener('resize', onResize)
       if (animationRef.current) cancelAnimationFrame(animationRef.current)
-      if (rendererRef.current && containerRef.current) {
+      
+      // ===== CRITICAL: Memory cleanup =====
+      if (meshRef.current) {
+        // Dispose geometry
+        if (meshRef.current.geometry) {
+          meshRef.current.geometry.dispose()
+        }
+        
+        // Dispose materials
+        if (meshRef.current.material) {
+          if (Array.isArray(meshRef.current.material)) {
+            meshRef.current.material.forEach(mat => {
+              if (mat.map) mat.map.dispose()
+              mat.dispose()
+            })
+          } else {
+            if (meshRef.current.material.map) meshRef.current.material.map.dispose()
+            meshRef.current.material.dispose()
+          }
+        }
+        
+        // Traverse and dispose for GLTF models
+        if (meshRef.current.traverse) {
+          meshRef.current.traverse(child => {
+            if (child.geometry) child.geometry.dispose()
+            if (child.material) {
+              if (Array.isArray(child.material)) {
+                child.material.forEach(mat => mat.dispose())
+              } else {
+                child.material.dispose()
+              }
+            }
+          })
+        }
+        
+        sceneRef.current?.remove(meshRef.current)
+        meshRef.current = null
+      }
+      
+      if (rendererRef.current && containerRef.current && rendererRef.current.domElement.parentNode === containerRef.current) {
         containerRef.current.removeChild(rendererRef.current.domElement)
       }
       rendererRef.current?.dispose()
     }
   }, [project, threeReady])
 
-  // Touch event handlers
+  // Touch event handlers (unchanged)
   const handleTouchStart = (e) => {
     e.preventDefault()
     const touches = e.touches
     touchStateRef.current.isTouching = true
     
     if (touches.length === 1) {
-      // Single touch - rotation
       ctrlRef.current.isRotating = true
       ctrlRef.current.lastX = touches[0].clientX
       ctrlRef.current.lastY = touches[0].clientY
     } else if (touches.length === 2) {
-      // Two touches - pinch zoom/pan
       const dx = touches[0].clientX - touches[1].clientX
       const dy = touches[0].clientY - touches[1].clientY
       touchStateRef.current.initialPinchDistance = Math.sqrt(dx * dx + dy * dy)
@@ -226,7 +256,6 @@ function GLTFViewerModal({ project, onClose }) {
     if (!t.isTouching) return
 
     if (touches.length === 1 && c.isRotating) {
-      // Single touch rotation
       const dx = touches[0].clientX - c.lastX
       const dy = touches[0].clientY - c.lastY
       c.spherical.theta -= dx * 0.01
@@ -235,20 +264,17 @@ function GLTFViewerModal({ project, onClose }) {
       c.lastX = touches[0].clientX
       c.lastY = touches[0].clientY
     } else if (touches.length === 2) {
-      // Two touch pinch zoom and pan
       const dx = touches[0].clientX - touches[1].clientX
       const dy = touches[0].clientY - touches[1].clientY
       const distance = Math.sqrt(dx * dx + dy * dy)
       
-      // Pinch zoom
       if (t.initialPinchDistance) {
-        const scale = distance / t.initialPininDistance
+        const scale = distance / t.initialPinchDistance
         const delta = (scale - 1) * 2
         c.spherical.radius = Math.max(1, Math.min(20, c.spherical.radius - delta))
         t.initialPinchDistance = distance
       }
 
-      // Two-finger pan
       const centerX = (touches[0].clientX + touches[1].clientX) / 2
       const centerY = (touches[0].clientY + touches[1].clientY) / 2
       const panX = centerX - t.lastCenterX
@@ -287,7 +313,6 @@ function GLTFViewerModal({ project, onClose }) {
   }
 
   function loadSTLModel(url, THREE) {
-    // ... (keep existing STL loading logic)
     if (!THREE.STLLoader) {
       setError('STL Loader not available')
       setShowPopup(true)
@@ -313,7 +338,7 @@ function GLTFViewerModal({ project, onClose }) {
           transparent: isTransparent,
           opacity: effectiveTransparency / 100,
           side: THREE.DoubleSide,
-          shininess: 10 // Reduced for less dull effect
+          shininess: 10
         })
         
         const mesh = new THREE.Mesh(geometry, material)
@@ -344,7 +369,6 @@ function GLTFViewerModal({ project, onClose }) {
   }
 
   function loadGLTFModel(url, THREE) {
-    // ... (keep existing GLTF loading logic)
     if (!THREE.GLTFLoader) {
       setError('GLTF Loader not available')
       setShowPopup(true)
@@ -375,7 +399,6 @@ function GLTFViewerModal({ project, onClose }) {
             if (project.modelColor) {
               child.material.color = new THREE.Color(project.modelColor)
             }
-            // Apply transparency to all models
             child.material.transparent = isTransparent
             child.material.opacity = effectiveTransparency / 100
             child.material.needsUpdate = true
@@ -529,6 +552,7 @@ function GLTFViewerModal({ project, onClose }) {
     meshRef.current.rotation.z += Math.PI / 2
   }
 
+  // (Rest of the JSX remains unchanged - UI rendering)
   return (
     <>
       {showPopup && (
@@ -558,7 +582,6 @@ function GLTFViewerModal({ project, onClose }) {
             <button onClick={rotateModelZ} title="Rotate Model Z+90°" style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(100,100,255,.15)', border: '1px solid rgba(100,100,255,.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '.75rem', fontWeight: '700', color: '#6464ff', cursor: 'pointer', flexDirection: 'column', lineHeight: '1' }}><span>Z</span><span style={{ fontSize: '.6rem' }}>↻</span></button>
             <div style={{ width: '1px', height: '40px', background: 'rgba(255,255,255,.2)', margin: '0 .25rem' }} />
             <button onClick={resetView} title="Reset View" style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,.1)', border: '1px solid rgba(255,255,255,.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 109 9 9 9 0 00-9-9z" stroke="currentColor" strokeWidth="2" /><path d="M12 7v5l3 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg></button>
-            {/* Always show transparency button */}
             <button onClick={toggleTransparency} title="Toggle Transparency" style={{ width: '40px', height: '40px', borderRadius: '10px', background: isTransparent ? 'rgba(255,255,255,.2)' : 'rgba(255,255,255,.1)', border: '1px solid rgba(255,255,255,.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" opacity="0.5" /><circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="2" /></svg></button>
           </div>
           <button onClick={onClose} style={{ position: 'absolute', top: '2rem', right: '2rem', width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(0,0,0,.8)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, cursor: 'pointer', color: '#fff' }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
@@ -577,7 +600,7 @@ function GLTFViewerModal({ project, onClose }) {
             ) : (
               <>
                 <span><kbd style={{ background: 'rgba(255,255,255,.1)', padding: '.25rem .5rem', borderRadius: '4px', fontFamily: 'monospace', fontSize: '.8rem' }}>Drag</kbd> to rotate</span>
-                <span><kbd style={{ background: 'rgba(255,255,255,.1)', padding: '.25rem .5rem', borderRadius: '4px', fontFamily: 'monospace', fontSize: '.8rm' }}>Scroll</kbd> to zoom</span>
+                <span><kbd style={{ background: 'rgba(255,255,255,.1)', padding: '.25rem .5rem', borderRadius: '4px', fontFamily: 'monospace', fontSize: '.8rem' }}>Scroll</kbd> to zoom</span>
                 <span><kbd style={{ background: 'rgba(255,255,255,.1)', padding: '.25rem .5rem', borderRadius: '4px', fontFamily: 'monospace', fontSize: '.8rem' }}>Right-click</kbd> to pan</span>
               </>
             )}
@@ -644,6 +667,7 @@ export default function CADGalleryNormalized() {
             <h2 style={{ fontSize: '56px', fontWeight: '700', marginBottom: '16px', background: 'linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.7) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', lineHeight: '1.1' }}>CAD Projects</h2>
             <p style={{ fontSize: '18px', lineHeight: '1.6', color: 'rgba(255, 255, 255, 0.68)', maxWidth: '900px' }}>Explore my mechanical design work — from precision engineering to creative product design.</p>
           </div>
+
           {totalPages > 1 && (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px', marginBottom: '24px', flexShrink: 0 }}>
               <button onClick={() => scrollToPage(Math.max(0, currentPage - 1))} disabled={currentPage === 0} style={{ width: '44px', height: '44px', borderRadius: '50%', background: currentPage === 0 ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.15)', cursor: currentPage === 0 ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: currentPage === 0 ? 0.3 : 1, transition: 'all 0.3s ease' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
@@ -651,6 +675,7 @@ export default function CADGalleryNormalized() {
               <button onClick={() => scrollToPage(Math.min(totalPages - 1, currentPage + 1))} disabled={currentPage === totalPages - 1} style={{ width: '44px', height: '44px', borderRadius: '50%', background: currentPage === totalPages - 1 ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.15)', cursor: currentPage === totalPages - 1 ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: currentPage === totalPages - 1 ? 0.3 : 1, transition: 'all 0.3s ease' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
             </div>
           )}
+
           <div ref={scrollContainerRef} style={{ flex: 1, overflowX: 'auto', overflowY: 'hidden', scrollbarWidth: 'none', msOverflowStyle: 'none', scrollSnapType: 'x mandatory', display: 'flex', WebkitOverflowScrolling: 'touch', minHeight: 0 }}>
             {Array.from({ length: totalPages }).map((_, pageIndex) => (
               <div key={pageIndex} style={{ minWidth: '100%', width: '100%', height: '100%', flexShrink: 0, scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -672,7 +697,14 @@ export default function CADGalleryNormalized() {
           </div>
         </div>
       </div>
-      {selectedProject && <GLTFViewerModal project={selectedProject} onClose={() => setSelectedProject(null)} />}
+      
+      {selectedProject && (
+        <GLTFViewerModal 
+          project={selectedProject} 
+          onClose={() => setSelectedProject(null)} 
+        />
+      )}
+      
       <style jsx>{`div::-webkit-scrollbar { display: none; } .cad-card:hover { transform: translateY(-6px); border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5); } .view-3d-button:hover { transform: scale(1.08); background: rgba(0, 0, 0, 0.95) !important; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7) !important; } .view-3d-button:active { transform: scale(1); }`}</style>
     </>
   )

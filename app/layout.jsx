@@ -3,8 +3,8 @@ import './globals.css'
 import { SpeedInsights } from '@vercel/speed-insights/next' // ← add this line
 
 export const metadata = {
-  title: 'Chinmay Patil — Portfolio',
-  description: 'Portfolio — CFD, OpenFOAM, Web apps'
+  title: 'Chinmay Patil - Portfolio',
+  description: 'Portfolio - CFD, OpenFOAM, Web apps'
 }
 
 export default function RootLayout({ children }) {

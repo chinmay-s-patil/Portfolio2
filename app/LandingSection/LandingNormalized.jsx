@@ -103,7 +103,7 @@ export default function LandingNormalized() {
               textTransform: 'uppercase',
               marginBottom: '16px' // INCREASED spacing
             }}>
-              Hello — I'm
+              Hello - I'm
             </div>
 
             {/* Title */}
@@ -155,14 +155,14 @@ export default function LandingNormalized() {
               <br />
               I focus on CFD and OpenFOAM, building reproducible simulation
               setups and efficient data-processing tools. I&rsquo;m strong in
-              Python, AIML, and steadily growing my C++ skills—and I&rsquo;m an
+              Python, AIML, and steadily growing my C++ skills-and I&rsquo;m an
               avid learner, expanding my simulation capabilities every day.
 
               
               {/* <span style={{ fontFamily: '"Audiowide", sans-serif' }}>
                 I focus on CFD and OpenFOAM, building reproducible simulation
                 setups and efficient data-processing tools. I&rsquo;m strong in
-                Python, AIML, and steadily growing my C++ skills—and
+                Python, AIML, and steadily growing my C++ skills-and
                 I&rsquo;m an avid learner, expanding my simulation capabilities every day.
               </span> */}
             </div>

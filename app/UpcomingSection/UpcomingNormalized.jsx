@@ -112,7 +112,7 @@ export default function UpcomingSection() {
               color: 'rgba(255, 255, 255, 0.68)',
               maxWidth: '900px'
             }}>
-              A preview of current research and simulations in development — from advanced multiphase flows to novel solver implementations.
+              A preview of current research and simulations in development - from advanced multiphase flows to novel solver implementations.
             </p>
           </div>
 

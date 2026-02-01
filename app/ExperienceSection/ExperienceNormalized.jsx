@@ -137,7 +137,7 @@ export default function Experience() {
             color: 'rgba(255, 255, 255, 0.68)',
             maxWidth: '900px'
           }}>
-            Navigate through my career journey — from cutting-edge research to industry applications.
+            Navigate through my career journey - from cutting-edge research to industry applications.
           </p>
 
           {/* Year Tabs */}
