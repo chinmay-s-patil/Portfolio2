@@ -28,7 +28,7 @@ const OpenFOAMNormalized = dynamic(() => import('./OpenFoamSection/OpenFOAMNorma
   loading: () => null,
 })
 
-const CADNormalized = dynamic(() => import('./CADSection/CADglTBNormalized'), {
+const CADNormalized = dynamic(() => import('./CADSection/CADGLTFNormalized'), {
   loading: () => null,
 })
 
