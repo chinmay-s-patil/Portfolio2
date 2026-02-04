@@ -1,7 +1,49 @@
 'use client'
 
-export default function EventModal({ event, onClose, scale, imageIndices }) {
+import { useState, useEffect, useCallback, useRef } from 'react'
+import LazyImage from './LazyImage'
+
+export default function EventModal({ event, onClose, scale }) {
   if (!event) return null
+  
+  const [imageIndices, setImageIndices] = useState([0, 1, 2])
+  const [isVisible, setIsVisible] = useState(false)
+  const timerRef = useRef(null)
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current)
+    }
+  }, [])
+
+  // Slideshow effect with cleanup
+  useEffect(() => {
+    setIsVisible(true)
+    const totalImages = event.images.length
+    
+    timerRef.current = setInterval(() => {
+      setImageIndices(prev => prev.map(idx => (idx + 3) % totalImages))
+    }, 4000)
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current)
+    }
+  }, [event])
+
+  const handleClose = useCallback(() => {
+    setIsVisible(false)
+    setTimeout(onClose, 300) // Wait for fade out
+  }, [onClose])
+
+  // Preload next set of images for slideshow
+  useEffect(() => {
+    const nextIndices = imageIndices.map(idx => (idx + 3) % event.images.length)
+    nextIndices.forEach(idx => {
+      const img = new Image()
+      img.src = event.images[idx]
+    })
+  }, [imageIndices, event.images])
 
   return (
     <div
@@ -9,15 +51,15 @@ export default function EventModal({ event, onClose, scale, imageIndices }) {
         position: 'fixed',
         inset: 0,
         zIndex: 100,
-        display: 'flex',
+        display: isVisible ? 'flex' : 'none',
         alignItems: 'center',
         justifyContent: 'center',
         padding: `${32 * scale}px`,
-        animation: 'fadeIn 0.3s ease'
+        opacity: isVisible ? 1 : 0,
+        transition: 'opacity 0.3s ease'
       }}
-      onClick={onClose}
+      onClick={handleClose}
     >
-      {/* Backdrop */}
       <div style={{
         position: 'absolute',
         inset: 0,
@@ -25,7 +67,6 @@ export default function EventModal({ event, onClose, scale, imageIndices }) {
         backdropFilter: 'blur(8px)'
       }} />
 
-      {/* Modal Content */}
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
@@ -40,12 +81,12 @@ export default function EventModal({ event, onClose, scale, imageIndices }) {
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
-          animation: 'slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+          transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+          transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
       >
-        {/* Close Button */}
         <button
-          onClick={onClose}
+          onClick={handleClose}
           style={{
             position: 'absolute',
             top: `${24 * scale}px`,
@@ -60,24 +101,20 @@ export default function EventModal({ event, onClose, scale, imageIndices }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            transition: 'all 0.2s ease',
             zIndex: 10
           }}
-          aria-label="Close modal"
         >
           <svg width={20 * scale} height={20 * scale} viewBox="0 0 24 24" fill="none">
             <path d="M18 6L6 18M6 6L18 18" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </button>
 
-        {/* Content */}
         <div style={{ 
           overflowY: 'auto', 
           overflowX: 'hidden',
           padding: `${40 * scale}px`,
           flex: 1
         }}>
-          {/* Header */}
           <div style={{ marginBottom: `${32 * scale}px` }}>
             <div style={{
               fontSize: `${14 * scale}px`,
@@ -137,7 +174,6 @@ export default function EventModal({ event, onClose, scale, imageIndices }) {
             </div>
           </div>
 
-          {/* 3-Image Slideshow */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
@@ -145,7 +181,7 @@ export default function EventModal({ event, onClose, scale, imageIndices }) {
             marginBottom: `${32 * scale}px`,
             height: `${400 * scale}px`
           }}>
-            {(imageIndices || [0, 1, 2]).map((imgIndex, slotIndex) => (
+            {imageIndices.map((imgIndex, slotIndex) => (
               <div
                 key={slotIndex}
                 style={{
@@ -158,7 +194,7 @@ export default function EventModal({ event, onClose, scale, imageIndices }) {
                   border: '1px solid rgba(255, 255, 255, 0.1)'
                 }}
               >
-                <img
+                <LazyImage
                   src={event.images[imgIndex]}
                   alt={`${event.title} - ${imgIndex + 1}`}
                   style={{
@@ -171,7 +207,6 @@ export default function EventModal({ event, onClose, scale, imageIndices }) {
             ))}
           </div>
 
-          {/* Description */}
           <div style={{ marginBottom: `${32 * scale}px` }}>
             <h3 style={{
               fontSize: `${20 * scale}px`,
@@ -190,7 +225,6 @@ export default function EventModal({ event, onClose, scale, imageIndices }) {
             </p>
           </div>
 
-          {/* Tags */}
           <div>
             <h3 style={{
               fontSize: `${20 * scale}px`,
