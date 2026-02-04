@@ -89,11 +89,12 @@ export default function Page() {
           <OpenFOAMNormalized />
         </section>
 
-/*
+        {/*
         <section id="cad" className="section">
           <CADNormalized />
         </section>
-*/
+        */}
+
         <section id="visualization" className="section">
           <VisualizationNormalized />
         </section>
