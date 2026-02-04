@@ -36,10 +36,6 @@ const VisualizationNormalized = dynamic(() => import('./VisualizationSection/Vis
   loading: () => null,
 })
 
-const EventsNormalized = dynamic(() => import('./EventsSection/EventsNormalized'), {
-  loading: () => null,
-})
-
 const UpcomingNormalized = dynamic(() => import('./UpcomingSection/UpcomingNormalized'), {
   loading: () => null,
 })
@@ -54,7 +50,6 @@ const sectionsMeta = [
   { id: 'openfoam', label: 'OpenFOAM' },
   { id: 'cad', label: 'CAD' },
   { id: 'visualization', label: 'Visualization' },
-  { id: 'events', label: 'Events' },
   { id: 'upcoming', label: 'Upcoming' },
 ]
 
@@ -95,10 +90,6 @@ export default function Page() {
        
         <section id="visualization" className="section">
           <VisualizationNormalized />
-        </section>
-        
-        <section id="events" className="section">
-          <EventsNormalized />
         </section>
         
         <section id="upcoming" className="section">
