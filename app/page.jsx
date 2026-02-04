@@ -28,9 +28,9 @@ const OpenFOAMNormalized = dynamic(() => import('./OpenFoamSection/OpenFOAMNorma
   loading: () => null,
 })
 
-const CADNormalized = dynamic(() => import('./CADSection/CADGLTFNormalized'), {
-  loading: () => null,
-})
+//const CADNormalized = dynamic(() => import('./CADSection/CADGLTFNormalized'), {
+//  loading: () => null,
+//})
 
 const VisualizationNormalized = dynamic(() => import('./VisualizationSection/VisualizationNormalized'), {
   loading: () => null,
@@ -52,7 +52,7 @@ const sectionsMeta = [
   { id: 'skills', label: 'Skills' },
   { id: 'projects', label: 'Projects' },
   { id: 'openfoam', label: 'OpenFOAM' },
-  { id: 'cad', label: 'CAD' },
+//  { id: 'cad', label: 'CAD' },
   { id: 'visualization', label: 'Visualization' },
   { id: 'events', label: 'Events' },
   { id: 'upcoming', label: 'Upcoming' },
@@ -89,9 +89,9 @@ export default function Page() {
           <OpenFOAMNormalized />
         </section>
 
-        <section id="cad" className="section">
-          <CADNormalized />
-        </section>
+//        <section id="cad" className="section">
+//          <CADNormalized />
+//        </section>
 
         <section id="visualization" className="section">
           <VisualizationNormalized />
