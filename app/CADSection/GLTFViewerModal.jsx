@@ -1,0 +1,820 @@
+// GLTFViewerModal.jsx - FULLY LAZY-LOADED 3D VIEWER
+// This component is loaded via dynamic import() only when user clicks "View 3D"
+// It includes all Three.js code and does NOT get bundled in the main chunk
+
+"use client"
+import { useEffect, useRef, useState } from 'react'
+
+export default function GLTFViewerModal({ project, onClose }) {
+  const containerRef = useRef(null)
+  const sceneRef = useRef(null)
+  const cameraRef = useRef(null)
+  const rendererRef = useRef(null)
+  const meshRef = useRef(null)
+  const animationRef = useRef(null)
+  
+  const [threeReady, setThreeReady] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [loadingProgress, setLoadingProgress] = useState(0)
+  const [error, setError] = useState(null)
+  const [showPopup, setShowPopup] = useState(false)
+  const [isTransparent, setIsTransparent] = useState(project.transparency > 0)
+  const [showInfo, setShowInfo] = useState(true)
+  const [isTouchDevice, setIsTouchDevice] = useState(false)
+  const [modelRotation, setModelRotation] = useState(project.modelRotation || { x: 0, y: 0, z: 0 })
+
+  const ctrlRef = useRef({
+    isRotating: false,
+    isPanning: false,
+    lastX: 0,
+    lastY: 0,
+    target: null,
+    spherical: null,
+    panOffset: null,
+    viewState: { x: 0, y: 0, z: 0, perp: 0 }
+  })
+
+  const touchStateRef = useRef({
+    isTouching: false,
+    touchStartX: 0,
+    touchStartY: 0,
+    initialPinchDistance: null,
+    lastCenterX: 0,
+    lastCenterY: 0
+  })
+
+  const fileExtension = project.gltfFile?.toLowerCase()?.split('.')?.pop() || 'gltf'
+  const isSTL = fileExtension === 'stl'
+  const isGLTF = fileExtension === 'gltf' || fileExtension === 'glb'
+  const effectiveTransparency = project.transparency > 0 ? project.transparency : 50
+
+  // ===== LAZY LOADING: Load Three.js ONLY when modal opens =====
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    
+    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0)
+    
+    let scriptsLoaded = []
+    
+    const cleanupScripts = () => {
+      // Remove dynamically added scripts when modal closes
+      scriptsLoaded.forEach(script => {
+        if (script && script.parentNode) {
+          script.parentNode.removeChild(script)
+        }
+      })
+    }
+    
+    const loadThreeJS = async () => {
+      try {
+        // Step 1: Load Three.js core
+        if (!window.THREE) {
+          await new Promise((resolve, reject) => {
+            const script = document.createElement('script')
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'
+            script.async = true
+            script.onload = () => {
+              scriptsLoaded.push(script)
+              resolve()
+            }
+            script.onerror = () => reject(new Error('Failed to load Three.js'))
+            document.head.appendChild(script)
+          })
+        }
+        
+        setLoadingProgress(30)
+        
+        // Step 2: Load appropriate model loader
+        if (isSTL && !window.THREE.STLLoader) {
+          await new Promise((resolve, reject) => {
+            const script = document.createElement('script')
+            script.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js'
+            script.async = true
+            script.onload = () => {
+              scriptsLoaded.push(script)
+              resolve()
+            }
+            script.onerror = () => reject(new Error('Failed to load STL loader'))
+            document.head.appendChild(script)
+          })
+        } else if (isGLTF && !window.THREE.GLTFLoader) {
+          await new Promise((resolve, reject) => {
+            const script = document.createElement('script')
+            script.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js'
+            script.async = true
+            script.onload = () => {
+              scriptsLoaded.push(script)
+              resolve()
+            }
+            script.onerror = () => reject(new Error('Failed to load GLTF loader'))
+            document.head.appendChild(script)
+          })
+        }
+        
+        setLoadingProgress(50)
+        setThreeReady(true)
+      } catch (err) {
+        console.error('Failed to load 3D engine:', err)
+        setError('Failed to load 3D engine')
+        setShowPopup(true)
+      }
+    }
+    
+    loadThreeJS()
+    
+    // Cleanup scripts on unmount
+    return cleanupScripts
+  }, [isSTL, isGLTF])
+
+  // ===== SCENE SETUP: Only after Three.js is loaded =====
+  useEffect(() => {
+    if (!threeReady || !containerRef.current) return
+    
+    const THREE = window.THREE
+    document.body.style.overflow = 'hidden'
+    
+    // Create scene
+    const scene = new THREE.Scene()
+    scene.background = new THREE.Color(0x000000)
+    sceneRef.current = scene
+    
+    // Create camera
+    const cam = new THREE.PerspectiveCamera(
+      45,
+      containerRef.current.clientWidth / containerRef.current.clientHeight,
+      0.1,
+      1000
+    )
+    cameraRef.current = cam
+    
+    // Create renderer
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+    renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    containerRef.current.appendChild(renderer.domElement)
+    rendererRef.current = renderer
+    
+    // Add lights
+    scene.add(new THREE.AmbientLight(0xffffff, 0.7))
+    const d1 = new THREE.DirectionalLight(0xffffff, 1.5)
+    d1.position.set(5, 5, 5)
+    scene.add(d1)
+    const d2 = new THREE.DirectionalLight(0xffffff, 0.8)
+    d2.position.set(-5, -5, -5)
+    scene.add(d2)
+    
+    // Initialize camera controls
+    ctrlRef.current.target = new THREE.Vector3()
+    ctrlRef.current.spherical = new THREE.Spherical(5, Math.PI / 3, Math.PI / 4)
+    ctrlRef.current.panOffset = new THREE.Vector3()
+    
+    // Load the actual 3D model
+    loadModel(project.gltfFile)
+    
+    // Handle resize
+    const onResize = () => {
+      if (!containerRef.current) return
+      cam.aspect = containerRef.current.clientWidth / containerRef.current.clientHeight
+      cam.updateProjectionMatrix()
+      renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight)
+    }
+    window.addEventListener('resize', onResize)
+    
+    // Animation loop
+    const animate = () => {
+      animationRef.current = requestAnimationFrame(animate)
+      updateCamera()
+      renderer.render(scene, cam)
+    }
+    animate()
+    
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('resize', onResize)
+      if (animationRef.current) cancelAnimationFrame(animationRef.current)
+      
+      // ===== MEMORY CLEANUP =====
+      if (meshRef.current) {
+        const disposeMesh = (obj) => {
+          if (obj.geometry) obj.geometry.dispose()
+          if (obj.material) {
+            if (Array.isArray(obj.material)) {
+              obj.material.forEach(mat => {
+                if (mat.map) mat.map.dispose()
+                mat.dispose()
+              })
+            } else {
+              if (obj.material.map) obj.material.map.dispose()
+              obj.material.dispose()
+            }
+          }
+        }
+        
+        if (meshRef.current.traverse) {
+          meshRef.current.traverse(child => disposeMesh(child))
+        } else {
+          disposeMesh(meshRef.current)
+        }
+        
+        sceneRef.current?.remove(meshRef.current)
+        meshRef.current = null
+      }
+      
+      if (rendererRef.current) {
+        if (containerRef.current && rendererRef.current.domElement.parentNode === containerRef.current) {
+          containerRef.current.removeChild(rendererRef.current.domElement)
+        }
+        rendererRef.current.dispose()
+        rendererRef.current = null
+      }
+      
+      sceneRef.current = null
+      cameraRef.current = null
+    }
+  }, [project, threeReady])
+
+  // ===== MODEL LOADING =====
+  function loadModel(url) {
+    const THREE = window.THREE
+    setIsLoading(true)
+    setLoadingProgress(60)
+    
+    if (isSTL) {
+      loadSTLModel(url, THREE)
+    } else if (isGLTF) {
+      loadGLTFModel(url, THREE)
+    } else {
+      setError('Unsupported file format')
+      setShowPopup(true)
+      setIsLoading(false)
+    }
+  }
+
+  function loadSTLModel(url, THREE) {
+    if (!THREE.STLLoader) {
+      setError('STL Loader not available')
+      setShowPopup(true)
+      setIsLoading(false)
+      return
+    }
+    
+    const loader = new THREE.STLLoader()
+    loader.load(
+      url,
+      (geometry) => {
+        setLoadingProgress(80)
+        geometry.computeBoundingBox()
+        const center = new THREE.Vector3()
+        geometry.boundingBox.getCenter(center)
+        geometry.translate(-center.x, -center.y, -center.z)
+        geometry.computeVertexNormals()
+        
+        const material = new THREE.MeshPhongMaterial({
+          color: new THREE.Color(project.modelColor || project.color),
+          transparent: isTransparent,
+          opacity: effectiveTransparency / 100,
+          side: THREE.DoubleSide,
+          shininess: 10
+        })
+        
+        const mesh = new THREE.Mesh(geometry, material)
+        mesh.rotation.set(modelRotation.x, modelRotation.y, modelRotation.z)
+        
+        const bbox = new THREE.Box3().setFromObject(mesh)
+        const size = bbox.getSize(new THREE.Vector3())
+        const maxDim = Math.max(size.x, size.y, size.z)
+        const scale = 2 / maxDim
+        mesh.scale.setScalar(scale)
+        
+        sceneRef.current.add(mesh)
+        meshRef.current = mesh
+        setIsLoading(false)
+        setLoadingProgress(100)
+      },
+      (xhr) => {
+        if (xhr.total) {
+          const progress = 60 + (xhr.loaded / xhr.total) * 30
+          setLoadingProgress(Math.min(progress, 95))
+        }
+      },
+      () => {
+        setError('model_unavailable')
+        setShowPopup(true)
+        setIsLoading(false)
+      }
+    )
+  }
+
+  function loadGLTFModel(url, THREE) {
+    if (!THREE.GLTFLoader) {
+      setError('GLTF Loader not available')
+      setShowPopup(true)
+      setIsLoading(false)
+      return
+    }
+    
+    const loader = new THREE.GLTFLoader()
+    loader.load(
+      url,
+      (gltf) => {
+        setLoadingProgress(80)
+        const model = gltf.scene
+        model.rotation.set(modelRotation.x, modelRotation.y, modelRotation.z)
+        
+        const box = new THREE.Box3().setFromObject(model)
+        const center = box.getCenter(new THREE.Vector3())
+        const size = box.getSize(new THREE.Vector3())
+        
+        model.position.sub(center)
+        const maxDim = Math.max(size.x, size.y, size.z)
+        const scale = 2 / maxDim
+        model.scale.setScalar(scale)
+        
+        model.traverse((child) => {
+          if (child.isMesh) {
+            if (project.modelColor) {
+              child.material.color = new THREE.Color(project.modelColor)
+            }
+            child.material.transparent = isTransparent
+            child.material.opacity = effectiveTransparency / 100
+            child.material.needsUpdate = true
+          }
+        })
+        
+        sceneRef.current.add(model)
+        meshRef.current = model
+        setIsLoading(false)
+        setLoadingProgress(100)
+      },
+      (xhr) => {
+        if (xhr.total) {
+          const progress = 60 + (xhr.loaded / xhr.total) * 30
+          setLoadingProgress(Math.min(progress, 95))
+        }
+      },
+      () => {
+        setError('model_unavailable')
+        setShowPopup(true)
+        setIsLoading(false)
+      }
+    )
+  }
+
+  // ===== CAMERA & CONTROLS =====
+  const updateCamera = () => {
+    const { spherical, target, panOffset } = ctrlRef.current
+    const pos = new window.THREE.Vector3().setFromSpherical(spherical)
+    cameraRef.current.position.copy(target).add(pos).add(panOffset)
+    cameraRef.current.lookAt(target.clone().add(panOffset))
+  }
+
+  const handleMouseDown = (e) => {
+    e.preventDefault()
+    ctrlRef.current.isRotating = e.button === 0
+    ctrlRef.current.isPanning = e.button === 2
+    ctrlRef.current.lastX = e.clientX
+    ctrlRef.current.lastY = e.clientY
+  }
+
+  const handleMouseMove = (e) => {
+    const c = ctrlRef.current
+    if (!c.isRotating && !c.isPanning) return
+    const dx = e.clientX - c.lastX
+    const dy = e.clientY - c.lastY
+    if (c.isRotating) {
+      c.spherical.theta -= dx * 0.01
+      c.spherical.phi += dy * 0.01
+      c.spherical.phi = window.THREE.MathUtils.clamp(c.spherical.phi, 0.1, Math.PI - 0.1)
+    }
+    if (c.isPanning) {
+      const pan = new window.THREE.Vector3()
+      pan.copy(cameraRef.current.position).sub(c.target).normalize()
+      pan.cross(cameraRef.current.up).setLength(dx * 0.005)
+      pan.addScaledVector(cameraRef.current.up, dy * 0.005)
+      c.panOffset.add(pan)
+    }
+    c.lastX = e.clientX
+    c.lastY = e.clientY
+  }
+
+  const handleMouseUp = () => {
+    ctrlRef.current.isRotating = ctrlRef.current.isPanning = false
+  }
+
+  const handleWheel = (e) => {
+    e.preventDefault()
+    ctrlRef.current.spherical.radius = Math.max(
+      1,
+      Math.min(20, ctrlRef.current.spherical.radius + e.deltaY * 0.01)
+    )
+  }
+
+  const resetView = () => {
+    ctrlRef.current.spherical.set(5, Math.PI / 3, Math.PI / 4)
+    ctrlRef.current.target.set(0, 0, 0)
+    ctrlRef.current.panOffset.set(0, 0, 0)
+    const originalRotation = project.modelRotation || { x: 0, y: 0, z: 0 }
+    setModelRotation(originalRotation)
+    if (meshRef.current) {
+      meshRef.current.rotation.set(originalRotation.x, originalRotation.y, originalRotation.z)
+    }
+  }
+
+  const toggleTransparency = () => {
+    if (!meshRef.current) return
+    const newTransparent = !isTransparent
+    setIsTransparent(newTransparent)
+    const opacity = newTransparent ? effectiveTransparency / 100 : 1.0
+    
+    if (isSTL) {
+      meshRef.current.material.transparent = newTransparent
+      meshRef.current.material.opacity = opacity
+      meshRef.current.material.needsUpdate = true
+    } else {
+      meshRef.current.traverse((child) => {
+        if (child.isMesh) {
+          child.material.transparent = newTransparent
+          child.material.opacity = opacity
+          child.material.needsUpdate = true
+        }
+      })
+    }
+  }
+
+  const setViewX = () => {
+    const s = ctrlRef.current.viewState.x
+    ctrlRef.current.spherical.theta = s ? -Math.PI / 2 : Math.PI / 2
+    ctrlRef.current.spherical.phi = Math.PI / 2
+    ctrlRef.current.viewState = { x: 1 - s, y: 0, z: 0, perp: 0 }
+  }
+
+  const setViewY = () => {
+    const s = ctrlRef.current.viewState.y
+    ctrlRef.current.spherical.theta = 0
+    ctrlRef.current.spherical.phi = s ? 0.1 : Math.PI - 0.1
+    ctrlRef.current.viewState = { x: 0, y: 1 - s, z: 0, perp: 0 }
+  }
+
+  const setViewZ = () => {
+    const s = ctrlRef.current.viewState.z
+    ctrlRef.current.spherical.theta = s ? Math.PI : 0
+    ctrlRef.current.spherical.phi = Math.PI / 2
+    ctrlRef.current.viewState = { x: 0, y: 0, z: 1 - s, perp: 0 }
+  }
+
+  const rotateModelX = () => {
+    if (!meshRef.current) return
+    const newRotation = { ...modelRotation, x: modelRotation.x + Math.PI / 2 }
+    setModelRotation(newRotation)
+    meshRef.current.rotation.x += Math.PI / 2
+  }
+
+  const rotateModelY = () => {
+    if (!meshRef.current) return
+    const newRotation = { ...modelRotation, y: modelRotation.y + Math.PI / 2 }
+    setModelRotation(newRotation)
+    meshRef.current.rotation.y += Math.PI / 2
+  }
+
+  const rotateModelZ = () => {
+    if (!meshRef.current) return
+    const newRotation = { ...modelRotation, z: modelRotation.z + Math.PI / 2 }
+    setModelRotation(newRotation)
+    meshRef.current.rotation.z += Math.PI / 2
+  }
+
+  // ===== RENDER =====
+  if (showPopup) {
+    return (
+      <div 
+        style={{
+          position: 'fixed', inset: 0, zIndex: 200,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: 'rgba(0,0,0,.85)', backdropFilter: 'blur(8px)'
+        }}
+        onClick={() => { setShowPopup(false); onClose() }}
+      >
+        <div 
+          onClick={e => e.stopPropagation()}
+          style={{
+            maxWidth: '540px', width: '90%',
+            background: 'linear-gradient(135deg,rgba(15,20,32,.98),rgba(10,14,26,.98))',
+            borderRadius: '20px', border: '2px solid rgba(255,180,100,.4)',
+            boxShadow: '0 20px 60px rgba(0,0,0,.8)', padding: '2.5rem',
+            textAlign: 'center'
+          }}
+        >
+          <div style={{
+            width: '80px', height: '80px', margin: '0 auto 1.5rem',
+            borderRadius: '50%', background: 'linear-gradient(135deg,rgba(255,180,100,.2),rgba(255,180,100,.05))',
+            display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(255,180,100,.9)" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+          </div>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem', color: '#fff' }}>
+            Model Currently Unavailable
+          </h2>
+          <p style={{ fontSize: '1rem', lineHeight: '1.7', color: 'rgba(255,255,255,.85)', marginBottom: '1.5rem' }}>
+            As I've recently transitioned between colleges, I no longer have access to the same CAD software and tools. 
+            Unfortunately, this means I'm currently unable to showcase this 3D model. I'm working on regaining access 
+            to properly display my portfolio work.
+          </p>
+          <button 
+            onClick={() => { setShowPopup(false); onClose() }}
+            style={{
+              padding: '.875rem 2rem',
+              background: 'linear-gradient(135deg,rgba(255,180,100,.85),rgba(255,180,100,.65))',
+              color: '#0a0e1a', border: 'none', borderRadius: '12px',
+              fontSize: '1rem', fontWeight: '600', cursor: 'pointer',
+              width: '100%'
+            }}
+          >
+            Understood
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div 
+      style={{
+        position: 'fixed', inset: 0, zIndex: 100,
+        display: 'flex', background: 'rgba(0,0,0,.95)', backdropFilter: 'blur(8px)'
+      }}
+      onClick={onClose}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+    >
+      {/* Top Controls */}
+      <div 
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          position: 'absolute', top: '2rem', left: '50%', transform: 'translateX(-50%)',
+          display: 'flex', gap: '.5rem', background: 'rgba(0,0,0,.8)',
+          backdropFilter: 'blur(12px)', padding: '.75rem 1rem',
+          borderRadius: '16px', border: '1px solid rgba(255,255,255,.1)', zIndex: 10
+        }}
+      >
+        <div style={{
+          padding: '0 1rem', display: 'flex', alignItems: 'center',
+          fontSize: '.9rem', fontWeight: '600', color: '#fff',
+          borderRight: '1px solid rgba(255,255,255,.2)'
+        }}>
+          {project.title}
+        </div>
+        
+        <button onClick={setViewX} title="View X axis" style={{
+          width: '40px', height: '40px', borderRadius: '10px',
+          background: 'rgba(255,100,100,.2)', border: '1px solid rgba(255,100,100,.4)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '.85rem', fontWeight: '700', color: '#ff6464', cursor: 'pointer'
+        }}>X</button>
+        
+        <button onClick={setViewY} title="View Y axis" style={{
+          width: '40px', height: '40px', borderRadius: '10px',
+          background: 'rgba(100,255,100,.2)', border: '1px solid rgba(100,255,100,.4)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '.85rem', fontWeight: '700', color: '#64ff64', cursor: 'pointer'
+        }}>Y</button>
+        
+        <button onClick={setViewZ} title="View Z axis" style={{
+          width: '40px', height: '40px', borderRadius: '10px',
+          background: 'rgba(100,100,255,.2)', border: '1px solid rgba(100,100,255,.4)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '.85rem', fontWeight: '700', color: '#6464ff', cursor: 'pointer'
+        }}>Z</button>
+        
+        <div style={{ width: '1px', height: '40px', background: 'rgba(255,255,255,.2)', margin: '0 .25rem' }} />
+        
+        <button onClick={rotateModelX} title="Rotate Model X+90°" style={{
+          width: '40px', height: '40px', borderRadius: '10px',
+          background: 'rgba(255,100,100,.15)', border: '1px solid rgba(255,100,100,.3)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '.75rem', fontWeight: '700', color: '#ff6464', cursor: 'pointer',
+          flexDirection: 'column', lineHeight: '1'
+        }}><span>X</span><span style={{ fontSize: '.6rem' }}>↻</span></button>
+        
+        <button onClick={rotateModelY} title="Rotate Model Y+90°" style={{
+          width: '40px', height: '40px', borderRadius: '10px',
+          background: 'rgba(100,255,100,.15)', border: '1px solid rgba(100,255,100,.3)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '.75rem', fontWeight: '700', color: '#64ff64', cursor: 'pointer',
+          flexDirection: 'column', lineHeight: '1'
+        }}><span>Y</span><span style={{ fontSize: '.6rem' }}>↻</span></button>
+        
+        <button onClick={rotateModelZ} title="Rotate Model Z+90°" style={{
+          width: '40px', height: '40px', borderRadius: '10px',
+          background: 'rgba(100,100,255,.15)', border: '1px solid rgba(100,100,255,.3)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '.75rem', fontWeight: '700', color: '#6464ff', cursor: 'pointer',
+          flexDirection: 'column', lineHeight: '1'
+        }}><span>Z</span><span style={{ fontSize: '.6rem' }}>↻</span></button>
+        
+        <div style={{ width: '1px', height: '40px', background: 'rgba(255,255,255,.2)', margin: '0 .25rem' }} />
+        
+        <button onClick={resetView} title="Reset View" style={{
+          width: '40px', height: '40px', borderRadius: '10px',
+          background: 'rgba(255,255,255,.1)', border: '1px solid rgba(255,255,255,.15)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: 'pointer', color: '#fff'
+        }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M3 12a9 9 0 109 9 9 9 0 00-9-9z" stroke="currentColor" strokeWidth="2" />
+            <path d="M12 7v5l3 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        </button>
+        
+        <button onClick={toggleTransparency} title="Toggle Transparency" style={{
+          width: '40px', height: '40px', borderRadius: '10px',
+          background: isTransparent ? 'rgba(255,255,255,.2)' : 'rgba(255,255,255,.1)',
+          border: '1px solid rgba(255,255,255,.15)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: 'pointer', color: '#fff'
+        }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" opacity="0.5" />
+            <circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Close Button */}
+      <button onClick={onClose} style={{
+        position: 'absolute', top: '2rem', right: '2rem',
+        width: '48px', height: '48px', borderRadius: '50%',
+        background: 'rgba(0,0,0,.8)', backdropFilter: 'blur(12px)',
+        border: '1px solid rgba(255,255,255,.1)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        zIndex: 10, cursor: 'pointer', color: '#fff'
+      }}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+
+      {/* Canvas Container */}
+      <div 
+        ref={containerRef}
+        onClick={(e) => e.stopPropagation()}
+        onWheel={handleWheel}
+        onMouseDown={handleMouseDown}
+        onContextMenu={(e) => e.preventDefault()}
+        style={{
+          flex: 1, position: 'relative', display: 'flex',
+          cursor: ctrlRef.current.isRotating || ctrlRef.current.isPanning ? 'grabbing' : 'grab',
+          userSelect: 'none', touchAction: 'none'
+        }}
+      >
+        {isLoading && (
+          <div style={{
+            position: 'absolute', inset: 0,
+            display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center',
+            fontSize: '1.2rem', color: '#fff', gap: '1.5rem',
+            background: 'rgba(10, 14, 26, 0.95)'
+          }}>
+            <div style={{
+              width: '60px', height: '60px',
+              border: '4px solid rgba(255, 255, 255, 0.1)',
+              borderTop: '4px solid hsl(30, 100%, 60%)',
+              borderRadius: '50%', animation: 'spin 1s linear infinite'
+            }} />
+            <div style={{ textAlign: 'center', maxWidth: '300px' }}>
+              {loadingProgress < 50 ? 'Loading 3D Engine...' : 'Loading 3D Model...'}
+            </div>
+            {loadingProgress > 0 && (
+              <div style={{
+                width: '300px', height: '6px',
+                background: 'rgba(255,255,255,.1)',
+                borderRadius: '3px', overflow: 'hidden'
+              }}>
+                <div style={{
+                  width: `${loadingProgress}%`, height: '100%',
+                  background: 'linear-gradient(90deg, hsl(30, 100%, 60%), hsl(30, 100%, 70%))',
+                  transition: 'width 0.3s ease'
+                }} />
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Info Panel */}
+      {showInfo && (
+        <div 
+          onClick={(e) => e.stopPropagation()}
+          style={{
+            position: 'absolute', right: '2rem', top: '50%', transform: 'translateY(-50%)',
+            width: '320px', maxHeight: '80vh', overflowY: 'auto',
+            background: 'rgba(0,0,0,.9)', backdropFilter: 'blur(12px)',
+            borderRadius: '16px', border: '1px solid rgba(255,255,255,.1)',
+            padding: '1.5rem', zIndex: 10
+          }}
+        >
+          <button 
+            onClick={() => setShowInfo(false)}
+            style={{
+              position: 'absolute', top: '1rem', right: '1rem',
+              width: '28px', height: '28px', borderRadius: '50%',
+              background: 'rgba(255,255,255,.1)', border: 'none',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#fff'
+            }}
+          >✕</button>
+          
+          <div style={{ fontSize: '12px', color: project.color, fontWeight: '600', marginBottom: '8px' }}>
+            {project.category}
+          </div>
+          <h3 style={{ fontSize: '24px', fontWeight: '700', color: '#fff', marginBottom: '16px' }}>
+            {project.title}
+          </h3>
+          <p style={{ fontSize: '14px', lineHeight: '1.6', color: 'rgba(255,255,255,.7)', marginBottom: '20px' }}>
+            {project.description}
+          </p>
+          <div style={{ marginBottom: '16px' }}>
+            <div style={{ fontSize: '12px', color: 'rgba(255,255,255,.5)', marginBottom: '8px' }}>YEAR</div>
+            <div style={{ fontSize: '16px', color: '#fff', fontWeight: '600' }}>{project.year}</div>
+          </div>
+          <div style={{ marginBottom: '16px' }}>
+            <div style={{ fontSize: '12px', color: 'rgba(255,255,255,.5)', marginBottom: '8px' }}>FILE FORMAT</div>
+            <div style={{
+              fontSize: '14px', color: '#fff', fontWeight: '600',
+              padding: '6px 12px', background: 'rgba(255,255,255,.1)',
+              borderRadius: '6px', display: 'inline-block', fontFamily: 'monospace'
+            }}>{fileExtension.toUpperCase()}</div>
+          </div>
+          <div>
+            <div style={{ fontSize: '12px', color: 'rgba(255,255,255,.5)', marginBottom: '8px' }}>MODEL ROTATION (deg)</div>
+            <div style={{
+              fontSize: '12px', fontFamily: 'monospace', color: 'rgba(255,255,255,.7)',
+              display: 'flex', gap: '12px'
+            }}>
+              <span>X: {Math.round(modelRotation.x * 180 / Math.PI)}°</span>
+              <span>Y: {Math.round(modelRotation.y * 180 / Math.PI)}°</span>
+              <span>Z: {Math.round(modelRotation.z * 180 / Math.PI)}°</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {!showInfo && (
+        <button 
+          onClick={() => setShowInfo(true)}
+          style={{
+            position: 'absolute', right: '2rem', top: '50%', transform: 'translateY(-50%)',
+            width: '48px', height: '48px', borderRadius: '50%',
+            background: 'rgba(0,0,0,.8)', backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255,255,255,.1)', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: '#fff', zIndex: 10
+          }}
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+            <line x1="12" y1="16" x2="12" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <line x1="12" y1="8" x2="12.01" y2="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        </button>
+      )}
+
+      {/* Help Text */}
+      <div style={{
+        position: 'absolute', bottom: '2rem', left: '50%', transform: 'translateX(-50%)',
+        background: 'rgba(0,0,0,.8)', backdropFilter: 'blur(12px)',
+        padding: '.75rem 1.5rem', borderRadius: '12px',
+        border: '1px solid rgba(255,255,255,.1)',
+        fontSize: '.85rem', color: 'rgba(255,255,255,.7)',
+        display: 'flex', gap: '2rem', zIndex: 10
+      }}>
+        <span>
+          <kbd style={{
+            background: 'rgba(255,255,255,.1)', padding: '.25rem .5rem',
+            borderRadius: '4px', fontFamily: 'monospace', fontSize: '.8rem'
+          }}>Drag</kbd> to rotate
+        </span>
+        <span>
+          <kbd style={{
+            background: 'rgba(255,255,255,.1)', padding: '.25rem .5rem',
+            borderRadius: '4px', fontFamily: 'monospace', fontSize: '.8rem'
+          }}>Scroll</kbd> to zoom
+        </span>
+        <span>
+          <kbd style={{
+            background: 'rgba(255,255,255,.1)', padding: '.25rem .5rem',
+            borderRadius: '4px', fontFamily: 'monospace', fontSize: '.8rem'
+          }}>Right-click</kbd> to pan
+        </span>
+      </div>
+
+      <style>{`
+        @keyframes spin { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+      `}</style>
+    </div>
+  )
+}
