@@ -1,16 +1,9 @@
 {
-  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": null,
   "regions": ["iad1"],
-  "build": {
-    "env": {
-      "NEXT_TELEMETRY_DISABLED": "1",
-      "NODE_ENV": "production",
-      "NODE_OPTIONS": "--max-old-space-size=3584"
-    }
-  },
-  "functions": {
-    "app/**/*.{js,ts,jsx,tsx}": {
-      "maxDuration": 10
-    }
-  }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }

@@ -1,23 +1,12 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback, memo, Suspense } from 'react'
-import dynamic from 'next/dynamic'
 import eventsList from './EventsList'
 import EventsCard from './EventsCard'
 
-// Heavy modal loaded dynamically ONLY when needed
-const EventsModal = dynamic(() => import('./EventsModal'), {
-  ssr: false,
-  loading: () => (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 100,
-      background: 'rgba(0,0,0,0.5)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center'
-    }}>
-      <div style={{ color: 'white', fontSize: '18px' }}>Loading...</div>
-    </div>
-  )
-})
+import { lazy } from 'react'
+const EventsModal = lazy(() => import('./EventsModal'))
+
 
 // Memoized page component to prevent re-renders
 const EventPage = memo(function EventPage({ events, pageIndex, scale, onCardClick }) {

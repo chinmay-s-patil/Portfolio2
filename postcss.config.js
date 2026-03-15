@@ -1,7 +1,6 @@
-module.exports = {
+export default {
   plugins: {
-    // use the separate PostCSS plugin package required by Tailwind v4+
-    '@tailwindcss/postcss': {},
-    autoprefixer: {}
-  }
+    tailwindcss: {},
+    autoprefixer: {},
+  },
 }

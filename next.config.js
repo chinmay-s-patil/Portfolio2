@@ -25,7 +25,7 @@ const nextConfig = {
       ...config.optimization,
       // Disable minimization during build to save memory
       // Note: This will increase bundle size but prevent OOM
-      minimize: false,
+      minimize: true,
       
       // Aggressive chunk splitting
       splitChunks: {
