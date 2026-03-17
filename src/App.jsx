@@ -3,7 +3,6 @@ import FloatingDock from './Navigation/FloatingDock'
 import Footer from './components/Footer'
 
 const LandingNormalized      = lazy(() => import('./LandingSection/LandingNormalized'))
-const HeroNormalized      = lazy(() => import('./HeroSection/HeroSection'))
 const EducationNormalized    = lazy(() => import('./EducationSection/EducationNormalized'))
 const ExperienceNormalized   = lazy(() => import('./ExperienceSection/ExperienceNormalized'))
 const SkillsNormalized       = lazy(() => import('./SkillsSection/SkillsNormalized'))
@@ -22,9 +21,6 @@ export default function App() {
       <FloatingDock />
 
       <main id="sections" aria-label="Portfolio sections">
-        <section id="hero" className="section">
-          <Suspense fallback={<NullFallback />}><HeroNormalized /></Suspense>
-        </section>
         <section id="landing" className="section">
           <Suspense fallback={<NullFallback />}><LandingNormalized /></Suspense>
         </section>
@@ -55,9 +51,9 @@ export default function App() {
         <section id="upcoming" className="section">
           <Suspense fallback={<NullFallback />}><UpcomingNormalized /></Suspense>
         </section>
-        <section id="contact" className="section" style={{ minHeight: 'auto', height: 'auto', padding: 0 }}>
+        {/* <section id="contact" className="section" style={{ minHeight: 'auto', height: 'auto', padding: 0 }}>
           <Footer />
-        </section>
+        </section> */}
       </main>
     </>
   )
