@@ -65,7 +65,7 @@ function RevealText({
 //   sectionRef   — attach to outer wrapper
 //   overlayJSX   — the bg-cover + card overlay
 //   textRevealed — true once overlay has fully lifted (trigger text animations)
-function useSectionIntro({ label = 'Education History', duration = 800 } = {}) {
+function useSectionIntro({ label = 'Education History', duration = 400 } = {}) {
   const sectionRef   = useRef(null)
   const animatingRef = useRef(false)
 
