@@ -1,26 +1,40 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useState, useEffect } from 'react'
 import FloatingDock from './Navigation/FloatingDock'
 import Footer from './components/Footer'
+import ContactOverlay from './components/ContactOverlay'
 
-const LandingNormalized      = lazy(() => import('./LandingSection/LandingNormalized'))
-const EducationNormalized    = lazy(() => import('./EducationSection/EducationNormalized'))
-const ExperienceNormalized   = lazy(() => import('./ExperienceSection/ExperienceNormalized'))
-const SkillsNormalized       = lazy(() => import('./SkillsSection/SkillsNormalized'))
-const ProjectsNormalized     = lazy(() => import('./ProjectsSection/ProjectsNormalized'))
-const OpenFOAMNormalized     = lazy(() => import('./OpenFoamSection/OpenFOAMNormalized'))
-const CADNormalized          = lazy(() => import('./CADSection/CADGLTFNormalized'))
+const LandingNormalized       = lazy(() => import('./LandingSection/LandingNormalized'))
+// const HeroNormalized          = lazy(() => import('./HeroSection/HeroSection'))
+const EducationNormalized     = lazy(() => import('./EducationSection/EducationNormalized'))
+const ExperienceNormalized    = lazy(() => import('./ExperienceSection/ExperienceNormalized'))
+const SkillsNormalized        = lazy(() => import('./SkillsSection/SkillsNormalized'))
+const ProjectsNormalized      = lazy(() => import('./ProjectsSection/ProjectsNormalized'))
+const OpenFOAMNormalized      = lazy(() => import('./OpenFoamSection/OpenFOAMNormalized'))
+const CADNormalized           = lazy(() => import('./CADSection/CADGLTFNormalized'))
 const VisualizationNormalized = lazy(() => import('./VisualizationSection/VisualizationNormalized'))
-const EventsNormalized       = lazy(() => import('./EventsSection/EventsNormalized'))
-const UpcomingNormalized     = lazy(() => import('./UpcomingSection/UpcomingNormalized'))
+const EventsNormalized        = lazy(() => import('./EventsSection/EventsNormalized'))
+const UpcomingNormalized      = lazy(() => import('./UpcomingSection/UpcomingNormalized'))
 
 const NullFallback = () => null
 
 export default function App() {
+  const [contactOpen, setContactOpen] = useState(false)
+
+  // Expose globally so FloatingDock (and anything else) can call it
+  useEffect(() => {
+    window.openContactOverlay = () => setContactOpen(true)
+    return () => { delete window.openContactOverlay }
+  }, [])
+
   return (
     <>
       <FloatingDock />
+      <ContactOverlay isOpen={contactOpen} onClose={() => setContactOpen(false)} />
 
       <main id="sections" aria-label="Portfolio sections">
+        {/* <section id="hero" className="section">
+          <Suspense fallback={<NullFallback />}><HeroNormalized /></Suspense>
+        </section> */}
         <section id="landing" className="section">
           <Suspense fallback={<NullFallback />}><LandingNormalized /></Suspense>
         </section>
@@ -51,9 +65,9 @@ export default function App() {
         <section id="upcoming" className="section">
           <Suspense fallback={<NullFallback />}><UpcomingNormalized /></Suspense>
         </section>
-        {/* <section id="contact" className="section" style={{ minHeight: 'auto', height: 'auto', padding: 0 }}>
-          <Footer />
-        </section> */}
+        <section id="contact" className="section" style={{ minHeight: 'auto', height: 'auto', padding: 0 }}>
+          <Footer onContactOpen={() => setContactOpen(true)} />
+        </section>
       </main>
     </>
   )

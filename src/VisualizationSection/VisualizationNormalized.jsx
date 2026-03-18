@@ -259,7 +259,7 @@ export default function VisualizationNormalized() {
                         }}
                         className="viz-card"
                       >
-                        {/* WIP Ribbon */}
+                        {/* WIP Ribbon — small diagonal badge, never blocks image */}
                         {viz.isWIP && (
                           <div style={{
                             position: 'absolute',
@@ -280,7 +280,7 @@ export default function VisualizationNormalized() {
                           </div>
                         )}
 
-                        {/* Icon/Preview Area */}
+                        {/* Preview Area — shows first screenshot, falls back to emoji only on load error */}
                         <div style={{
                           width: '100%',
                           height: '240px',
@@ -292,12 +292,38 @@ export default function VisualizationNormalized() {
                           alignItems: 'center',
                           justifyContent: 'center'
                         }}>
-                          {/* Large Icon */}
-                          <div style={{
-                            fontSize: '80px',
-                            filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))',
-                            animation: 'float 3s ease-in-out infinite'
-                          }}>
+                          {viz.screenshots && viz.screenshots.length > 0 ? (
+                            <img
+                              src={viz.screenshots[0]}
+                              alt={viz.title}
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                objectPosition: 'center',
+                              }}
+                              onError={(e) => {
+                                // Silently hide broken image, show emoji fallback
+                                e.target.style.display = 'none'
+                                const fallback = e.target.parentElement.querySelector('.emoji-fallback')
+                                if (fallback) fallback.style.display = 'flex'
+                              }}
+                            />
+                          ) : null}
+
+                          {/* Emoji fallback — hidden by default, shown only if image errors */}
+                          <div
+                            className="emoji-fallback"
+                            style={{
+                              display: viz.screenshots && viz.screenshots.length > 0 ? 'none' : 'flex',
+                              position: 'absolute',
+                              inset: 0,
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: '80px',
+                              filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))',
+                            }}
+                          >
                             {viz.icon}
                           </div>
 
@@ -315,7 +341,8 @@ export default function VisualizationNormalized() {
                             color: viz.color,
                             textTransform: 'uppercase',
                             letterSpacing: '0.05em',
-                            border: `1px solid ${viz.color}60`
+                            border: `1px solid ${viz.color}60`,
+                            zIndex: 2,
                           }}>
                             {viz.category}
                           </div>
@@ -331,7 +358,8 @@ export default function VisualizationNormalized() {
                             borderRadius: '6px',
                             fontSize: '12px',
                             fontWeight: '700',
-                            color: '#fff'
+                            color: '#fff',
+                            zIndex: 2,
                           }}>
                             {viz.year}
                           </div>
@@ -448,12 +476,8 @@ export default function VisualizationNormalized() {
 
       <style jsx>{`
         @keyframes float {
-          0%, 100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-10px);
-          }
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
         }
 
         div::-webkit-scrollbar {

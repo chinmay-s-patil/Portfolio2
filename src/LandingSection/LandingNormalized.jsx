@@ -24,7 +24,6 @@ export default function LandingNormalized() {
 
   return (
     <>
-    {/* Google-font for the handwritten line */}
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@700&display=swap');
@@ -33,22 +32,6 @@ export default function LandingNormalized() {
         @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&display=swap');
 
-        // @font-face {
-        //   font-family: 'Bitcount Grid Single';
-        //   src: url('/fonts/bitcount.woff2') format('woff2');
-        //   font-weight: 400;
-        //   font-style: normal;
-        //   font-display: swap;
-        // }
-
-        // @font-face {
-        //   font-family: 'Bitcount Grid Single';
-        //   src: url('/fonts/bitcount.woff2') format('woff2-variations');
-        //   font-weight: 100 900;   /* full weight range */
-        //   font-style: normal;
-        //   font-display: swap;
-        // }
-
         @font-face {
           font-family: 'Bitcount Grid Single';
           src: url('/fonts/BitcountGridSingle/BitcountGridSingle-VariableFont_CRSV,ELSH,ELXP,slnt,wght.ttf') format('woff2-variations');
@@ -56,13 +39,11 @@ export default function LandingNormalized() {
           font-style: normal;
           font-display: swap;
         }
-
       `}</style>
 
       {/* Main scaled container */}
       <div
         style={{
-          transform: `scale(${scale})`,
           transformOrigin: 'center center',
           width: BASE_WIDTH,
           height: BASE_HEIGHT,
@@ -72,28 +53,29 @@ export default function LandingNormalized() {
           transform: `translate(-50%, -50%) scale(${scale})`,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
         }}
       >
-        {/* Content container - INCREASED VERTICAL HEIGHT */}
+        {/* Content container */}
         <div
           style={{
             position: 'relative',
             width: '1700px',
-            height: '1000px', // INCREASED from 900px
+            height: '1000px',
             display: 'flex',
             alignItems: 'center',
-            gap: '80px'
+            gap: '80px',
           }}
         >
-          {/* Left: Text content - 50% width */}
-          <div style={{ 
+          {/* Left: Text content */}
+          <div style={{
             flex: '0 0 50%',
             paddingRight: '40px',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center' // Center content vertically
+            justifyContent: 'center',
           }}>
+
             {/* Kicker */}
             <div style={{
               fontSize: '14px',
@@ -101,21 +83,21 @@ export default function LandingNormalized() {
               fontWeight: '600',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
-              marginBottom: '16px' // INCREASED spacing
+              marginBottom: '16px',
             }}>
-              Hello - I'm
+              Hello — I'm
             </div>
 
             {/* Title */}
             <h1 style={{
-              fontSize: '68px', // INCREASED from 64px
+              fontSize: '68px',
               fontWeight: '700',
-              marginBottom: '20px', // INCREASED spacing
+              marginBottom: '20px',
               lineHeight: '1.1',
               background: 'linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.7) 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
+              backgroundClip: 'text',
             }}>
               Chinmay S Patil
               <br />
@@ -123,70 +105,67 @@ export default function LandingNormalized() {
                 background: 'linear-gradient(135deg, hsl(var(--accent)) 0%, #14ffc8 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
+                backgroundClip: 'text',
               }}>
                 Fluid Simulations
               </span>
               {' '}& Visual Interfaces
             </h1>
-            
-            {/* subtitle */}
-            <div
-              style={{
-                fontSize: '20px',
-                lineHeight: 1.7,
-                marginBottom: '40px',
-                color: 'rgba(255,255,255,.68)',
-                maxWidth: '100%',
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: '"Bruno Ace SC", sans-serif',
-                  fontSize: '26px',
-                  color: '#fff',
-                  letterSpacing: '0.4px',
-                }}
-              >
-                Aerospace-engineering student who turns aerodynamic questions
-                into reliable numbers.
-              </span>
-              <br />
-              <br />
-              I focus on CFD and OpenFOAM, building reproducible simulation
-              setups and efficient data-processing tools. I&rsquo;m strong in
-              Python, AIML, and steadily growing my C++ skills-and I&rsquo;m an
-              avid learner, expanding my simulation capabilities every day.
 
-              
-              {/* <span style={{ fontFamily: '"Audiowide", sans-serif' }}>
-                I focus on CFD and OpenFOAM, building reproducible simulation
-                setups and efficient data-processing tools. I&rsquo;m strong in
-                Python, AIML, and steadily growing my C++ skills-and
-                I&rsquo;m an avid learner, expanding my simulation capabilities every day.
-              </span> */}
+            {/* Subtitle */}
+            <div style={{
+              marginBottom: '40px',
+              maxWidth: '100%',
+            }}>
+              {/* Tagline */}
+              <p style={{
+                fontFamily: '"Bruno Ace SC", sans-serif',
+                fontSize: '24px',
+                color: '#fff',
+                letterSpacing: '0.4px',
+                marginBottom: '16px',
+                lineHeight: '1.4',
+              }}>
+                From airflow to insight.
+              </p>
+
+              {/* Body */}
+              <p style={{
+                fontSize: '19px',
+                lineHeight: '1.75',
+                color: 'rgba(255,255,255,0.68)',
+              }}>
+                I build CFD systems and OpenFOAM workflows that turn complex
+                physics into clean, usable data.{' '}
+                <span style={{
+                  color: 'rgba(255,255,255,0.9)',
+                  fontWeight: '500',
+                }}>
+                  Python-first, AIML-enabled.
+                </span>
+              </p>
             </div>
 
             {/* CTA Buttons */}
             <div style={{
               display: 'flex',
-              gap: '20px', // INCREASED spacing
-              marginBottom: '24px' // REDUCED to make room for social buttons
+              gap: '20px',
+              marginBottom: '24px',
             }}>
-              <a 
+              <a
                 href="#projects"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '12px',
-                  padding: '16px 32px', // INCREASED padding
+                  padding: '16px 32px',
                   background: '#fff',
                   color: '#0a0e1a',
                   borderRadius: '12px',
                   fontWeight: '600',
-                  fontSize: '16px', // INCREASED font size
+                  fontSize: '16px',
                   textDecoration: 'none',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
                 }}
                 className="cta-button-primary"
               >
@@ -196,21 +175,21 @@ export default function LandingNormalized() {
                 </svg>
               </a>
 
-              <a 
+              <a
                 href="#experience"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '12px',
-                  padding: '16px 32px', // INCREASED padding
+                  padding: '16px 32px',
                   background: 'rgba(255, 255, 255, 0.06)',
                   border: '1px solid rgba(255, 255, 255, 0.1)',
                   color: '#fff',
                   borderRadius: '12px',
                   fontWeight: '600',
-                  fontSize: '16px', // INCREASED font size
+                  fontSize: '16px',
                   textDecoration: 'none',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
                 }}
                 className="cta-button-secondary"
               >
@@ -223,16 +202,16 @@ export default function LandingNormalized() {
               display: 'flex',
               gap: '16px',
               alignItems: 'center',
-              marginBottom: '40px'
+              marginBottom: '40px',
             }}>
               <span style={{
                 fontSize: '14px',
                 color: 'rgba(255, 255, 255, 0.5)',
-                fontWeight: '500'
+                fontWeight: '500',
               }}>
                 Connect:
               </span>
-              
+
               <a
                 href="https://www.youtube.com/@chinmay-s-patil"
                 target="_blank"
@@ -247,7 +226,7 @@ export default function LandingNormalized() {
                   background: 'rgba(255, 0, 0, 0.1)',
                   border: '1px solid rgba(255, 0, 0, 0.2)',
                   transition: 'all 0.3s ease',
-                  textDecoration: 'none'
+                  textDecoration: 'none',
                 }}
                 className="social-button youtube"
                 aria-label="YouTube"
@@ -271,7 +250,7 @@ export default function LandingNormalized() {
                   background: 'rgba(0, 119, 181, 0.1)',
                   border: '1px solid rgba(0, 119, 181, 0.2)',
                   transition: 'all 0.3s ease',
-                  textDecoration: 'none'
+                  textDecoration: 'none',
                 }}
                 className="social-button linkedin"
                 aria-label="LinkedIn"
@@ -293,7 +272,7 @@ export default function LandingNormalized() {
                   background: 'rgba(140, 255, 200, 0.1)',
                   border: '1px solid rgba(140, 255, 200, 0.2)',
                   transition: 'all 0.3s ease',
-                  textDecoration: 'none'
+                  textDecoration: 'none',
                 }}
                 className="social-button email"
                 aria-label="Email"
@@ -309,42 +288,42 @@ export default function LandingNormalized() {
             <div style={{
               display: 'grid',
               gridTemplateColumns: '1fr 1fr',
-              gap: '20px' // INCREASED spacing
+              gap: '20px',
             }}>
               <div style={{
-                padding: '24px', // INCREASED padding
+                padding: '24px',
                 borderRadius: '16px',
                 background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01))',
-                border: '1px solid rgba(255, 255, 255, 0.08)'
+                border: '1px solid rgba(255, 255, 255, 0.08)',
               }}>
                 <div style={{
-                  fontSize: '20px', // INCREASED font size
+                  fontSize: '20px',
                   fontWeight: '700',
-                  marginBottom: '12px', // INCREASED spacing
-                  color: '#fff'
+                  marginBottom: '12px',
+                  color: '#fff',
                 }}>
                   Core Focus
                 </div>
                 <p style={{
-                  fontSize: '16px', // INCREASED font size
+                  fontSize: '16px',
                   lineHeight: '1.6',
-                  color: 'rgba(255, 255, 255, 0.68)'
+                  color: 'rgba(255, 255, 255, 0.68)',
                 }}>
-                  CFD · OpenFOAM · Thermal · SuperSonic ·  · Python
+                  CFD · OpenFOAM · Thermal · Supersonic · Python
                 </p>
               </div>
 
               <div style={{
-                padding: '24px', // INCREASED padding
+                padding: '24px',
                 borderRadius: '16px',
                 background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01))',
-                border: '1px solid rgba(255, 255, 255, 0.08)'
+                border: '1px solid rgba(255, 255, 255, 0.08)',
               }}>
                 <div style={{
-                  fontSize: '20px', // INCREASED font size
+                  fontSize: '20px',
                   fontWeight: '700',
-                  marginBottom: '12px', // INCREASED spacing
-                  color: '#fff'
+                  marginBottom: '12px',
+                  color: '#fff',
                 }}>
                   Current Status
                 </div>
@@ -352,17 +331,18 @@ export default function LandingNormalized() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '12px',
-                  fontSize: '16px', // INCREASED font size
+                  fontSize: '16px',
                   lineHeight: '1.6',
-                  color: 'rgba(255, 255, 255, 0.68)'
+                  color: 'rgba(255, 255, 255, 0.68)',
                 }}>
                   <div style={{
-                    width: '12px', // INCREASED size
-                    height: '12px', // INCREASED size
+                    width: '12px',
+                    height: '12px',
                     borderRadius: '50%',
                     background: 'hsl(var(--accent))',
                     boxShadow: '0 0 0 0 rgba(140, 255, 200, 0.7)',
-                    animation: 'pulse 2s infinite'
+                    animation: 'pulse 2s infinite',
+                    flexShrink: 0,
                   }} />
                   <span>Available for freelance & collaboration</span>
                 </div>
@@ -370,27 +350,23 @@ export default function LandingNormalized() {
             </div>
           </div>
 
-          {/* Right: Portrait - 50% width and INCREASED HEIGHT */}
-          <div 
+          {/* Right: Portrait */}
+          <div
             className="portrait"
             style={{
               flex: '0 0 50%',
               position: 'relative',
-              height: '700px', // INCREASED from 600px
+              height: '700px',
               borderRadius: '20px',
               overflow: 'hidden',
               boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
-              border: '1px solid rgba(255, 255, 255, 0.08)'
+              border: '1px solid rgba(255, 255, 255, 0.08)',
             }}
           >
             <img
               src="/portrait.jpg"
               alt="Chinmay Patil"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover'
-              }}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </div>
         </div>
@@ -398,18 +374,9 @@ export default function LandingNormalized() {
 
       <style jsx>{`
         @keyframes pulse {
-          0% {
-            transform: scale(0.95);
-            box-shadow: 0 0 0 0 rgba(140, 255, 200, 0.7);
-          }
-          70% {
-            transform: scale(1);
-            box-shadow: 0 0 0 10px rgba(140, 255, 200, 0);
-          }
-          100% {
-            transform: scale(0.95);
-            box-shadow: 0 0 0 0 rgba(140, 255, 200, 0);
-          }
+          0%   { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(140, 255, 200, 0.7); }
+          70%  { transform: scale(1);    box-shadow: 0 0 0 10px rgba(140, 255, 200, 0); }
+          100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(140, 255, 200, 0); }
         }
 
         .cta-button-primary:hover,
@@ -418,29 +385,19 @@ export default function LandingNormalized() {
           box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
         }
 
-        .cta-button-primary:hover {
-          background: #f0f0f0;
-        }
-
-        .cta-button-secondary:hover {
-          background: rgba(255, 255, 255, 0.1);
-        }
+        .cta-button-primary:hover  { background: #f0f0f0; }
+        .cta-button-secondary:hover { background: rgba(255, 255, 255, 0.1); }
 
         .portrait:hover {
-          transform: translateY(-8px) scale(1.01); // Added subtle scale
+          transform: translateY(-8px) scale(1.01);
           box-shadow: 0 28px 80px rgba(0, 0, 0, 0.6);
         }
 
         @media (max-width: 1800px) {
-          div[style*="width: 1700px"] {
-            width: 1500px !important;
-          }
+          div[style*="width: 1700px"] { width: 1500px !important; }
         }
-
         @media (max-width: 1600px) {
-          div[style*="width: 1700px"] {
-            width: 1300px !important;
-          }
+          div[style*="width: 1700px"] { width: 1300px !important; }
         }
       `}</style>
     </>

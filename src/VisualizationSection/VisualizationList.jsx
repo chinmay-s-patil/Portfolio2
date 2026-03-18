@@ -6,15 +6,18 @@ const visualizationsList = [
     description: 'An intuitive executable tool for creating blockMeshDict files directly. Designed to streamline the meshing workflow for OpenFOAM users with a visual interface.',
     longDescription: 'BlockMeshAuto simplifies the complex process of creating blockMeshDict files for OpenFOAM. Originally developed for personal use, this desktop application provides an intuitive interface for defining mesh blocks, boundaries, and grading. Perfect for engineers who want to quickly prototype mesh configurations without manually editing text files.',
     type: 'exe',
-    tech: ['C++', 'Qt', 'OpenFOAM'],
+    tech: ['Python', 'TKinter', 'OpenFOAM'],
     year: '2025',
-    isWIP: true,
+    isWIP: false,
     color: '#48cae4',
     icon: '🔷',
     screenshots: [
-      '/Visualizations/blockmeshauto-1.jpg',
-      '/Visualizations/blockmeshauto-2.jpg',
-      '/Visualizations/blockmeshauto-3.jpg'
+      '/Visualization/BlockMeshAuto/BlockMeshAuto 1.png',
+      '/Visualization/BlockMeshAuto/BlockMeshAuto 2.png',
+      '/Visualization/BlockMeshAuto/BlockMeshAuto 3.png',
+      '/Visualization/BlockMeshAuto/BlockMeshAuto 4.png',
+      '/Visualization/BlockMeshAuto/BlockMeshAuto 5.png',
+      '/Visualization/BlockMeshAuto/BlockMeshAuto 6.png'
     ],
     accessType: 'Request Access',
     ctaText: 'Contact me for beta access',
@@ -61,7 +64,7 @@ const visualizationsList = [
     type: 'python',
     tech: ['Python', 'NumPy', 'Matplotlib', 'Pandas'],
     year: '2025',
-    isWIP: true,
+    isWIP: false,
     color: '#9d4edd',
     icon: '📊',
     screenshots: [
